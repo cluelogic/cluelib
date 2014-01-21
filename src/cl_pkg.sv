@@ -54,6 +54,7 @@ package cl;
    `include "cl_scrambler.svh"
 
    `include "cl_comparator.svh"
+   `include "cl_default_comparator.svh"
    `include "cl_choice.svh"
    `include "cl_pair_comparator.svh"
    `include "cl_pair.svh"

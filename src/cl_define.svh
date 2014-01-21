@@ -66,12 +66,15 @@
 //------------------------------------------------------------------------------
 
 `ifdef CL_USE_INCISIVE
+ `undef CL_SUPPORT_BIT_STREAM_CASTING
+ `undef CL_SUPPORT_FATAL_SEVERITY_TASK
 `endif
 
 `ifdef CL_USE_MODELSIM
  `define CL_SUPPORT_BIT_STREAM_CASTING
  `undef  CL_SUPPORT_COUNTBITS
  `define CL_SUPPORT_COUNTONES
+ `define CL_SUPPORT_FATAL_SEVERITY_TASK
  `undef  CL_SUPPORT_PARAMETERIZED_NESTED_CLASS
  `undef  CL_SUPPORT_POP_FROM_AN_EMPTY_QUEUE
  `undef  CL_SUPPORT_RANDOMIZE

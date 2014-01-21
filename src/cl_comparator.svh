@@ -83,7 +83,15 @@ class comparator#( type T = int );
    //---------------------------------------------------------------------------
 
    virtual function bit lt( T x, T y );
-      return x < y;
+
+`ifdef CL_SUPPORT_FATAL_SEVERITY_TASK
+      $fatal( 2, "lt() is not defined for %s", $typename( T ) );
+`else
+      $display( "lt() is not defined for %s", $typename( T ) );
+      $finish( 2 );
+`endif
+
+      return 0; // dummy
    endfunction: lt
 
    //---------------------------------------------------------------------------
@@ -99,7 +107,15 @@ class comparator#( type T = int );
    //---------------------------------------------------------------------------
 
    virtual function bit gt( T x, T y );
-      return x > y;
+
+`ifdef CL_SUPPORT_FATAL_SEVERITY_TASK
+      $fatal( 2, "gt() is not defined for %s", $typename( T ) );
+`else
+      $display( "gt() is not defined for %s", $typename( T ) );
+      $finish( 2 );
+`endif
+
+      return 0; // dummy
    endfunction: gt
 
    //---------------------------------------------------------------------------

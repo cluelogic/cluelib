@@ -1,6 +1,5 @@
 //==============================================================================
-//
-// cl_choice.svh (v0.1.0)
+// cl_default_comparator.svh (v0.1.0)
 //
 // The MIT License (MIT)
 //
@@ -13,10 +12,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,69 +25,51 @@
 // SOFTWARE.
 //==============================================================================
 
-`ifndef CL_CHOICE_SVH
-`define CL_CHOICE_SVH
+`ifndef CL_DEFAULT_COMPARATOR_SVH
+`define CL_DEFAULT_COMPARATOR_SVH
 
 //------------------------------------------------------------------------------
-// Class: choice
-//   Provides functions to choose items.
+// Class: default_comparator
+//   Provides compare strategies.
 //------------------------------------------------------------------------------
 
-virtual class choice #( type T = int );
-
-   local static default_comparator#(T) default_cmp = new();
+class default_comparator#( type T = int ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
-   // Function: min
-   //   Returns the smaller item.
+   // Function: lt
+   //   Returns 1 if *x* is less than *y*.
    //
    // Arguments:
-   //   x - An item of type *T*.
-   //   y - Another item of type *T*.
-   //   cmp - (OPTIONAL) Compare strategy. If not specified or null,
-   //                    *comparator#(T)* is used. The default is null.
+   //   x - An input of type T.
+   //   y - Another input of type T.
    //
-   // Example:
-   // | assert( choice#(int)::min( 1, 2 ) == 1 );
+   // Returns:
+   //   If *x* is less than *y*, then returns 1. Otherwise, returns 0.
    //---------------------------------------------------------------------------
 
-   static function T min( T x, T y, comparator#(T) cmp = null );
-      if ( cmp ) begin
-	 if ( cmp.lt( x, y ) ) return x;
-	 else                  return y;
-      end else begin
-	 if ( default_cmp.lt( x, y ) ) return x;
-	 else                          return y;
-      end
-   endfunction: min
+   virtual function bit lt( T x, T y );
+      return x < y;
+   endfunction: lt
 
    //---------------------------------------------------------------------------
-   // Function: max
-   //   Returns the larger item.
+   // Function: gt
+   //   Returns 1 if *x* is greater than *y*.
    //
    // Arguments:
-   //   x - An item of type *T*.
-   //   y - Another item of type *T*.
-   //   cmp - (OPTIONAL) Compare strategy. If not specified or null,
-   //                    *comparator#(T)* is used. The default is null.
+   //   x - An input of type T.
+   //   y - Another input of type T.
    //
-   // Example:
-   // | assert( choice#(int)::max( 1, 2 ) == 2 );
+   // Returns:
+   //   If *x* is greater than *y*, then returns 1. Otherwise, returns 0.
    //---------------------------------------------------------------------------
 
-   static function T max( T x, T y, comparator#(T) cmp = null );
-      if ( cmp ) begin
-	 if ( cmp.gt( x, y ) ) return x;
-	 else                  return y;
-      end else begin
-	 if ( default_cmp.gt( x, y ) ) return x;
-	 else                          return y;
-      end
-   endfunction: max
+   virtual function bit gt( T x, T y );
+      return x > y;
+   endfunction: gt
 
-endclass: choice
+endclass: default_comparator
 
-`endif //  `ifndef CL_CHOICE_SVH
+`endif //  `ifndef CL_DEFAULT_COMPARATOR_SVH
 
 //==============================================================================
 // Copyright (c) 2013, 2014 ClueLogic, LLC

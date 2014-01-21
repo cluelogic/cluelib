@@ -1935,17 +1935,7 @@ virtual class text;
    static local function void normalize( string s, 
 					 ref int start_pos,
 					 ref int end_pos );
-      int slen = s.len();
-
-      if ( slen == 0 ) begin
-	 start_pos = 0;
-	 end_pos   = 0;
-	 return;
-      end
-      if ( start_pos < 0 ) start_pos += slen;
-      if ( start_pos < 0 ) start_pos = 0;
-      if ( end_pos < 0 )     end_pos += slen;
-      if ( end_pos >= slen ) end_pos = slen - 1;
+      util::normalize( s.len(), start_pos, end_pos );
    endfunction: normalize
 
 endclass: text

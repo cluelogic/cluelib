@@ -85,7 +85,14 @@ virtual class collection#( type T = int );
    //---------------------------------------------------------------------------
 
    virtual function bit add( T e );
-      $fatal( 1, "add() is not supported" );
+
+`ifdef CL_SUPPORT_FATAL_SEVERITY_TASK
+      $fatal( 2, "add() is not supported" );
+`else
+      $display( "add() is not supported" );
+      $finish( 2 );
+`endif
+
       return 0;
    endfunction: add
 

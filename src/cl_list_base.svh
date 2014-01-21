@@ -66,7 +66,14 @@ virtual class list_base #( type T = int ) extends collection#( T );
    //---------------------------------------------------------------------------
 
    virtual function void add_at( int index, T e );
-      $fatal( 1, "add_at() is not supported" );
+
+`ifdef CL_SUPPORT_FATAL_SEVERITY_TASK
+      $fatal( 2, "add_at() is not supported" );
+`else
+      $display( "add_at() is not supported" );
+      $finish( 2 );
+`endif
+      
    endfunction: add_at
 
    //---------------------------------------------------------------------------
@@ -237,7 +244,13 @@ virtual class list_base #( type T = int ) extends collection#( T );
    virtual function T remove_at( int index );
       T dummy;
       
-      $fatal( 1, "remove_at() is not supported" );
+`ifdef CL_SUPPORT_FATAL_SEVERITY_TASK
+      $fatal( 2, "remove_at() is not supported" );
+`else
+      $display( "remove_at() is not supported" );
+      $finish( 2 );
+`endif
+      
       return dummy;
    endfunction: remove_at
 
@@ -277,7 +290,13 @@ virtual class list_base #( type T = int ) extends collection#( T );
    virtual function T set_at( int index, T e );
       T dummy;
       
-      $fatal( 1, "set_at() is not supported" );
+`ifdef CL_SUPPORT_FATAL_SEVERITY_TASK
+      $fatal( 2, "set_at() is not supported" );
+`else
+      $display( "set_at() is not supported" );
+      $finish( 2 );
+`endif
+      
       return dummy;
    endfunction: set_at
 

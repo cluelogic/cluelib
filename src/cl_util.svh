@@ -103,6 +103,24 @@ virtual class util;
       return ( num_bin_digits + 3 ) / 4;
    endfunction: num_hex_digits
 
+   //---------------------------------------------------------------------------
+   // Function: normalize
+   //---------------------------------------------------------------------------
+
+   static function void normalize( int len,
+				   ref int start_pos,
+				   ref int end_pos );
+      if ( len == 0 ) begin
+	 start_pos = 0;
+	 end_pos   = 0;
+	 return;
+      end
+      if ( start_pos < 0 ) start_pos += len;
+      if ( start_pos < 0 ) start_pos = 0;
+      if ( end_pos < 0 )    end_pos += len;
+      if ( end_pos >= len ) end_pos = len - 1;
+   endfunction: normalize
+
 endclass: util
 
 `endif //  `ifndef CL_UTIL_SVH

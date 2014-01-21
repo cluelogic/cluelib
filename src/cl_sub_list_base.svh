@@ -34,7 +34,7 @@
 //   Defines the core functionality of a list.
 //------------------------------------------------------------------------------
 
-virtual class sub_list_base #( type T = int ) extends list_base#( T );
+class sub_list_base #( type T = int ) extends list_base#( T );
 
    local list_base#(T) backed_list;
    local int offset;
@@ -60,7 +60,7 @@ virtual class sub_list_base #( type T = int ) extends list_base#( T );
    //---------------------------------------------------------------------------
 
    virtual function void add_at( int index, T e );
-      if ( index < sub_list_size )
+      assert ( index < sub_list_size )
 	backed_list.add_at( index + offset, e );
       else
 	$fatal( "add_at: index=%0d must be less than %0d", index, sub_list_size );
@@ -98,7 +98,7 @@ virtual class sub_list_base #( type T = int ) extends list_base#( T );
    //---------------------------------------------------------------------------
 
    virtual function bit add_all_at( int index, collection#( T ) c );
-      if ( index < sub_list_size ) begin
+      assert ( index < sub_list_size ) begin
 	 return backed_list.add_all_at( index + offset, c );
       end else begin
 	 $fatal( "add_all_at: index=%0d must be less than %0d", index, sub_list_size );
@@ -118,7 +118,7 @@ virtual class sub_list_base #( type T = int ) extends list_base#( T );
    //---------------------------------------------------------------------------
 
    virtual function T get_at( int index );
-      if ( index < sub_list_size ) begin
+      assert ( index < sub_list_size ) begin
 	 return backed_list.get_at( index );
       end else begin
 	 T dummy;
@@ -168,7 +168,7 @@ virtual class sub_list_base #( type T = int ) extends list_base#( T );
    //---------------------------------------------------------------------------
 
    virtual function T remove_at( int index );
-      if ( index < sub_list_size ) begin
+      assert ( index < sub_list_size ) begin
 	 return backed_list.remove_at( index );
       end else begin
 	 T dummy;
@@ -189,7 +189,7 @@ virtual class sub_list_base #( type T = int ) extends list_base#( T );
    //---------------------------------------------------------------------------
 
    virtual protected function void remove_range( int from_index, int to_index );
-      if ( from_index < sub_list_size && to_index < sub_list_size )
+      assert ( from_index < sub_list_size && to_index < sub_list_size )
 	backed_list.remove_range( from_index, to_index );
       else
 	$fatal( "remove_range: from_index=%0d and to_index=%0d must be less than %0d",
@@ -209,7 +209,7 @@ virtual class sub_list_base #( type T = int ) extends list_base#( T );
    //---------------------------------------------------------------------------
 
    virtual function T set_at( int index, T e );
-      if ( index < sub_list_size ) begin
+      assert ( index < sub_list_size ) begin
 	 return backed_list.set_at( index, e );
       end else begin
 	 T dummy;

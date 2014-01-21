@@ -137,7 +137,7 @@ class kitchen_timer;
 	       begin
 		  start_time = $time;
 		  remaining -= elapsed;
-		  if ( remaining <= 0 ) 
+		  assert ( remaining > 0 ) else
 		    $warning( "The kitchen timer triggers immediately." );
 		  #remaining ->ring;
 		  stamp();

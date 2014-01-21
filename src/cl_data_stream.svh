@@ -57,6 +57,38 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 ) exten
 
    typedef pa_type ds_type[];
 
+   //---------------------------------------------------------------------------
+   // Typedef: bs_type
+   //   Bit stream type. The shorthand of the dynamic array of type *T*.
+   //---------------------------------------------------------------------------
+
+   typedef T bs_type[];
+
+   //---------------------------------------------------------------------------
+   // Function: to_bit_stream
+   //---------------------------------------------------------------------------
+
+   static function bs_type to_bit_stream( ds_type ds,
+					  bit msb_first = 1,
+					  int from_index = 0,
+					  int to_index = -1 );
+      bs_type bs;
+      
+      util::normalize( ds.size(), from_index, to_index );
+      bs = new[ ( to_index - from_index + 1 ) * WIDTH ];
+
+      for ( int i = from_index; i <= to_index; i++ ) begin
+	 if ( msb_first ) begin
+	    for ( int j = 0; j < WIDTH; j++ )
+	      bs[ i * WIDTH + j ] = ds[i][ WIDTH - 1 - j ];
+	 end else begin
+	    for ( int j = 0; j < WIDTH; j++ )
+	      bs[ i * WIDTH + j ] = ds[i][j];
+	 end
+      end
+      return bs;
+   endfunction: to_bit_stream
+
 /*
    //---------------------------------------------------------------------------
    // Function: from_bit_stream
@@ -70,18 +102,83 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 ) exten
 					 int 	   to_index = -1 );
    endfunction: from_bit_stream
 
+*/
    //---------------------------------------------------------------------------
-   // Function: to_bit_stream
-   // *TBD*
+   // Function: make_divisible
+   //   Makes the data stream divisible by the specified number by adding
+   //   padding data.
+   //
+   // Arguments:
+   //   ds - Input data stream.
+   //   divisible_by - (OPTIONAL) Output data stream is divisible by this
+   //                  number. The default is 1.
+   //   padding - (OPTIONAL) Padding data. The default is 0.
    //---------------------------------------------------------------------------
 
-   static function void to_bit_stream( pa_type datastream[],
-				       ref T bitstream[],
-				       input bit msb_first = 1,
-				       int 	 from_index = 0,
-				       int 	 to_index = -1 );
-   endfunction: to_bit_stream
-*/
+   static function ds_type make_divisible( ds_type ds,
+					   int divisible_by = 1,
+					   pa_type padding = 0 );
+      assert( divisible_by > 0 ) begin
+	 if ( ds.size() % divisible_by == 0 ) begin // already divisible
+	    return ds;
+	 end else begin
+	    int ds_size = ds.size();
+	    int num_padding = divisible_by - ( ds_size % divisible_by );
+	    ds_type padded_ds = new[ ds_size + num_padding ]( ds );
+
+	    for ( int i = 0; i < num_padding; i++ )
+	      padded_ds[ ds_size + i ] = padding;
+	    return padded_ds;
+	 end
+      end else begin
+	 $fatal( 2, "divisible_by=%0d is not positive", divisible_by );
+	 return ds;
+      end
+   endfunction: make_divisible
+
+   //---------------------------------------------------------------------------
+   // Function: split
+   //   Splits the specified data stream into two data streams.
+   //
+   // Arguments:
+   //   ds  - Input data stream.
+   //   ds0 - Output data stream with data elements at even location of the
+   //         input data stream.
+   //   ds1 - Output data stream with data elements at odd location of the
+   //         input data stream.
+   //   pad - (OPTIONAL) If the length of the input data stream is odd, and
+   //         *pad* is 1, then the last element is filled with *padding*. If
+   //         *pad* is 0, no padding is made. The default is 0.
+   //   padding - (OPTIONAL) The padding data if the length of the input data
+   //             stream is odd and *pad* is 1. The default is 0.
+   //
+   // Examples:
+   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3]          (pad=0)
+   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3][padding] (pad=1)
+   //---------------------------------------------------------------------------
+
+   static function void split( ds_type ds,
+			       ref ds_type ds0,
+			       ref ds_type ds1,
+			       input bit pad = 0,
+			       input pa_type padding = 0 );
+      int ds_size = ds.size();
+
+      if ( ds_size % 2 == 0 ) begin // even
+	 ds0 = new[ ds_size / 2 ];
+	 ds1 = new[ ds_size / 2 ];
+      end else if ( pad ) begin
+	 ds0 = new[ ( ds_size + 1 ) / 2 ];
+	 ds1 = new[ ( ds_size + 1 ) / 2 ];
+      end else begin
+	 ds0 = new[ ( ds_size + 1 ) / 2 ];
+	 ds1 = new[ ds_size / 2 ];
+      end
+      for ( int i = 0; i < ds.size(); i += 2 ) ds0[i/2] = ds[i];
+      for ( int i = 1; i < ds.size(); i += 2 ) ds1[i/2] = ds[i];
+      if ( ( ds_size % 2 == 1 ) && pad ) ds1[ ds1.size() - 1 ] = padding;
+   endfunction: split      
+
    //---------------------------------------------------------------------------
    // Function: sequential
    //   Returns a data stream with the elements whose values are sequential.
