@@ -31,23 +31,32 @@
 //------------------------------------------------------------------------------
 // Class: pair
 //   Provides a pair that carries two values, which can be different types.
+//
+// Parameters:
+//   T1 - (OPTIONAL) The type of the first value of a pair. The default is
+//        *int*.
+//   T2 - (OPTIONAL) The type of the second value of a pair. The default is the
+//        same type as *T1*.
 //------------------------------------------------------------------------------
 
 class pair#( type T1 = int, type T2 = T1 );
 
    //---------------------------------------------------------------------------
    // Typedef: this_type
-   //   The shorthand of pair#(T1,T2).
+   //   The shorthand of *pair#(T1,T2)*.
    //---------------------------------------------------------------------------
 
    typedef pair#(T1,T2) this_type;
 
    local comparator#(this_type) cmp;
-   local static pair_comparator#(this_type) default_cmp = new();
 
    //---------------------------------------------------------------------------
    // Property: first
    //   The first value inside the pair.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | assert( p.first == 1 );
    //---------------------------------------------------------------------------
 
    T1 first;
@@ -55,6 +64,10 @@ class pair#( type T1 = int, type T2 = T1 );
    //---------------------------------------------------------------------------
    // Property: second
    //   The second value inside the pair.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | assert( p.second == "apple" );
    //---------------------------------------------------------------------------
 
    T2 second;
@@ -64,39 +77,45 @@ class pair#( type T1 = int, type T2 = T1 );
    //   Creates a pair of values of types T1 and T2.
    //
    // Arguments:
-   //   first  - The first value of the pair.
-   //   second - The second value of the pair.
-   //   cmp    - (OPTIONAL) Compare strategy. If not specified or null, 
-   //            pair_comparator#(this_type) is used. The default is null.
+   //   first  - The first value of a pair.
+   //   second - The second value of a pair.
+   //   cmp - (OPTIONAL) A strategy object used to compare two pairs. If not
+   //         specified or *null*, <pair_comparator> *#(this_type)* is used. The
+   //         default is *null*.
    //
    // Returns:
    //   None.
    //
    // Example:
-   // | pair#(int, string) p = new( 1, "second" );
+   // | pair#(int, string) p = new( 1, "apple" );
    //---------------------------------------------------------------------------
 
    function new( T1 first, T2 second, comparator#(this_type) cmp = null );
       this.first  = first;
       this.second = second;
-      this.cmp    = cmp;
+      if ( cmp ) this.cmp = cmp;
+      else       this.cmp = pair_comparator#(this_type)::get_instance();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: eq
    //   Returns 1 if this object is equal to the specified pair. The comparison
-   //   is done by the compare strategy object.
+   //   is done by the strategy object specified at the object construction.
    //
    // Argument:
    //   p - A pair to compare with.
    //
    // Returns:
    //   If this object is equal to *p*, then returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | pair#(int, string) q = new( 1, "apple" );
+   // | assert( p.eq( q ) == 1 ); // 1 == 1 && "apple" == "apple"
    //---------------------------------------------------------------------------
 
-   function bit eq( this_type p );
-      if ( cmp ) return cmp.eq( this, p );
-      else       return default_cmp.eq( this, p );
+   function bit eq( const ref this_type p );
+      return cmp.eq( this, p );
    endfunction: eq
 
    // Operator overloading is not supported?
@@ -105,7 +124,8 @@ class pair#( type T1 = int, type T2 = T1 );
    //---------------------------------------------------------------------------
    // Function: ne
    //   Returns 1 if this object is not equal to the specified pair. The
-   //   comparison is done by the compare strategy object.
+   //   comparison is done by the strategy object specified at the object
+   //   construction.
    //
    // Argument:
    //   p - A pair to compare with.
@@ -113,34 +133,43 @@ class pair#( type T1 = int, type T2 = T1 );
    // Returns:
    //   If this object is not equal to *p*, then returns 1. Otherwise, returns
    //   0.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | pair#(int, string) q = new( 1, "orange" );
+   // | assert( p.ne( q ) == 1 ); // "apple" != "orange"
    //---------------------------------------------------------------------------
 
-   function bit ne( this_type p );
-      if ( cmp ) return cmp.ne( this, p );
-      else       return default_cmp.ne( this, p );
+   function bit ne( const ref this_type p );
+      return cmp.ne( this, p );
    endfunction: ne
 
    //---------------------------------------------------------------------------
    // Function: lt
    //   Returns 1 if this object is less than the specified pair. The comparison
-   //   is done by the compare strategy object.
+   //   is done by the strategy object specified at the object construction.
    //
    // Argument:
    //   p - A pair to compare with.
    //
    // Returns:
    //   If this object is less than *p*, then returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | pair#(int, string) q = new( 2, "apple" );
+   // | assert( p.lt( q ) == 1 ); // 1 < 2
    //---------------------------------------------------------------------------
 
-   function bit lt( this_type p );
-      if ( cmp ) return cmp.lt( this, p );
-      else       return default_cmp.lt( this, p );
+   function bit lt( const ref this_type p );
+      return cmp.lt( this, p );
    endfunction: lt
 
    //---------------------------------------------------------------------------
    // Function: gt
    //   Returns 1 if this object is greater than the specified pair. The
-   //   comparison is done by the compare strategy object.
+   //   comparison is done by the strategy object specified at the object
+   //   construction.
    //
    // Argument:
    //   p - A pair to compare with.
@@ -148,17 +177,22 @@ class pair#( type T1 = int, type T2 = T1 );
    // Returns:
    //   If this object is greater than *p*, then returns 1. Otherwise, returns
    //   0.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "orange" );
+   // | pair#(int, string) q = new( 1, "apple" );
+   // | assert( p.gt( q ) == 1 ); // "orange" > "apple" by the lexicographical order
    //---------------------------------------------------------------------------
 
-   function bit gt( this_type p );
-      if ( cmp ) return cmp.gt( this, p );
-      else       return default_cmp.gt( this, p );
+   function bit gt( const ref this_type p );
+      return cmp.gt( this, p );
    endfunction: gt
 
    //---------------------------------------------------------------------------
    // Function: le
    //   Returns 1 if this object is less than or equal to the specified
-   //   pair. The comparison is done by the compare strategy object.
+   //   pair. The comparison is done by the strategy object specified at the
+   //   object construction.
    //
    // Argument:
    //   p - A pair to compare with.
@@ -166,17 +200,22 @@ class pair#( type T1 = int, type T2 = T1 );
    // Returns:
    //   If this object is less than or equal to *p*, then returns 1. Otherwise,
    //   returns 0.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | pair#(int, string) q = new( 1, "orange" );
+   // | assert( p.le( q ) == 1 ); // "apple" < "orange" by the lexicographical order
    //---------------------------------------------------------------------------
 
-   function bit le( this_type p );
-      if ( cmp ) return cmp.le( this, p );
-      else       return default_cmp.le( this, p );
+   function bit le( const ref this_type p );
+      return cmp.le( this, p );
    endfunction: le
 
    //---------------------------------------------------------------------------
    // Function: ge
    //   Returns 1 if this object is greater than or equal to the specified
-   //   pair. The comparison is done by the compare strategy object.
+   //   pair. The comparison is done by the strategy object specified at the
+   //   object construction.
    //
    // Argument:
    //   p - A pair to compare with.
@@ -184,11 +223,15 @@ class pair#( type T1 = int, type T2 = T1 );
    // Returns:
    //   If this object is greater than or equal to *p*, then returns
    //   1. Otherwise, returns 0.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 2, "apple" );
+   // | pair#(int, string) q = new( 1, "orange" );
+   // | assert( p.ge( q ) == 1 ); // 2 > 1
    //---------------------------------------------------------------------------
 
-   function bit ge( this_type p );
-      if ( cmp ) return cmp.ge( this, p );
-      else       return default_cmp.ge( this, p );
+   function bit ge( const ref this_type p );
+      return cmp.ge( this, p );
    endfunction: ge
 
    //---------------------------------------------------------------------------
@@ -197,6 +240,11 @@ class pair#( type T1 = int, type T2 = T1 );
    //
    // Returns:
    //   A cloned pair.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | pair#(int, string) q = p.clone();
+   // | assert( p.eq( q ) == 1 );
    //---------------------------------------------------------------------------
 
    function this_type clone();
@@ -205,13 +253,22 @@ class pair#( type T1 = int, type T2 = T1 );
 
    //---------------------------------------------------------------------------
    // Function: swap
-   //   Swaps the data of this object and the specified pair.
+   //   Swaps the contents of this pair with the ones of the specified pair.
    //
    // Argument:
-   //   p - A pair to swap.
+   //   p - A pair to swap the contents.
+   //
+   // Example:
+   // | pair#(int, string) p = new( 1, "apple" );
+   // | pair#(int, string) q = new( 2, "orange" );
+   // | p.swap( q );
+   // | assert( p.first == 2 );
+   // | assert( q.first == 1 );
+   // | assert( p.second == "orange" );
+   // | assert( q.second == "apple" );
    //---------------------------------------------------------------------------
 
-   function void swap( this_type p );
+   function void swap( ref this_type p );
       T1 f;
       T2 s;
 

@@ -1,5 +1,5 @@
 //==============================================================================
-// cl_pkg.sv (v0.1.0)
+// cl_common_packed_array.svh (v0.1.0)
 //
 // The MIT License (MIT)
 //
@@ -25,74 +25,47 @@
 // SOFTWARE.
 //==============================================================================
 
-`ifndef CL_PKG_SV
-`define CL_PKG_SV
+`ifndef CL_COMMON_PACKED_ARRAY_SVH
+`define CL_COMMON_PACKED_ARRAY_SVH
 
 //------------------------------------------------------------------------------
-// Package: cl
+// Class: common_packed_array
 //------------------------------------------------------------------------------
 
-package cl;
-   `include "cl_define.svh"
-   `include "cl_types.svh"
+virtual class common_packed_array #( type T = bit, int WIDTH = 1, type AT = T[WIDTH-1:0] );
 
-`ifdef CL_USE_DPI_C
-   import "DPI-C" function int c_find( string, string, int );
-`endif
+   //---------------------------------------------------------------------------
+   // Typedef: pa_type
+   //   The shorthand of the packed array of type *T*.
+   //---------------------------------------------------------------------------
 
-   `include "cl_util.svh"
-   `include "cl_putil.svh"
-   `include "cl_text.svh"
+   typedef T [WIDTH-1:0] pa_type;
 
-   `include "cl_formatter.svh"
-   `include "cl_string_formatter.svh"
-   `include "cl_decimal_formatter.svh"
-   `include "cl_hex_formatter.svh"
-   `include "cl_comma_formatter.svh"
-   `include "cl_global.svh"
+   //---------------------------------------------------------------------------
+   // Function: pa_to_a
+   //---------------------------------------------------------------------------
 
-   `include "cl_crc.svh"
-   `include "cl_scrambler.svh"
+   static function void pa_to_a( const ref pa_type src,
+				 ref AT dst,
+				 input bit reverse = 0 );
+      T filler;
+      integer src_size = $size( src );
+      integer dst_size = $size( dst );
+      int     min_size = choice#(integer)::min( src_size, dst_size );
 
-   `include "cl_comparator.svh"
-   `include "cl_default_comparator.svh"
-   `include "cl_choice.svh"
-   `include "cl_pair_comparator.svh"
-   `include "cl_pair.svh"
-   `include "cl_tuple_comparator.svh"
-   `include "cl_tuple.svh"
+      for ( int i = 0; i < min_size; i++ ) begin
+	 if ( reverse ) dst[WIDTH-1-i] = src[i];
+	 else           dst[i]         = src[i];
+      end
+      for ( int i = min_size; i < dst_size; i++ ) begin
+	 if ( reverse ) dst[WIDTH-1-i] = filler;
+	 else           dst[i]         = filler;
+      end
+   endfunction: pa_to_a
+   
+endclass: common_packed_array
 
-   `include "cl_common_array.svh"
-   `include "cl_common_packed_array.svh"
-   `include "cl_packed_array.svh"
-   `include "cl_unpacked_array.svh"
-   `include "cl_dynamic_array.svh"
-   `include "cl_queue.svh"
-   `include "cl_data_stream.svh"
-   `include "cl_bit_stream.svh"
-
-   `include "cl_iterator.svh"
-   `include "cl_collection.svh"
-   `include "cl_set_base.svh"
-   `include "cl_set_iterator.svh"
-   `include "cl_set.svh"
-   `include "cl_deque_iterator.svh"
-   `include "cl_deque_descending_iterator.svh"
-   `include "cl_deque.svh"
-   `include "cl_bidir_iterator.svh"
-   `include "cl_list_base.svh"
-   `include "cl_sub_list_base.svh"
-   `include "cl_list_iterator.svh"
-   `include "cl_list_bidir_iterator.svh"
-   `include "cl_list.svh"
-
-   `include "cl_random_num.svh"
-   `include "cl_kitchen_timer.svh"
-   `include "cl_journal.svh"
-
-endpackage: cl
-
-`endif //  `ifndef CL_PKG_SV
+`endif //  `ifndef CL_COMMON_PACKED_ARRAY_SVH
 
 //==============================================================================
 // Copyright (c) 2013, 2014 ClueLogic, LLC

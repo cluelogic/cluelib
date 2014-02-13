@@ -31,33 +31,62 @@
 //------------------------------------------------------------------------------
 // Class: tuple
 //   Provides a tuple that carries up to ten values, which can be different
-//   types. The default types are *int*.
+//   types.
+//
+// Parameters:
+//   T1 - (OPTIONAL) The type of the first value of a tuple. The default is
+//        *int*.
+//   T2 - (OPTIONAL) The type of the second value of a tuple. The default is
+//        *int*.
+//   T3 - (OPTIONAL) The type of the third value of a tuple. The default is
+//        *int*.
+//   T4 - (OPTIONAL) The type of the fourth value of a tuple. The default is
+//        *int*.
+//   T5 - (OPTIONAL) The type of the fifth value of a tuple. The default is
+//        *int*.
+//   T6 - (OPTIONAL) The type of the sixth value of a tuple. The default is 
+//        *int*.
+//   T7 - (OPTIONAL) The type of the seventh value of a tuple. The default is
+//        *int*.
+//   T8 - (OPTIONAL) The type of the eighth value of a tuple. The default is
+//        *int*.
+//   T9 - (OPTIONAL) The type of the ninth value of a tuple. The default is
+//        *int*.
+//   T10 - (OPTIONAL) The type of the tenth value of a tuple. The default is
+//         *int*.
 //------------------------------------------------------------------------------
 
 class tuple#( type T1 = int, 
-	      type T2 = int,
-	      type T3 = int,
-	      type T4 = int,
-	      type T5 = int,
-	      type T6 = int,
-	      type T7 = int,
-	      type T8 = int,
-	      type T9 = int,
+	      type T2 = int, 
+	      type T3 = int, 
+	      type T4 = int, 
+	      type T5 = int, 
+	      type T6 = int, 
+	      type T7 = int, 
+	      type T8 = int, 
+	      type T9 = int, 
 	      type T10 = int );
+
+   // In order to assign the default values to the "fourth" to the "tenth" of
+   // the new(), "int" is used for T4 to T10, instead of using T1 as their
+   // default types.
 
    //---------------------------------------------------------------------------
    // Typedef: this_type
-   //   The shorthand of tuple#(T1,T2,T3,T4,T5,T6,T7,T8,T9,T10)
+   //   The shorthand of *tuple#(T1,T2,T3,T4,T5,T6,T7,T8,T9,T10)*
    //---------------------------------------------------------------------------
 
    typedef tuple#(T1,T2,T3,T4,T5,T6,T7,T8,T9,T10) this_type;
 
    local comparator#(this_type) cmp;
-   local static tuple_comparator#(this_type) default_cmp = new();
 
    //---------------------------------------------------------------------------
    // Property: first
    //   The first value inside the tuple.
+   //
+   // Example:
+   // | tuple#(int,string,bit[7:0]) t = new( 1, "apple", 8'hFF );
+   // | assert( t.first == 1 );
    //---------------------------------------------------------------------------
 
    T1 first;
@@ -65,6 +94,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: second
    //   The second value inside the tuple.
+   //
+   // Example:
+   // | tuple#(int,string,bit[7:0]) t = new( 1, "apple", 8'hFF );
+   // | assert( t.second == "apple" );
    //---------------------------------------------------------------------------
 
    T2 second;
@@ -72,6 +105,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: third
    //   The third value inside the tuple.
+   //
+   // Example:
+   // | tuple#(int,string,bit[7:0]) t = new( 1, "apple", 8'hFF );
+   // | assert( t.third == 8'hFF );
    //---------------------------------------------------------------------------
 
    T3 third;
@@ -79,6 +116,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: fourth
    //   The fourth value inside the tuple.
+   //
+   // Example:
+   // | tuple#() t = new( 1, 2, 3, 4 );
+   // | assert( t.fourth == 4 );
    //---------------------------------------------------------------------------
 
    T4 fourth;
@@ -86,6 +127,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: fifth
    //   The fifth value inside the tuple.
+   //
+   // Example:
+   // | tuple#() t = new( 1, 2, 3, 4, 5 );
+   // | assert( t.fifth == 5 );
    //---------------------------------------------------------------------------
 
    T5 fifth;
@@ -93,6 +138,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: sixth
    //   The sixth value inside the tuple.
+   //
+   // Example:
+   // | tuple#() t = new( 1, 2, 3, 4, 5, 6 );
+   // | assert( t.sixth == 6 );
    //---------------------------------------------------------------------------
 
    T6 sixth;
@@ -100,6 +149,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: seventh
    //   The seventh value inside the tuple.
+   //
+   // Example:
+   // | tuple#() t = new( 1, 2, 3, 4, 5, 6, 7 );
+   // | assert( t.seventh == 7 );
    //---------------------------------------------------------------------------
 
    T7 seventh;
@@ -107,6 +160,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: eighth
    //   The eighth value inside the tuple.
+   //
+   // Example:
+   // | tuple#() t = new( 1, 2, 3, 4, 5, 6, 7, 8 );
+   // | assert( t.eighth == 8 );
    //---------------------------------------------------------------------------
 
    T8 eighth;
@@ -114,6 +171,10 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: ninth
    //   The ninth value inside the tuple.
+   //
+   // Example:
+   // | tuple#() t = new( 1, 2, 3, 4, 5, 6, 7, 8, 9 );
+   // | assert( t.ninth == 9 );
    //---------------------------------------------------------------------------
 
    T9 ninth;
@@ -121,34 +182,39 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Property: tenth
    //   The tenth value inside the tuple.
+   //
+   // Example:
+   // | tuple#() t = new( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 );
+   // | assert( t.tenth == 10 );
    //---------------------------------------------------------------------------
 
    T10 tenth;
 
    //---------------------------------------------------------------------------
    // Function: new
-   //   Creates a tuple of values of types T1, T2, and T3. Optionally a tuple
+   //   Creates a tuple of values of types T1, T2, and T3. Optionally, a tuple
    //   can have up to ten values of different types.
    //
    // Arguments:
-   //   first   - The first  value of the tuple.
-   //   second  - The second value of the tuple.
-   //   third   - The third  value of the tuple.
-   //   fourth  - (OPTIONAL) The fourth  value of the tuple.
-   //   fifth   - (OPTIONAL) The fifth   value of the tuple.
-   //   sixth   - (OPTIONAL) The sixth   value of the tuple.
-   //   seventh - (OPTIONAL) The seventh value of the tuple.
-   //   eighth  - (OPTIONAL) The eighth  value of the tuple.
-   //   ninth   - (OPTIONAL) The ninth   value of the tuple.
-   //   tenth   - (OPTIONAL) The tenth   value of the tuple.
-   //   cmp     - (OPTIONAL) Compare strategy. If not specified or null, 
-   //             tuple_comparator#(this_type) is used. The default is null.
+   //   first   - The first  value of a tuple.
+   //   second  - The second value of a tuple.
+   //   third   - The third  value of a tuple.
+   //   fourth  - (OPTIONAL) The fourth  value of a tuple.
+   //   fifth   - (OPTIONAL) The fifth   value of a tuple.
+   //   sixth   - (OPTIONAL) The sixth   value of a tuple.
+   //   seventh - (OPTIONAL) The seventh value of a tuple.
+   //   eighth  - (OPTIONAL) The eighth  value of a tuple.
+   //   ninth   - (OPTIONAL) The ninth   value of a tuple.
+   //   tenth   - (OPTIONAL) The tenth   value of a tuple.
+   //   cmp - (OPTIONAL) A strategy object used to compare two tuples. If not
+   //         specified or *null*, <tuple_comparator> *#(this_type)* is
+   //         used. The default is *null*.
    //
    // Returns:
    //   None.
    //
    // Example:
-   // | tuple#(int, string, bit[7:0]) t = new( 1, "second", 8'h03 );
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "apple", 8'hFF );
    //---------------------------------------------------------------------------
 
    function new( T1 first,
@@ -172,24 +238,29 @@ class tuple#( type T1 = int,
       this.eighth  = eighth;
       this.ninth   = ninth;
       this.tenth   = tenth;
-      this.cmp     = cmp;
+      if ( cmp ) this.cmp = cmp;
+      else       this.cmp = tuple_comparator#(this_type)::get_instance();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: eq
    //   Returns 1 if this object is equal to the specified tuple. The comparison
-   //   is done by the compare strategy object.
+   //   is done by the strategy object specified at the object construction.
    //
    // Argument:
    //   t - A tuple to compare with.
    //
    // Returns:
-   //   If this object is equal to *p*, then returns 1. Otherwise, returns 0.
+   //   If this object is equal to *t*, then returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "apple", 8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = new( 1, "apple", 8'hFF );
+   // | assert( t.eq( u ) == 1 ); // 1 == 1 && "apple" == "apple" && 8'hFF == 8'hFF
    //---------------------------------------------------------------------------
 
-   function bit eq( this_type t );
-      if ( cmp ) return cmp.eq( this, t );
-      else       return default_cmp.eq( this, t );
+   function bit eq( const ref this_type t );
+      return cmp.eq( this, t );
    endfunction: eq
 
    // Operator overloading is not supported?
@@ -198,90 +269,115 @@ class tuple#( type T1 = int,
    //---------------------------------------------------------------------------
    // Function: ne
    //   Returns 1 if this object is not equal to the specified tuple. The
-   //   comparison is done by the compare strategy object.
+   //   comparison is done by the strategy object specified at the object
+   //   construction.
    //
    // Argument:
    //   t - A tuple to compare with.
    //
    // Returns:
-   //   If this object is not equal to *p*, then returns 1. Otherwise, returns
+   //   If this object is not equal to *t*, then returns 1. Otherwise, returns
    //   0.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "apple",  8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = new( 1, "orange", 8'hFF );
+   // | assert( t.ne( u ) == 1 ); // "apple" != "orange"
    //---------------------------------------------------------------------------
 
-   function bit ne( this_type t );
-      if ( cmp ) return cmp.ne( this, t );
-      else       return default_cmp.ne( this, t );
+   function bit ne( const ref this_type t );
+      return cmp.ne( this, t );
    endfunction: ne
 
    //---------------------------------------------------------------------------
    // Function: lt
-   //   Returns 1 if this object is less than the specified tuple. The comparison
-   //   is done by the compare strategy object.
+   //   Returns 1 if this object is less than the specified tuple. The
+   //   comparison is done by the strategy object specified at the object
+   //   construction.
    //
    // Argument:
    //   t - A tuple to compare with.
    //
    // Returns:
-   //   If this object is less than *p*, then returns 1. Otherwise, returns 0.
+   //   If this object is less than *t*, then returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "apple", 8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = new( 2, "apple", 8'hFF );
+   // | assert( t.lt( u ) == 1 ); // 1 < 2
    //---------------------------------------------------------------------------
 
-   function bit lt( this_type t );
-      if ( cmp ) return cmp.lt( this, t );
-      else       return default_cmp.lt( this, t );
+   function bit lt( const ref this_type t );
+      return cmp.lt( this, t );
    endfunction: lt
 
    //---------------------------------------------------------------------------
    // Function: gt
    //   Returns 1 if this object is greater than the specified tuple. The
-   //   comparison is done by the compare strategy object.
+   //   comparison is done by the strategy object specified at the object
+   //   construction.
    //
    // Argument:
    //   t - A tuple to compare with.
    //
    // Returns:
-   //   If this object is greater than *p*, then returns 1. Otherwise, returns
+   //   If this object is greater than *t*, then returns 1. Otherwise, returns
    //   0.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "orange", 8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = new( 1, "apple",  8'hFF );
+   // | assert( t.gt( u ) == 1 ); // "orange" > "apple" by the lexicographical order
    //---------------------------------------------------------------------------
 
-   function bit gt( this_type t );
-      if ( cmp ) return cmp.gt( this, t );
-      else       return default_cmp.gt( this, t );
+   function bit gt( const ref this_type t );
+      return cmp.gt( this, t );
    endfunction: gt
 
    //---------------------------------------------------------------------------
    // Function: le
    //   Returns 1 if this object is less than or equal to the specified
-   //   tuple. The comparison is done by the compare strategy object.
+   //   tuple. The comparison is done by the strategy object specified at the
+   //   object construction.
    //
    // Argument:
    //   t - A tuple to compare with.
    //
    // Returns:
-   //   If this object is less than or equal to *p*, then returns 1. Otherwise,
+   //   If this object is less than or equal to *t*, then returns 1. Otherwise,
    //   returns 0.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "apple",  8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = new( 1, "orange", 8'hFF );
+   // | assert( t.le( u ) == 1 ); // "apple" < "orange" by the lexicographical order
    //---------------------------------------------------------------------------
 
-   function bit le( this_type t );
-      if ( cmp ) return cmp.le( this, t );
-      else       return default_cmp.le( this, t );
+   function bit le( const ref this_type t );
+      return cmp.le( this, t );
    endfunction: le
 
    //---------------------------------------------------------------------------
    // Function: ge
    //   Returns 1 if this object is greater than or equal to the specified
-   //   tuple. The comparison is done by the compare strategy object.
+   //   tuple. The comparison is done by the strategy object specified at the
+   //   object construction.
    //
    // Argument:
    //   t - A tuple to compare with.
    //
    // Returns:
-   //   If this object is greater than or equal to *p*, then returns
+   //   If this object is greater than or equal to *t*, then returns
    //   1. Otherwise, returns 0.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 2, "apple",  8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = new( 1, "orange", 8'hFF );
+   // | assert( t.ge( u ) == 1 ); // 2 > 1
    //---------------------------------------------------------------------------
 
-   function bit ge( this_type t );
-      if ( cmp ) return cmp.ge( this, t );
-      else       return default_cmp.ge( this, t );
+   function bit ge( const ref this_type t );
+      return cmp.ge( this, t );
    endfunction: ge
 
    //---------------------------------------------------------------------------
@@ -290,6 +386,11 @@ class tuple#( type T1 = int,
    //
    // Returns:
    //   A cloned tuple.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "apple",  8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = t.clone();
+   // | assert( t.eq( u ) == 1 );
    //---------------------------------------------------------------------------
 
    function this_type clone();
@@ -299,13 +400,24 @@ class tuple#( type T1 = int,
 
    //---------------------------------------------------------------------------
    // Function: swap
-   //   Swaps the data of this object and the specified tuple.
+   //   Swaps the contents of this tuple with the ones of the specified tuple.
    //
    // Argument:
-   //   t - A tuple to swap.
+   //   t - A tuple to swap the contents.
+   //
+   // Example:
+   // | tuple#(int, string, bit[7:0]) t = new( 1, "apple",  8'hFF );
+   // | tuple#(int, string, bit[7:0]) u = new( 2, "orange", 8'hAA );
+   // | t.swap( u );
+   // | assert( t.first == 2 );
+   // | assert( u.first == 1 );
+   // | assert( t.second == "orange" );
+   // | assert( u.second == "apple" );
+   // | assert( t.third == 8'hAA );
+   // | assert( u.third == 8'hFF );
    //---------------------------------------------------------------------------
 
-   function void swap( this_type t );
+   function void swap( ref this_type t );
       T1 e1;
       T2 e2;
       T3 e3;

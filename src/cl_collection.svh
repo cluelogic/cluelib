@@ -55,7 +55,7 @@ virtual class collection#( type T = int );
    //   The default comparator used if *cmp* is not specified.
    //---------------------------------------------------------------------------
    
-   protected static comparator#(T) default_cmp = new();
+   protected static comparator#(T) default_cmp = comparator#(T)::get_instance();
 
    //---------------------------------------------------------------------------
    // Property: fmtr

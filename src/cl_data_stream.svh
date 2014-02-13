@@ -137,49 +137,6 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 ) exten
    endfunction: make_divisible
 
    //---------------------------------------------------------------------------
-   // Function: split
-   //   Splits the specified data stream into two data streams.
-   //
-   // Arguments:
-   //   ds  - Input data stream.
-   //   ds0 - Output data stream with data elements at even location of the
-   //         input data stream.
-   //   ds1 - Output data stream with data elements at odd location of the
-   //         input data stream.
-   //   pad - (OPTIONAL) If the length of the input data stream is odd, and
-   //         *pad* is 1, then the last element is filled with *padding*. If
-   //         *pad* is 0, no padding is made. The default is 0.
-   //   padding - (OPTIONAL) The padding data if the length of the input data
-   //             stream is odd and *pad* is 1. The default is 0.
-   //
-   // Examples:
-   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3]          (pad=0)
-   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3][padding] (pad=1)
-   //---------------------------------------------------------------------------
-
-   static function void split( ds_type ds,
-			       ref ds_type ds0,
-			       ref ds_type ds1,
-			       input bit pad = 0,
-			       input pa_type padding = 0 );
-      int ds_size = ds.size();
-
-      if ( ds_size % 2 == 0 ) begin // even
-	 ds0 = new[ ds_size / 2 ];
-	 ds1 = new[ ds_size / 2 ];
-      end else if ( pad ) begin
-	 ds0 = new[ ( ds_size + 1 ) / 2 ];
-	 ds1 = new[ ( ds_size + 1 ) / 2 ];
-      end else begin
-	 ds0 = new[ ( ds_size + 1 ) / 2 ];
-	 ds1 = new[ ds_size / 2 ];
-      end
-      for ( int i = 0; i < ds.size(); i += 2 ) ds0[i/2] = ds[i];
-      for ( int i = 1; i < ds.size(); i += 2 ) ds1[i/2] = ds[i];
-      if ( ( ds_size % 2 == 1 ) && pad ) ds1[ ds1.size() - 1 ] = padding;
-   endfunction: split      
-
-   //---------------------------------------------------------------------------
    // Function: sequential
    //   Returns a data stream with the elements whose values are sequential.
    //
@@ -303,11 +260,13 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 ) exten
       scramble = new[ ds.size() ];
       foreach ( ds[i] ) begin
 	 T bitstream[];
+	 T scrambled[];
 
-	 bitstream = packed_array#(T,WIDTH)::to_dynamic_array( ds[i], 
+	 bitstream = packed_array#(T,WIDTH)::to_dynamic_array( ds[i],
 							       little_endian );
-	 scramble[i] = packed_array#(T,WIDTH)::from_dynamic_array
-		       ( scrblr.scramble( bitstream, lfsr ), little_endian );
+	 scrambled = scrblr.scramble( bitstream, lfsr );
+	 scramble[i] = packed_array#(T,WIDTH)::from_dynamic_array( scrambled,
+								   little_endian );
       end
    endfunction: scramble
 
@@ -337,7 +296,7 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 ) exten
    //                     data stream are converted.
    //   abbrev          - (OPTIONAL) A string to indicate the abbreviation of 
    //                     the items in the data stream. The *abbrev* is used
-   //                     only if not all items are converted to a string. The
+   //                     only if all items are not converted to a string. The
    //                     default is three periods ("...").
    //
    // Returns:

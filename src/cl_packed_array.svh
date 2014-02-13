@@ -30,9 +30,13 @@
 
 //------------------------------------------------------------------------------
 // Class: packed_array
-//   A parameterized class that manages a packed array.  The type *T* must be
-//   the single bit data types (*bit*, *logic*, *reg*), enumerated types, or
-//   other packed arrays or packed structures. The default type is *bit*.
+//   A parameterized class that manages a packed array.  
+//
+// Parameters:
+//   T - (OPTIONAL) The type of a packed array. The type *T* must be the single
+//       bit data types (*bit*, *logic*, or *reg*), enumerated types, or other
+//       packed arrays or packed structures. The default type is *bit*.
+//   WIDTH - (OPTIONAL) The width of a packed array. The default is 1.
 //------------------------------------------------------------------------------
 
 virtual class packed_array #( type T = bit, int WIDTH = 1 );
@@ -45,18 +49,18 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    typedef T [WIDTH-1:0] pa_type;
 
    //---------------------------------------------------------------------------
-   // Typedef: da_type
-   //   The shorthand of the dynamic array of type *T*.
-   //---------------------------------------------------------------------------
-
-   typedef T da_type[];
-
-   //---------------------------------------------------------------------------
    // Typedef: ua_type
    //   The shorthand of the unpacked array of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T ua_type[WIDTH];
+
+   //---------------------------------------------------------------------------
+   // Typedef: da_type
+   //   The shorthand of the dynamic array of type *T*.
+   //---------------------------------------------------------------------------
+
+   typedef T da_type[];
 
    //---------------------------------------------------------------------------
    // Typedef: q_type
@@ -66,247 +70,464 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    typedef T q_type[$];
 
    //---------------------------------------------------------------------------
-   // Function: from_dynamic_array
-   //   Converts a dynamic array of type *T* to the packed array of the same
-   //   type.  If the size of the dynamic array is larger than *WIDTH*, excess
-   //   elements are ignored.
-   //
-   // Arguments:
-   //   da            - An input dynamic array.
-   //   little_endian - (OPTIONAL) If 1, the item at index 0 of the dynamic
-   //                   array occupies the LSBs.  If 0, the item at index 0 of
-   //                   the dynamic array occupies the MSBs.  The default is 0.
-   //
-   // Returns:
-   //   The packed array converted from *da*.
-   //
-   // Examples:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-   // | assert( packed_array#(bit,8)::from_dynamic_array( da                      ) == 8'h1B ); // bit[7:0]
-   // | assert( packed_array#(bit,8)::from_dynamic_array( da, .little_endian( 1 ) ) == 8'hD8 );
-   //---------------------------------------------------------------------------
-
-   static function pa_type from_dynamic_array( da_type da,
-					       bit little_endian = 0 );
-      pa_type pa;
-      da_type size_adjusted_da;
-
-      if ( da.size() == WIDTH )	size_adjusted_da = da;
-      else                      size_adjusted_da = new[WIDTH]( da );
-
-      if ( little_endian ) size_adjusted_da.reverse();
-
-`ifdef CL_SUPPORT_BIT_STREAM_CASTING
-      pa = pa_type'( size_adjusted_da );
-`else
-      foreach ( size_adjusted_da[i] ) pa[WIDTH-1-i] = size_adjusted_da[i];
-`endif
-
-      return pa;
-   endfunction: from_dynamic_array
-
-   //---------------------------------------------------------------------------
    // Function: from_unpacked_array
-   //   Converts an unpacked array of type *T* to the packed array of the same
-   //   type.
+   //   (STATIC) Converts an unpacked array of type *T* to a packed array of the
+   //   same type.
    //
    // Arguments:
-   //   ua            - An input unpacked array.
-   //   little_endian - (OPTIONAL) If 1, the item at index 0 of the unpacked
-   //                   array occupies the LSBs.  If 0, the item at index 0 of
-   //                   the unpacked array occupies the MSBs.  The default is 0.
+   //   ua      - An unpacked array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *ua* is
+   //             positioned to the index 0 of the packed array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
    //
    // Returns:
-   //   The packed array converted from *ua*.
+   //   A packed array converted from *ua*.
    //
    // Examples:
-   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
-   // | assert( packed_array#(bit,8)::from_unpacked_array( ua                      ) == 8'h1B ); // bit[7:0]
-   // | assert( packed_array#(bit,8)::from_unpacked_array( ua, .little_endian( 1 ) ) == 8'hD8 );
+   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+   // | assert( packed_array#(bit,8)::from_unpacked_array( ua                ) == 8'hD8 ); // bit[7:0]
+   // | assert( packed_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == 8'h1B );
+   //
+   // See Also:
+   //   <ua_to_pa>
    //---------------------------------------------------------------------------
 
-   static function pa_type from_unpacked_array( ua_type ua,
-						bit little_endian = 0 );
-      pa_type pa;
-
-      if ( little_endian ) ua.reverse();
-
-`ifdef CL_SUPPORT_BIT_STREAM_CASTING
-      pa = pa_type'( ua );
-`else
-      foreach ( ua[i] ) pa[WIDTH-1-i] = ua[i];
-`endif
-
-      return pa;
+   static function pa_type from_unpacked_array( const ref ua_type ua,
+						input bit reverse = 0 );
+      common_array#( T, WIDTH, pa_type )::ua_to_a( ua, from_unpacked_array,
+						   reverse );
    endfunction: from_unpacked_array
 
    //---------------------------------------------------------------------------
-   // Function: from_queue
-   //   Converts a queue of type *T* to the packed array of the same type.  If
-   //   the size of the queue is larger than *WIDTH*, excess elements are
-   //   ignored.
+   // Function: to_unpacked_array
+   //   (STATIC) Converts a packed array of type *T* to an unpacked array of the
+   //   same type.
    //
    // Arguments:
-   //   da            - An input dynamic array.
-   //   little_endian - (OPTIONAL) If 1, the item at index 0 of the queue
-   //                   occupies the LSBs.  If 0, the item at index 0 of the
-   //                   queue occupies the MSBs.  The default is 0.
+   //   pa      - A packed array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *pa* is
+   //             positioned to the index 0 of the unpacked array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
    //
    // Returns:
-   //   The packed array converted from *q*.
+   //   An unpacked array converted from *pa*.
    //
    // Examples:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-   // | assert( packed_array#(bit,8)::from_queue( q                      ) == 8'h1B ); // bit[7:0]
-   // | assert( packed_array#(bit,8)::from_queue( q, .little_endian( 1 ) ) == 8'hD8 );
+   // | bit[7:0] pa = 8'hD8;
+   // | assert( packed_array#(bit,8)::to_unpacked_array( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( packed_array#(bit,8)::to_unpacked_array( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <pa_to_ua>
    //---------------------------------------------------------------------------
 
-   static function pa_type from_queue( q_type q,
-				       bit little_endian = 0 );
-      pa_type pa;
+   static function ua_type to_unpacked_array( const ref pa_type pa,
+					      input bit reverse = 0 );
+      common_packed_array#( T, WIDTH, ua_type )::pa_to_a( pa, to_unpacked_array,
+							  reverse );
+   endfunction: to_unpacked_array
 
-      // The size of 'q' can be different from the 'WIDTH', but a bit-stream
-      // casting requires the same size. To support such a case, always use a
-      // 'foreach'.
-      
-// `ifdef CL_SUPPORT_BIT_STREAM_CASTING
-//       if ( little_endian ) q.reverse();
-//       pa = pa_type'( q );
-// `else
-      foreach ( q[i] ) begin
-	 if ( little_endian ) pa[i]         = q[i];
-	 else                 pa[WIDTH-1-i] = q[i];
-      end
-// `endif
+   //---------------------------------------------------------------------------
+   // Function: from_dynamic_array
+   //   (STATIC) Converts a dynamic array of type *T* to a packed array of the
+   //   same type.  If the size of the dynamic array is larger than *WIDTH*, the
+   //   excess elements are ignored. If the size of the dynamic array is smaller
+   //   than *WIDTH*, the default value of type *T* is used for the missing
+   //   elements.
+   //
+   // Arguments:
+   //   da      - A dynamic array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of the packed array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
+   //
+   // Returns:
+   //   A packed array converted from *da*.
+   //
+   // Examples:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | assert( packed_array#(bit,8)::from_dynamic_array( da                ) == 8'hD8 ); // bit[7:0]
+   // | assert( packed_array#(bit,8)::from_dynamic_array( da, .reverse( 1 ) ) == 8'h1B );
+   //
+   // See Also:
+   //   <da_to_pa>
+   //---------------------------------------------------------------------------
 
-      return pa;
-   endfunction: from_queue
+   static function pa_type from_dynamic_array( const ref da_type da,
+					       input bit reverse = 0 );
+      common_array#( T, WIDTH, pa_type )::da_to_a( da, from_dynamic_array, 
+						   reverse );
+   endfunction: from_dynamic_array
 
    //---------------------------------------------------------------------------
    // Function: to_dynamic_array
-   //   Converts a packed array of type *T* to the dynamic array of the same
-   //   type.
+   //   (STATIC) Converts a packed array of type *T* to a dynamic array of the
+   //   same type.
    //
    // Arguments:
-   //   pa            - An input packed array.
-   //   little_endian - (OPTIONAL) If 1, the LSBs of a packed array occupy the
-   //                   index 0 of the dynamic array. If 0, the MSBs of a packed
-   //                   array occupy the index 0 of the dynamic array. The
-   //                   default is 0.
+   //   pa      - A packed array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *pa* is
+   //             positioned to the index 0 of the dynamic array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
    //
    // Returns:
-   //   The dynamic array converted from *pa*.
+   //   A dynamic array converted from *pa*.
    //
    // Examples:
-   // | bit [7:0] pa = 8'hD8;
-   // | assert( packed_array#(bit,8)::to_dynamic_array( pa                      ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
-   // | assert( packed_array#(bit,8)::to_dynamic_array( pa, .little_endian( 1 ) ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit[7:0] pa = 8'hD8;
+   // | assert( packed_array#(bit,8)::to_dynamic_array( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <pa_to_da>
    //---------------------------------------------------------------------------
 
-   static function da_type to_dynamic_array( pa_type pa,
-					     bit little_endian = 0 );
-      da_type da = new[WIDTH];
-
-`ifdef CL_SUPPORT_BIT_STREAM_CASTING
-      da = da_type'( pa );
-`else
-      foreach( pa[i] ) da[WIDTH-1-i] = pa[i];
-`endif
-      
-      if ( little_endian ) da.reverse();
-      return da;
+   static function da_type to_dynamic_array( const ref pa_type pa,
+					     input bit reverse = 0 );
+      to_dynamic_array = new[WIDTH];
+      common_packed_array#( T, WIDTH, da_type )::pa_to_a( pa, to_dynamic_array,
+							  reverse );
    endfunction: to_dynamic_array
-   
+
    //---------------------------------------------------------------------------
-   // Function: to_unpacked_array
-   //   Converts a packed array of type *T* to the unpacked array of the same
-   //   type.
+   // Function: from_queue
+   //   (STATIC) Converts a queue of type *T* to a packed array of the same
+   //   type.  If the size of the queue is larger than *WIDTH*, the excess
+   //   elements are ignored. If the size of the queue is smaller than *WIDTH*,
+   //   the default valus of type *T* is used for the missing elements.
    //
    // Arguments:
-   //   pa            - An input packed array.
-   //   little_endian - (OPTIONAL) If 1, the LSBs of a packed array occupy the
-   //                   index 0 of the unpacked array. If 0, the MSBs of a
-   //                   packed array occupy the index 0 of the unpacked
-   //                   array. The default is 0.
+   //   q - A queue to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of the packed array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
    //
    // Returns:
-   //   The unpacked array converted from *pa*.
+   //   A packed array converted from *q*.
    //
    // Examples:
-   // | bit [7:0] pa = 8'hD8;
-   // | assert( packed_array#(bit,8)::to_unpacked_array( pa                      ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
-   // | assert( packed_array#(bit,8)::to_unpacked_array( pa, .little_endian( 1 ) ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | assert( packed_array#(bit,8)::from_queue( q                ) == 8'hD8 ); // bit[7:0]
+   // | assert( packed_array#(bit,8)::from_queue( q, .reverse( 1 ) ) == 8'h1B );
+   //
+   // See Also:
+   //   <q_to_pa>
    //---------------------------------------------------------------------------
 
-   static function ua_type to_unpacked_array( pa_type pa,
-					      bit little_endian = 0 );
-      ua_type ua;
+   static function pa_type from_queue( const ref q_type q,
+				       input bit reverse = 0 );
+      common_array#( T, WIDTH, pa_type )::q_to_a( q, from_queue, reverse );
+   endfunction: from_queue
 
-`ifdef CL_SUPPORT_BIT_STREAM_CASTING
-      ua = ua_type'( pa );
-`else
-      foreach ( pa[i] ) ua[WIDTH-1-i] = pa[i];
-`endif
-      
-      if ( little_endian ) ua.reverse();
-      return ua;
-   endfunction: to_unpacked_array
-   
    //---------------------------------------------------------------------------
    // Function: to_queue
-   //   Converts a packed array of type *T* to the queue of the same type.
+   //   (STATIC) Converts a packed array of type *T* to a queue of the same
+   //   type.
    //
    // Arguments:
-   //   pa            - An input packed array.
-   //   little_endian - (OPTIONAL) If 1, the LSBs of a packed array occupy the
-   //                   index 0 of the queue. If 0, the MSBs of a packed array
-   //                   occupy the index 0 of the queue.  The default is 0.
+   //   pa      - A packed array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *pa* is
+   //             positioned to the index 0 of the queue. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
    //
    // Returns:
-   //   The queue converted from *pa*.
+   //   A queue converted from *pa*.
    //
    // Examples:
-   // | bit [7:0] pa = 8'hD8;
-   // | assert( packed_array#(bit,8)::to_queue( pa                      ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
-   // | assert( packed_array#(bit,8)::to_queue( pa, .little_endian( 1 ) ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit[7:0] pa = 8'hD8;
+   // | assert( packed_array#(bit,8)::to_queue( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <pa_to_q>
    //---------------------------------------------------------------------------
 
-   static function q_type to_queue( pa_type pa,
-				    bit little_endian = 0 );
-      q_type q;
-
-`ifdef CL_SUPPORT_BIT_STREAM_CASTING
-      q = q_type'( pa );
-`else
-      foreach ( pa[i] ) q.push_back( pa[i] ); // pa[WIDTH-1] to pa[0]
-`endif
-      
-      if ( little_endian ) q.reverse();
-      return q;
+   static function q_type to_queue( const ref pa_type pa,
+				    input bit reverse = 0 );
+      common_array#( T, WIDTH, pa_type )::a_to_q( pa, to_queue, reverse );
    endfunction: to_queue
 
    //---------------------------------------------------------------------------
-   // Function: reverse
-   //   Returns a copy of the given packed array with the elements in reverse
-   //   order.
+   // Function: ua_to_pa
+   //   (STATIC) Converts an unpacked array of type *T* to a packed array of the
+   //   same type. Unlike <from_unpacked_array>, this function populates the
+   //   packed array passed by reference, instead of returning a new packed
+   //   array.
    //
-   // Argument:
-   //   pa - An input packed array.
+   // Arguments:
+   //   ua      - An unpacked array to be converted.
+   //   pa      - A packed array reference to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *ua* is
+   //             positioned to the index 0 of *pa*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
    //
    // Returns:
-   //   A copy of *pa* with the elements in reverse order.
+   //   None.
    //
-   // Example:
-   // | assert( packed_array#(bit,8)::reverse( 8'h0F ) == 8'hF0 );
+   // Examples:
+   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+   // | bit[7:0] pa;
+   // |
+   // | packed_array#(bit,8)::ua_to_pa( ua, pa );
+   // | assert( pa == 8'hD8 ); // bit[7:0]
+   // |
+   // | packed_array#(bit,8)::ua_to_pa( ua, pa, .reverse( 1 ) );
+   // | assert( pa == 8'h1B );
+   //
+   // See Also:
+   //   <from_unpacked_array>
    //---------------------------------------------------------------------------
 
-   static function pa_type reverse( pa_type pa );
-      foreach ( pa[i] ) reverse[WIDTH-1-i] = pa[i];
+   static function void ua_to_pa( const ref ua_type ua,
+				  ref pa_type pa,
+				  input bit reverse = 0 );
+      common_array#( T, WIDTH, pa_type )::ua_to_a( ua, pa, reverse );
+   endfunction: ua_to_pa
+
+   //---------------------------------------------------------------------------
+   // Function: pa_to_ua
+   //   (STATIC) Converts a packed array of type *T* to an unpacked array of the
+   //   same type. Unlike <to_unpacked_array>, this function populates the
+   //   unpacked array passed by reference, instead of returning a new unpacked
+   //   array.
+   //
+   // Arguments:
+   //   pa      - A packed array to be converted.
+   //   ua      - An unpacked array reference to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *pa* is
+   //             positioned to the index 0 of *ua*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit[7:0] pa = 8'hD8;
+   // | bit ua[8];
+   // |
+   // | packed_array#(bit,8)::pa_to_ua( pa, ua );
+   // | assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | packed_array#(bit,8)::pa_to_ua( pa, ua, .reverse( 1 ) );
+   // | assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <to_unpacked_array>
+   //---------------------------------------------------------------------------
+
+   static function void pa_to_ua( const ref pa_type pa,
+				  ref ua_type ua,
+				  input bit reverse = 0 );
+      common_packed_array#( T, WIDTH, ua_type )::pa_to_a( pa, ua, reverse );
+   endfunction: pa_to_ua
+
+   //---------------------------------------------------------------------------
+   // Function: da_to_pa
+   //   (STATIC) Converts a dynamic array of type *T* to a packed array of the
+   //   same type.  Unlike <from_dynamic_array>, this function populates the
+   //   packed array passed by reference, instead of returning a new packed
+   //   array. If the size of the dynamic array is larger than *WIDTH*, the
+   //   excess elements are ignored. If the size of the dynamic array is smaller
+   //   than *WIDTH*, the default value of type *T* is used for the missing
+   //   elements.
+   //
+   // Arguments:
+   //   da      - A dynamic array to be converted.
+   //   pa      - A packed array to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of *pa*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit[7:0] pa;
+   // |
+   // | packed_array#(bit,8)::da_to_pa( da, pa );
+   // | assert( pa == 8'hD8 ); // bit[7:0]
+   // |
+   // | packed_array#(bit,8)::da_to_pa( da, pa, .reverse( 1 ) );
+   // | assert( pa == 8'h1B );
+   //
+   // See Also:
+   //   <from_dynamic_array>
+   //---------------------------------------------------------------------------
+
+   static function void da_to_pa( const ref da_type da,
+				  ref pa_type pa,
+				  input bit reverse = 0 );
+      common_array#( T, WIDTH, pa_type )::da_to_a( da, pa, reverse );
+   endfunction: da_to_pa
+
+   //---------------------------------------------------------------------------
+   // Function: pa_to_da
+   //   (STATIC) Converts a packed array of type *T* to a dynamic array of the
+   //   same type. Unlike <to_dynamic_array>, this function populates the
+   //   dynamic array passed by reference, instead of returning a new dynamic
+   //   array.
+   //
+   // Arguments:
+   //   pa - A packed array to be converted.
+   //   da - A dynamic array to be populated. This function does _not_ resize
+   //        *da*. Make sure to set the size of the dynamic array to accommodate
+   //        the elements of *pa* before calling this function.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *pa* is
+   //             positioned to the index 0 of *da*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit[7:0] pa = 8'hD8;
+   // | bit da[] = new[8]; // set the size of da[]
+   // |
+   // | packed_array#(bit,8)::pa_to_da( pa, da );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | packed_array#(bit,8)::pa_to_da( pa, da, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <to_dynamic_array>
+   //---------------------------------------------------------------------------
+
+   static function void pa_to_da( const ref pa_type pa,
+				  ref da_type da,
+				  input bit reverse = 0 );
+      common_packed_array#( T, WIDTH, da_type )::pa_to_a( pa, da, reverse );
+   endfunction: pa_to_da
+
+   //---------------------------------------------------------------------------
+   // Function: q_to_pa
+   //   (STATIC) Converts a queue of type *T* to a packed array of the same
+   //   type.  Unlike <from_queue>, this function populates the packed array
+   //   passed by reference, instead of returning a new packed array. If the
+   //   size of the queue is larger than *WIDTH*, the excess elements are
+   //   ignored. If the size of the queue is smaller than *WIDTH*, the default
+   //   valus of type *T* is used for the missing elements.
+   //
+   // Arguments:
+   //   q - A queue to be converted.
+   //   pa - A packed array to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of *pa*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit[7:0] pa;
+   // |
+   // | packed_array#(bit,8)::q_to_pa( q, pa );
+   // | assert( pa == 8'hD8 ); // bit[7:0]
+   // |
+   // | packed_array#(bit,8)::q_to_pa( q, pa, .reverse( 1 ) );
+   // | assert( pa == 8'h1B );
+   //
+   // See Also:
+   //   <from_queue>
+   //---------------------------------------------------------------------------
+
+   static function void q_to_pa( const ref q_type q,
+				 ref pa_type pa,
+				 input bit reverse = 0 );
+      common_array#( T, WIDTH, pa_type )::q_to_a( q, pa, reverse );
+   endfunction: q_to_pa
+
+   //---------------------------------------------------------------------------
+   // Function: pa_to_q
+   //   (STATIC) Converts a packed array of type *T* to a queue of the same
+   //   type. Unlike <to_queue>, this function populates the queue passed by
+   //   reference instead of returning a new queue.
+   //
+   // Arguments:
+   //   pa - A packed array to be converted.
+   //   q - A queue to be populated.  This function does _not_ change the size
+   //       of *q*. Make sure that *q* has enough items to accommodate the
+   //       elements of *pa* before calling this function.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *pa* is
+   //             positioned to the index 0 of *q*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit[7:0] pa = 8'hD8;
+   // | bit q[$] = { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // |
+   // | packed_array#(bit,8)::pa_to_q( pa, q );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | packed_array#(bit,8)::pa_to_q( pa, q, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <to_queue>
+   //---------------------------------------------------------------------------
+
+   static function void pa_to_q( const ref pa_type pa,
+				 ref q_type q,
+				 input bit reverse = 0 );
+//    common_array#( T, WIDTH, pa_type )::a_to_q( pa, q, reverse );
+      common_packed_array#( T, WIDTH, q_type )::pa_to_a( pa, q, reverse );
+   endfunction: pa_to_q
+
+   //---------------------------------------------------------------------------
+   // Function: init
+   //   (STATIC) Initializes the each element of the given packed array to the
+   //   specified value.
+   //
+   // Arguments:
+   //   pa - A packed array to be initialized.
+   //   val - A value to initialize the elements of *pa*.
+   //
+   // Returns:
+   //   None.
+   //
+   // Example:
+   // | bit[7:0] pa;
+   // | packed_array#(bit,8)::init( pa, 1'b1 );
+   // | assert( pa == 8'hFF );
+   //---------------------------------------------------------------------------
+
+   static function void init( ref pa_type pa, input T val );
+      common_array#( T, WIDTH, pa_type )::init( pa, val );
+   endfunction: init
+
+   //---------------------------------------------------------------------------
+   // Function: reverse
+   //   (STATIC) Reverses the order of the elements of the given packed array.
+   //
+   // Argument:
+   //   pa - A packed array to be reversed.
+   //
+   // Returns:
+   //   None.
+   //
+   // Example:
+   // | bit[7:0] pa = 8'h0F;
+   // | packed_array#(bit,8)::reverse( pa );
+   // | assert( pa == 8'hF0 );
+   //---------------------------------------------------------------------------
+
+   static function void reverse( ref pa_type pa );
+      common_array#( T, WIDTH, pa_type )::reverse( pa );
    endfunction: reverse
 
    //---------------------------------------------------------------------------
    // Function: count_ones
-   //   Counts the number of bits having value 1.
+   //   (STATIC) Counts the number of bits having value 1.
    //
    // Argument:
    //   pa - A packed array.
@@ -316,7 +537,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //   data type, -1 is returned.
    //
    // Example:
-   // | bit[15:0] pa = 16'h1234;
+   // | bit[15:0] pa = 16'h1234; // 16'b0001_0010_0011_0100
    // | assert( packed_array#(bit,16)::count_ones( pa ) == 5 );
    //---------------------------------------------------------------------------
 
@@ -337,7 +558,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: count_zeros
-   //   Counts the number of bits having value 0.
+   //   (STATIC) Counts the number of bits having value 0.
    //
    // Argument:
    //   pa - A packed array.
@@ -347,7 +568,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //   data type, -1 is returned.
    //
    // Example:
-   // | bit[15:0] pa = 16'h1234;
+   // | bit[15:0] pa = 16'h1234; // 16'b0001_0010_0011_0100
    // | assert( packed_array#(bit,16)::count_zeros( pa ) == 11 );
    //---------------------------------------------------------------------------
 
@@ -368,7 +589,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: count_unknowns
-   //   Counts the number of bits having value X.
+   //   (STATIC) Counts the number of bits having value X.
    //
    // Argument:
    //   pa - A packed array.
@@ -399,7 +620,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: count_hizs
-   //    Counts the number of bits having value Z.
+   //   (STATIC) Counts the number of bits having value Z.
    //
    // Argument:
    //   pa - A packed array.

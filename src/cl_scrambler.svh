@@ -106,7 +106,7 @@ endclass: scrambler
 // Class: scrambler_2
 //   Provides a function to scramble an input bit stream using the following
 //   2-bit LFSR polynomial:
-// | x^2 + x + 1
+// : x^2 + x + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -132,7 +132,7 @@ endclass: scrambler_2
 // Class: scrambler_3
 //   Provides a function to scramble an input bit stream using the following
 //   3-bit LFSR polynomial:
-// | x^3 + x^2 + 1
+// : x^3 + x^2 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -158,7 +158,7 @@ endclass: scrambler_3
 // Class: scrambler_4
 //   Provides a function to scramble an input bit stream using the following
 //   4-bit LFSR polynomial:
-// | x^4 + x^3 + 1
+// : x^4 + x^3 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -184,7 +184,7 @@ endclass: scrambler_4
 // Class: scrambler_5
 //   Provides a function to scramble an input bit stream using the following
 //   5-bit LFSR polynomial:
-// | x^5 + x^3 + 1
+// : x^5 + x^3 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -210,7 +210,7 @@ endclass: scrambler_5
 // Class: scrambler_6
 //   Provides a function to scramble an input bit stream using the following
 //   6-bit LFSR polynomial:
-// | x^6 + x^5 + 1
+// : x^6 + x^5 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -236,7 +236,7 @@ endclass: scrambler_6
 // Class: scrambler_7
 //   Provides a function to scramble an input bit stream using the following
 //   7-bit LFSR polynomial:
-// | x^7 + x^6 + 1
+// : x^7 + x^6 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -262,7 +262,7 @@ endclass: scrambler_7
 // Class: scrambler_8
 //   Provides a function to scramble an input bit stream using the following
 //   8-bit LFSR polynomial:
-// | x^8 + x^6 + x^5 + x^4 + 1
+// : x^8 + x^6 + x^5 + x^4 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -288,7 +288,7 @@ endclass: scrambler_8
 // Class: scrambler_9
 //   Provides a function to scramble an input bit stream using the following
 //   9-bit LFSR polynomial:
-// | x^9 + x^5 + 1
+// : x^9 + x^5 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -314,7 +314,7 @@ endclass: scrambler_9
 // Class: scrambler_10
 //   Provides a function to scramble an input bit stream using the following
 //   10-bit LFSR polynomial:
-// | x^10 + x^7 + 1
+// : x^10 + x^7 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -340,7 +340,7 @@ endclass: scrambler_10
 // Class: scrambler_11
 //   Provides a function to scramble an input bit stream using the following
 //   11-bit LFSR polynomial:
-// | x^11 + x^9 + 1
+// : x^11 + x^9 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -366,7 +366,7 @@ endclass: scrambler_11
 // Class: scrambler_12
 //   Provides a function to scramble an input bit stream using the following
 //   12-bit LFSR polynomial:
-// | x^12 + x^11 + x^10 + x^4 + 1
+// : x^12 + x^11 + x^10 + x^4 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -392,7 +392,7 @@ endclass: scrambler_12
 // Class: scrambler_13
 //   Provides a function to scramble an input bit stream using the following
 //   13-bit LFSR polynomial:
-// | x^13 + x^12 + x^11 + x^8 + 1
+// : x^13 + x^12 + x^11 + x^8 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -418,7 +418,7 @@ endclass: scrambler_13
 // Class: scrambler_14
 //   Provides a function to scramble an input bit stream using the following
 //   14-bit LFSR polynomial:
-// | x^14 + x^13 + x^12 + x^2 + 1
+// : x^14 + x^13 + x^12 + x^2 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -444,7 +444,7 @@ endclass: scrambler_14
 // Class: scrambler_15
 //   Provides a function to scramble an input bit stream using the following
 //   15-bit LFSR polynomial:
-// | x^15 + x^14 + 1
+// : x^15 + x^14 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -470,7 +470,7 @@ endclass: scrambler_15
 // Class: scrambler_16
 //   Provides a function to scramble an input bit stream using the following
 //   16-bit LFSR polynomial:
-// | x^16 + x^14 + x^13 + x^11 + 1
+// : x^16 + x^14 + x^13 + x^11 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -496,7 +496,7 @@ endclass: scrambler_16
 // Class: scrambler_17
 //   Provides a function to scramble an input bit stream using the following
 //   17-bit LFSR polynomial:
-// | x^17 + x^14 + 1
+// : x^17 + x^14 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -522,7 +522,7 @@ endclass: scrambler_17
 // Class: scrambler_18
 //   Provides a function to scramble an input bit stream using the following
 //   18-bit LFSR polynomial:
-// | x^18 + x^11 + 1
+// : x^18 + x^11 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -548,7 +548,7 @@ endclass: scrambler_18
 // Class: scrambler_19
 //   Provides a function to scramble an input bit stream using the following
 //   19-bit LFSR polynomial:
-// | x^19 + x^18 + x^17 + x^14 + 1
+// : x^19 + x^18 + x^17 + x^14 + 1
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.

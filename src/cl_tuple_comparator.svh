@@ -38,6 +38,31 @@ typedef class tuple;
 class tuple_comparator#( type T = tuple ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
+   // Typedef: this_type
+   //   The shorthand of pair_comparator#(T).
+   //---------------------------------------------------------------------------
+
+   typedef tuple_comparator#(T) this_type;
+
+   local static this_type inst = null;
+
+   protected function new();
+   endfunction: new
+
+   //---------------------------------------------------------------------------
+   // Function: get_instance
+   //   Returns a singleton instance of this comparator.
+   //
+   // Returns:
+   //   A singleton instance.
+   //---------------------------------------------------------------------------
+
+   static function this_type get_instance();
+      if ( inst == null ) inst = new();
+      return inst;
+   endfunction: get_instance
+
+   //---------------------------------------------------------------------------
    // Function: eq
    //   Returns 1 if two tuples are equal.
    //
@@ -129,40 +154,6 @@ class tuple_comparator#( type T = tuple ) extends comparator#(T);
    virtual function bit gt( T x, T y );
       return lt( y, x );
    endfunction: gt
-
-   //---------------------------------------------------------------------------
-   // Function: le
-   //   Returns 1 if *x* is less than or equal to *y*.
-   //
-   // Arguments:
-   //   x - An input of type T.
-   //   y - Another input of type T.
-   //
-   // Returns:
-   //   If *x* is less than or equal to *y*, then returns 1. Otherwise, returns
-   //   0.
-   //---------------------------------------------------------------------------
-
-   virtual function bit le( T x, T y );
-      return ! gt( x, y );
-   endfunction: le
-
-   //---------------------------------------------------------------------------
-   // Function: ge
-   //   Returns 1 if *x* is greater than or equal to *y*.
-   //
-   // Arguments:
-   //   x - An input of type T.
-   //   y - Another input of type T.
-   //
-   // Returns:
-   //   If *x* is greaterthan or equal to *y*, then returns 1. Otherwise,
-   //   returns 0.
-   //---------------------------------------------------------------------------
-
-   virtual function bit ge( T x, T y );
-      return ! lt( x, y );
-   endfunction: ge
 
 endclass: tuple_comparator
 

@@ -36,6 +36,31 @@
 class comparator#( type T = int );
 
    //---------------------------------------------------------------------------
+   // Typedef: this_type
+   //   The shorthand of comparator#(T).
+   //---------------------------------------------------------------------------
+
+   typedef comparator#(T) this_type;
+
+   local static this_type inst = null;
+
+   protected function new();
+   endfunction: new
+
+   //---------------------------------------------------------------------------
+   // Function: get_instance
+   //   Returns a singleton instance of this comparator.
+   //
+   // Returns:
+   //   A singleton instance.
+   //---------------------------------------------------------------------------
+
+   static function this_type get_instance();
+      if ( inst == null ) inst = new();
+      return inst;
+   endfunction: get_instance
+
+   //---------------------------------------------------------------------------
    // Function: eq
    //   Returns 1 if two inputs are equal.
    //

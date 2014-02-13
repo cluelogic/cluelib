@@ -25,98 +25,58 @@
 // SOFTWARE.
 // ==============================================================================
 
-// Title: text
-
 `ifndef CL_TEXT_SVH
 `define CL_TEXT_SVH
-
-//------------------------------------------------------------------------------
-// Typedef: string_q
-//   The queue of strings.
-//------------------------------------------------------------------------------
-
-typedef string string_q[$];
-
-//------------------------------------------------------------------------------
-// Typedef: three_strings
-//   The unpacked array of three strings.
-//------------------------------------------------------------------------------
-
-typedef string three_strings[3];
-
-//------------------------------------------------------------------------------
-// Typedef: fg_color_e
-//   The enumerated type of foreground colors.
-//------------------------------------------------------------------------------
-
-typedef enum { FG_BLACK   = 30,
-	       FG_RED     = 31,
-	       FG_GREEN   = 32,
-	       FG_YELLOW  = 33,
-	       FG_BLUE    = 34,
-	       FG_MAGENTA = 35,
-	       FG_CYAN    = 36,
-	       FG_WHITE   = 37 } fg_color_e;
-
-//------------------------------------------------------------------------------
-// Typedef: bg_color_e
-//   The enumerated type of background colors.
-//------------------------------------------------------------------------------
-
-typedef enum { BG_BLACK   = 40,
-	       BG_RED     = 41,
-	       BG_GREEN   = 42,
-	       BG_YELLOW  = 43,
-	       BG_BLUE    = 44,
-	       BG_MAGENTA = 45,
-	       BG_CYAN    = 46,
-	       BG_WHITE   = 47 } bg_color_e;
 
 //------------------------------------------------------------------------------
 // Class: text
 //   Provides utility functions for text processing.  All functions are defined
 //   as static.
-//
-// Group: Common Arguments
-//   start_pos - Specifies the start position in a string.  The position of the
-//               first character is 0. The position of the second character is
-//               1, and so on. The position can be specified as a negative
-//               number. For example, the position of the last character can be
-//               specified as -1. The position of the second to the last
-//               character can be specified as -2, and so on. The default is 0
-//               (the first character).
-//   end_pos - Specifies the end position in a string using the same rule as the
-//             *start_pos*. The default is -1 (the last character).
-//
-// Examples:
-// |       ____ position 0 or -26
-// |      /    ____ position 5 or -21
-// |     /    /         ____ position 15 or -11
-// |    /    /         /         ____ position 25 or -1
-// |   /    /         /         /
-// |  V    V         V         V
-// | "This is an example string."
-// |  |----------------------->| start_pos =   0, end_pos =  25 \
-// |  |----------------------->| start_pos =   0, end_pos =  -1  \ these specify the same range of the string
-// |  |----------------------->| start_pos = -26, end_pos =  25  /
-// |  |----------------------->| start_pos = -26, end_pos =  -1 /
-// |       |-------->|           start_pos =   5, end_pos =  15 \
-// |       |-------->|           start_pos =   5, end_pos = -11  \ these specify the same range of the string
-// |       |-------->|           start_pos = -21, end_pos =  15  /
-// |       |-------->|           start_pos = -21, end_pos = -11 /
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 virtual class text;
+
+   //---------------------------------------------------------------------------
+   // Group: Common Arguments
+   //   start_pos - Specifies the start position in a string.  The position of
+   //               the first character is 0, the position of the second
+   //               character is 1, and so on. The position can be specified as
+   //               a negative number. The position of the last character can be
+   //               specified as -1, the position of the second to the last
+   //               character can be specified as -2, and so on. The default is
+   //               0 (the first character).
+   //   end_pos - Specifies the end position in a string using the same rule as
+   //             the *start_pos*. The default is -1 (the last character).
+   //
+   // Examples:
+   // (begin example)
+   //       ____ position 0 or -26
+   //      /    ____ position 5 or -21
+   //     /    /         ____ position 15 or -11
+   //    /    /         /         ____ position 25 or -1
+   //   /    /         /         /
+   //  V    V         V         V
+   // "How common arguments work."
+   //  |----------------------->| start_pos =   0, end_pos =  25 \
+   //  |----------------------->| start_pos =   0, end_pos =  -1  \ these specify the same range of the string
+   //  |----------------------->| start_pos = -26, end_pos =  25  /
+   //  |----------------------->| start_pos = -26, end_pos =  -1 /
+   //       |-------->|           start_pos =   5, end_pos =  15 \
+   //       |-------->|           start_pos =   5, end_pos = -11  \ these specify the same range of the string
+   //       |-------->|           start_pos = -21, end_pos =  15  /
+   //       |-------->|           start_pos = -21, end_pos = -11 /
+   // (end example)
+   //---------------------------------------------------------------------------
 
    // Group: Functions
 
    //---------------------------------------------------------------------------
    // Function: capitalize
-   //   Returns a copy of the given string with the first character uppercased
-   //   and the remainder lowercased.
+   //   (STATIC) Returns a copy of the given string with the first character
+   //   uppercased and the remainder lowercased.
    //
    // Argument:
-   //   s - The string to capitalize.
+   //   s - A string to be capitalized.
    //
    // Returns: 
    //   A copy of *s* with the first character uppercased and the remainder
@@ -138,21 +98,21 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: center
-   //   Returns a string of given width with the given string centerted and
-   //   padded with the given character.
+   //   (STATIC) Returns a string of the specified width with the given string
+   //   centerted and padded with the specified character.
    //
    // Arguments:
-   //   s - The string to center.
+   //   s - A string to be centered.
    //   width - The width of the returned string.
    //   fill_char - (OPTIONAL) The character used for padding if *width* is
-   //               larger than the length of *s*.  The default is a space
+   //               wider than the length of *s*.  The default is a space
    //               character (" ").
-   //   trim_ends - (OPTIONAL) If *width* is smaller than the length of *s* and:
-   //               (i) if *trim_ends* is 1, then the head and the tail of *s*
-   //               are trimmed to fit within *width*; or (ii) if *trim_ends* is
-   //               0, then *width* is extended to the length of *s*.  If
-   //               *width* is larger than or equal to the length of *s*,
-   //               *trim_ends* is ignored.  The default is 0.
+   //   trim_ends - (OPTIONAL) If *width* is narrower than the length of *s* and
+   //               *trim_ends* is 1, then the head and the tail of *s* are
+   //               trimmed to fit within *width*. If *trim_ends* is 0, then
+   //               *width* is widened to the length of *s*.  If *width* is
+   //               wider than or equal to the length of *s*, *trim_ends* is
+   //               ignored.  The default is 0.
    //
    // Returns:
    //   A string with *s* placed at the center and padded with *fill_char*.
@@ -160,8 +120,8 @@ virtual class text;
    // Examples:
    // | assert( text::center( "center me", 15 )                 == "   center me   " );
    // | assert( text::center( "center me", 15, "-" )            == "---center me---" );
-   // | assert( text::center( "center me", 7 )                  ==    "center me"    );
-   // | assert( text::center( "center me", 7, .trim_ends( 1 ) ) ==     "enter m"     );
+   // | assert( text::center( "center me", 7 )                  ==    "center me"    ); // widened to fit
+   // | assert( text::center( "center me", 7, .trim_ends( 1 ) ) ==     "enter m"     ); // trimmed
    //
    // See Also:
    //   <ljust>, <rjust>
@@ -193,25 +153,26 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: change
-   //   Returns a copy of the given string with the characters in the specified
-   //   range replaced with the specified substring.
+   //   (STATIC) Returns a copy of the given string with the characters in the
+   //   specified range replaced with the specified substring.
    //
    // Arguments:
-   //   s         - An input string.
+   //   s         - A string to be changed.
    //   sub       - A substring. 
    //   start_pos - (OPTIONAL) Specifies the left-most position in *s* to be 
-   //               replaced. See <Common Arguments> for how to specify.
+   //               replaced. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the right-most position in *s* to be
-   //               replaced. See <Common Arguments> for how to specify.
+   //               replaced. See <Common Arguments>.
    //
    // Returns:
    //   A copy of *s* with the characters in the specified range replaced with
-   //   *sub*. If the specified range is invalid, *s* is returned. If *s* is an
-   //   empty string (""), no change is made.
+   //   *sub*. If the specified range is invalid, *s* is returned without a
+   //   change. If *s* is an empty string (""), no change is made.
    //
    // Examples:
    // | assert( text::change( "a primary library", "function", .start_pos( 10 ) ) == "a primary function" );
    // | //                               |---->|
+   // | //                              10
    //
    // See Also:
    //   <replace>
@@ -224,17 +185,17 @@ virtual class text;
       string old_str = slice( s, start_pos, end_pos );
 
       if ( old_str == "" ) return s;
-      else return replace( s, old_str, sub, .count( 1 ) );
+      else                 return replace( s, old_str, sub, .count( 1 ) );
    endfunction: change
 
    //---------------------------------------------------------------------------
    // Function: chomp
-   //   Returns a copy of the given string with the last newline character
-   //   removed (if present). Returns the given string as is if the given string
-   //   does not end in a newline character.
+   //   (STATIC) Returns a copy of the given string with the last newline
+   //   character removed (if present). Returns the given string as is if the
+   //   given string does not end in a newline character.
    //
    // Argument:
-   //   s - An input string.
+   //   s - A string to be chomped
    //
    // Returns:
    //   Returns a copy of *s* with the last newline character removed (if
@@ -259,7 +220,7 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: chop
-   //   Returns the last character of the given string. 
+   //   (STATIC) Returns the last character of the given string. 
    //
    // Arguments:
    //   s - An input string.
@@ -281,10 +242,10 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: colorize
-   //   Returns a copy of the given string with ANSI escape code.
+   //   (STATIC) Returns a copy of the given string with ANSI escape codes.
    //
    // Arguments:
-   //   s         - An input string.
+   //   s         - A string to be colorized.
    //   fg        - (OPTIONAL) Foreground color. See <fg_color_e> for available
    //               colors. The default is black.
    //   bg        - (OPTIONAL) Background color. See <bg_color_e> for available 
@@ -292,11 +253,11 @@ virtual class text;
    //   bold      - (OPTIONAL) If 1, the string is boldfaced. The default is 0.
    //   underline - (OPTIONAL) If 1, the string is underlined. The default is 0.
    //   blink     - (OPTIONAL) If 1, the string is blinked. The default is 0.
-   //   reverse   - (OPTIONAL) If 1, the foreground and background colors of the
-   //               string are reversed. The default is 0.
+   //   reverse - (OPTIONAL) If 1, the foreground and the background colors of
+   //             the string are reversed. The default is 0.
    //
    // Returns:
-   //   A copy of *S* with ANSI escape code.
+   //   A copy of *s* with ANSI escape codes.
    //
    // Examples:
    // | $display( text::colorize( "display me in red", FG_RED ) );
@@ -322,16 +283,16 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: contains
-   //   Returns 1 if the given string contains the specified substring.
+   //   (STATIC) Returns 1 if the given string contains the specified substring.
    //
    // Arguments:
-   //   s         - An input string.
-   //   sub       - A substring. 
-   //               An empty substring ("") matches no input string.
+   //   s   - An input string.
+   //   sub - A substring to search. An empty substring ("") matches no input
+   //         string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
    //   If *s* contains *sub*, 1 is returned. Otherwise, 0 is returned.
@@ -340,10 +301,13 @@ virtual class text;
    // | assert( text::contains( "a primary library", "primary" )                  == 1 );
    // | assert( text::contains( "a primary library", "primary", .start_pos( 3 ) ) == 0 );
    // | //                          |----------->|
+   // | //                          3
    // | assert( text::contains( "a primary library", "primary", .end_pos(  7 ) )  == 0 );
    // | //                       |----->|
+   // | //                              7
    // | assert( text::contains( "a primary library", "primary", .end_pos( -9 ) )  == 1 );
    // | //                       |------>|
+   // | //                              -9
    //
    // See Also:
    //   <contains_str>, <count>, <ends_with>, <find_any>, <index>, <only>, 
@@ -359,17 +323,17 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: contains_str
-   //   If the given string contains the specified substring, returns that
-   //   substring.
+   //   (STATIC) If the given string contains the specified substring, returns
+   //   that substring.
    //
    // Arguments:
-   //   s         - An input string.
-   //   sub       - A substring. 
-   //               An empty substring ("") matches no input string.
+   //   s   - An input string.
+   //   sub - A substring to search.  An empty substring ("") matches no input
+   //         string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
    //   If *s* contains *sub*, *sub* is returned. Otherwise, an empty string
@@ -379,10 +343,13 @@ virtual class text;
    // | assert( text::contains_str( "a primary library", "primary" )                  == "primary" );
    // | assert( text::contains_str( "a primary library", "primary", .start_pos( 3 ) ) == "" );
    // | //                              |----------->|
+   // | //                              3
    // | assert( text::contains_str( "a primary library", "primary", .end_pos(  7 ) )  == "" );
    // | //                           |----->|
+   // | //                                  7
    // | assert( text::contains_str( "a primary library", "primary", .end_pos( -9 ) )  == "primary" );
    // | //                           |------>|
+   // | //                                  -9
    //
    // See Also:
    //   <contains>, <count>, <ends_with>, <find_any>, <index>, <only>, 
@@ -399,17 +366,17 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: count
-   //   Returns the number of non-overlapping occurrences of the specified
-   //   substring in the given string.
+   //   (STATIC) Returns the number of non-overlapping occurrences of the
+   //   specified substring in the given string.
    //
    // Arguments:
-   //   s         - An input string.
-   //   sub       - A substring. 
-   //               An empty substring ("") matches no input string.
+   //   s   - An input string.
+   //   sub - A substring to search.  An empty substring ("") matches no input
+   //         string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search.  See <Common Arguments> for how to specify.
+   //               search.  See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
    //   The number of non-overlapping occurrences of *sub* in *s*.
@@ -418,10 +385,13 @@ virtual class text;
    // | assert( text::count( "a primary library", "ary" )                  == 2 );
    // | assert( text::count( "a primary library", "ary", .start_pos( 3 ) ) == 2 );
    // | //                       |----------->|
+   // | //                       3
    // | assert( text::count( "a primary library", "ary", .end_pos(  7 ) )  == 0 );
    // | //                    |----->|
+   // | //                           7
    // | assert( text::count( "a primary library", "ary", .end_pos( -9 ) )  == 1 );
    // | //                    |------>|
+   // | //                           -9
    //
    // See Also:
    //   <contains>, <contains_str>, <ends_with>, <find_any>, <index>, <only>, 
@@ -445,19 +415,19 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: delete
-   //   Returns a copy of the given string with all occurrences of the specified
-   //   string removed.
+   //   (STATIC) Returns a copy of the given string with the specified string
+   //   removed.
    //
    // Arguments:
    //   s     - An input string.
-   //   sub   - An substring to delete. An empty substring ("") matches no input
+   //   sub   - A substring to remove. An empty substring ("") matches no input
    //           string.
-   //   count - (OPTIONAL) A number of substrings to remove. If specified, only
-   //           the first *count* occurrences are removed. By default, all
+   //   count - (OPTIONAL) The number of substrings to remove. If specified,
+   //           only the first *count* occurrences are removed. By default, all
    //           occurrences are removed.
    //
    // Returns:
-   //   A copy of *s* with all occurrences of *sub* removed.
+   //   A copy of *s* with the first *count* occurrences of *sub* removed.
    //
    // Examples:
    // | assert( text::delete( "abcabc", "abc"    ) == "" );
@@ -475,7 +445,7 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: ends_with
-   //   Returns 1 if the given string ends with one of the specified suffixes.
+   //   (STATIC) Returns 1 if the given string ends with one of the specified suffixes.
    //
    // Arguments:
    //   s         - An input string.
@@ -483,22 +453,25 @@ virtual class text;
    //               using an array literal.  An empty string ("") matches no
    //               input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
-   //   If *s* ends with one of the *suffixes* given, 1 is returned. 
+   //   If *s* ends with one of the specified *suffixes*, 1 is returned. 
    //   Otherwise, 0 is returned.
    //
    // Examples:
    // | assert( text::ends_with( "a primary library", { "primary", "library" } )                  == 1 );
    // | assert( text::ends_with( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 1 );
    // | //                           |----------->|
+   // | //                           3
    // | assert( text::ends_with( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == 0 );
    // | //                        |----->|
+   // | //                               7
    // | assert( text::ends_with( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  == 1 );
    // | //                        |------>|
+   // | //                               -9
    //
    // See Also:
    //   <contains>, <contains_str>, <count>, <find_any>, <index>, <only>, 
@@ -527,8 +500,8 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: find_any
-   //   Returns the lowest index in the given string where each specified 
-   //   substring is found.
+   //   (STATIC) Returns the lowest index in the given string where each
+   //   specified substring is found.
    //
    // Arguments:
    //   s         - An input string.
@@ -536,22 +509,25 @@ virtual class text;
    //               an array literal.
    //               An empty substring ("") matches no input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
    //   The lowest index in *s* where each substring in *subs* is found. If no
    //   substring is found, -1 is returned.
    //
    // Examples:
-   // | assert( text::find_any( "a primary library", { "primary", "library" } )                  ==  2 );
-   // | assert( text::find_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 );
-   // | //                       |----------->|
-   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == -1 );
+   // | assert( text::find_any( "a primary library", { "primary", "library" } )                  ==  2 ); // found "primary" at index 2
+   // | assert( text::find_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 ); // found "library" at index 10
+   // | //                          |----------->|
+   // | //                          3
+   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == -1 ); // no substring was found
    // | //                       |----->|
-   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  ==  2 );
+   // | //                              7
+   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  ==  2 ); // found "primary" at index 2
    // | //                       |------>|
+   // | //                              -9
    //
    // See Also:
    //   <contains>, <contains_str>, <count>, <ends_with>, <index>, <only>, 
@@ -581,14 +557,16 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: hash
-   //   Returns a hash value for the given string. The hash code is calculated 
-   //   as: sum(s[i] * 31 ** (N-i-1)), where N is the length of the given string.
+   //   (STATIC) Returns the hash value of the given string. The hash value is
+   //   calculated as:
+   //   (see hash.png) 
+   //   where N is the length of the given string.
    //
    // Argument:
    //   s - An input string.
    //
    // Returns:
-   //   A hash value for *s*.
+   //   The hash value of *s*.
    //
    // Example:
    // | assert( text::hash( "my hash value is" ) == 32'he4260597 );
@@ -601,17 +579,17 @@ virtual class text;
    
    //---------------------------------------------------------------------------
    // Function: index
-   //   Returns the index of the first occurrence of the specified substring 
-   //   in the given string within the optionally specified range.
+   //   (STATIC) Returns the index of the first occurrence of the specified
+   //   substring in the given string within the optionally specified range.
    //
    // Arguments:
    //   s         - An input string.
-   //   sub       - A substring. 
+   //   sub       - A substring to search. 
    //               An empty substring ("") matches no input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
    //   The index of the first occurrence of *sub* in *s*. If *sub* is not
@@ -621,10 +599,13 @@ virtual class text;
    // | assert( text::index( "a primary library", "ary" )                  ==  6 );
    // | assert( text::index( "a primary library", "ary", .start_pos( 3 ) ) ==  6 );
    // | //                       |----------->|
+   // | //                       3  
    // | assert( text::index( "a primary library", "ary", .end_pos(  7 ) )  == -1 );
    // | //                    |----->|
+   // | //                           7
    // | assert( text::index( "a primary library", "ary", .end_pos( -9 ) )  ==  6 );
    // | //                    |------>|
+   // | //                           -9
    //
    // See Also:
    //   <contains>, <contains_str>, <count>, <ends_with>, <find_any>, <only>, 
@@ -658,23 +639,23 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: insert
-   //   Returns a copy of the given string with the specified substring inserted
-   //   at the specified position.
+   //   (STATIC) Returns a copy of the given string with the specified substring
+   //   inserted at the specified position.
    //
    // Arguments:
    //   s         - An input string.
-   //   sub       - An substring to insert.
-   //   start_pos - (OPTIONAL) Specifies the position where *sub* starts at in
-   //               *s*.  See <Common Arguments> for how to specify. The default
-   //               is 0 (inserting before *s*).
+   //   sub       - A substring to insert.
+   //   start_pos - (OPTIONAL) Specifies the position where *sub* is inserted.
+   //               See <Common Arguments>. The default is 0 (inserting *sub*
+   //               before *s*).
    //
    // Returns:
-   //   A copy of *s* with *sub* inserted at *pos*.
+   //   A copy of *s* with *sub* inserted at *start_pos*.
    //
    // Examples:
-   // | assert( text::insert( "abc", "XYZ"     ) == "XYZabc" );
-   // | assert( text::insert( "abc", "XYZ",  1 ) == "aXYZbc" );
-   // | assert( text::insert( "abc", "XYZ", -1 ) == "abXYZc" );
+   // | assert( text::insert( "abc", "XYZ"     ) == "XYZabc" ); // insert "XYZ" before the first character ("a")
+   // | assert( text::insert( "abc", "XYZ",  1 ) == "aXYZbc" ); // insert "XYZ" before the character index 1 ("b")
+   // | assert( text::insert( "abc", "XYZ", -1 ) == "abXYZc" ); // insert "XYZ" before the last character ("c")
    //
    // See Also:
    //   <chop>, <chomp>, <delete>, <lstrip>, <rstrip>, <strip>, <trim>
@@ -693,15 +674,15 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: is_alpha
-   //   Returns 1 if all characters in the given string are alphabetic.
-   //   Alphabetic characters are [a-zA-Z].
+   //   (STATIC) Returns 1 if all characters in the given string are alphabetic.
+   //   Alphabetic characters are *[a-zA-Z]*.
    //
    // Argument:
    //   s - An input string.
    //
    // Returns:
    //   If all characters in *s* are alphabetic, 1 is returned. Otherwise, 0 is
-   //   returned. If the length of *s* is 0, 0 is returned.
+   //   returned. If *s* is an empty string, 0 is returned.
    //
    // Examples:
    // | assert( text::is_alpha( "abc"  ) == 1 );
@@ -723,15 +704,15 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: is_digit
-   //   Returns 1 if all characters in the given string are digits.  Digits are
-   //   [0-9].
+   //   (STATIC) Returns 1 if all characters in the given string are digits.
+   //   Digits are *[0-9]*.
    //
    // Argument:
    //   s - An input string.
    //
    // Returns:
    //   If all characters in *s* are digits, 1 is returned. Otherwise, 0 is
-   //   returned.  If the length of *s* is 0, 0 is returned.
+   //   returned.  If *s* is an empty string, 0 is returned.
    //
    // Examples:
    // | assert( text::is_digit( "123"  ) == 1 );
@@ -752,15 +733,15 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: is_lower
-   //   Returns 1 if all _cased_ characters in the given string are lowercase.  
-   //   Lowercase characters are [a-z].
+   //   (STATIC) Returns 1 if all _cased_ characters in the given string are
+   //   lowercase.  Lowercase characters are *[a-z]*.
    //
    // Argument:
    //   s - An input string.
    //
    // Returns:
    //   If all cased characters in *s* are lowercase, 1 is returned. Otherwise,
-   //   0 is returned.  If the length of *s* is 0, 0 is returned.
+   //   0 is returned. If *s* is an empty string, 0 is returned.
    //
    // Examples:
    // | assert( text::is_lower( "abc"   ) == 1 );
@@ -774,7 +755,6 @@ virtual class text;
    static function bit is_lower( string s );
       if ( s.len() == 0 ) return 0;
       foreach ( s[i] ) begin
-//	 if ( ! ( s[i] >= "a" && s[i] <= "z" ) ) return 0;
 	 if ( s[i] >= "A" && s[i] <= "Z" ) return 0; // uppercase is found
       end
       return 1;
@@ -782,7 +762,7 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: is_printable
-   //   Returns 1 if all characters in the given string are printable.
+   //   (STATIC) Returns 1 if all characters in the given string are printable.
    //   Printable characters are the ones whose ASCII code are between 'h20 
    //   (" ") and 'h7F ("~").
    //
@@ -791,11 +771,11 @@ virtual class text;
    //
    // Returns:
    //   If all characters in *s* are printable, 1 is returned. Otherwise, 0 is
-   //   returned.  If the length of *s* is 0, 1 is returned.
+   //   returned.  If *s* is an empty string, 0 is returned.
    //
    // Examples:
    // | assert( text::is_printable( "!@#$" ) == 1 );
-   // | assert( text::is_printable( "\x80" ) == 0 );
+   // | assert( text::is_printable( "\200" ) == 0 ); // ASCII 'h80 is not printable
    //
    // See Also:
    //   <is_alpha>, <is_digit>, <is_lower>, <is_space>, <is_upper>
@@ -812,13 +792,13 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: is_single_bit_type
-   //   Returns 1 if the given string is "bit", "logic", or "reg".
+   //   (STATIC) Returns 1 if the given string is *bit*, *logic*, or *reg*.
    //
    // Argument:
    //   s - An input string.
    //
    // Returns:
-   //   If *s* is "bit", "logic", or "reg", 1 is returned. Othewise, 0 is
+   //   If *s* is *bit*, *logic*, or *reg*, 1 is returned. Othewise, 0 is
    //   returned.
    //
    // Examples:
@@ -832,16 +812,15 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: is_space
-   //   Returns 1 if all characters in the given string are whitespace
-   //   characters.  The whitespace characters are a space (" "), a tab ("\t"),
-   //   or a newline ("\n").
+   //   (STATIC) Returns 1 if all characters in the given string are whitespace
+   //   characters: a space (" "), a tab (*\t*), or a newline (*\n*).
    //
    // Argument:
    //   s - An input string.
    //
    // Returns:
    //   If all characters in *s* are whitespace characters, 1 is
-   //   returned. Otherwise, 0 is returned.  If the length of *s* is 0, 0 is
+   //   returned. Otherwise, 0 is returned. If *s* is an empty string, 0 is
    //   returned.
    //
    // Examples:
@@ -863,20 +842,20 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: is_upper
-   //   Returns 1 if all _cased_ characters in the given string are uppercase.  
-   //   Uppercase characters are [A-Z].
+   //   (STATIC) Returns 1 if all _cased_ characters in the given string are
+   //   uppercase.  Uppercase characters are *[A-Z]*.
    //
    // Argument:
    //   s - An input string.
    //
    // Returns:
    //   If all cased characters in *s* are uppercase, 1 is returned. Otherwise,
-   //   0 is returned.  If the length of *s* is 0, 0 is returned.
+   //   0 is returned.  If *s* is an empty string, 0 is returned.
    //
    // Examples:
    // | assert( text::is_upper( "ABC"   ) == 1 );
    // | assert( text::is_upper( "ABCx"  ) == 0 );
-   // | assert( text::is_lower( "ABC!?" ) == 1 ); // all cased characters are uppercase
+   // | assert( text::is_upper( "ABC!?" ) == 1 ); // all cased characters are uppercase
    //
    // See Also:
    //   <is_alpha>, <is_digit>, <is_lower>, <is_printable>, <is_space>
@@ -893,8 +872,8 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: join_str
-   //   Returns a string by concatenating the strings in the given queue
-   //   separated by the specified separator.
+   //   (STATIC) Returns a string by concatenating the strings in the given
+   //   string queue, separated by the specified separator.
    //
    // Arguments:
    //   strings   - A queue of strings. The *strings* can be specified using an
@@ -903,7 +882,7 @@ virtual class text;
    //               empty string ("").
    //
    // Returns:
-   //   A string by concatenating the strings in *strings* separated by 
+   //   A string by concatenating the strings in *strings*, separated by 
    //   *separator*.
    //
    // Examples:
@@ -924,8 +903,8 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: lc_first
-   //   Returns a copy of the given string with the first character lowercased
-   //   and the remainder unchanged.
+   //   (STATIC) Returns a copy of the given string with the first character
+   //   lowercased and the remainder unchanged.
    //
    // Argument:
    //   s - An input string.
@@ -950,29 +929,30 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: ljust
-   //   Returns a string of the specified width with the given string left
-   //   justified and padded with the specified character.
+   //   (STATIC) Returns a string of the specified width with the given string
+   //   left justified and padded with the specified character.
    //
    // Arguments:
-   //   s          - A string to left justify.
+   //   s          - A string to left-justify.
    //   width      - The width of the returned string.
-   //   fill_char  - (OPTIONAL) A character used for padding if *width* is 
-   //                larger than the length of *s*.  The default is a space.
-   //   trim_right - (OPTIONAL) If *width* is smaller than the length of *s*
-   //                and: (i) if *trim_right* is 1, then the tail of *s* is
-   //                trimmed to fit within *width*; or (ii) if *trim_right* is
-   //                0, then *width* is extended to the length of *s*.  If
-   //                *width* is larger than or equal to the length of *s*,
-   //                *trim_right* is ignored.  The default is 0.
+   //   fill_char - (OPTIONAL) A character used for padding if *width* is wider
+   //               than the length of *s*.  The default is a space character ("
+   //               ").
+   //   trim_right - (OPTIONAL) If *width* is narrower than the length of *s*
+   //                and *trim_right* is 1, then the tail of *s* is trimmed to
+   //                fit within *width*. If *trim_right* is 0, then *width* is
+   //                widened to the length of *s*.  If *width* is wider than or
+   //                equal to the length of *s*, *trim_right* is ignored.  The
+   //                default is 0.
    //
    // Returns:
-   //   A string with *s* left justified and padded with *fill_char*.
+   //   A string with *s* left-justified and padded with *fill_char*.
    //
    // Examples:
    // | assert( text::ljust( "ljust me", 15 )                  == "ljust me       " );
    // | assert( text::ljust( "ljust me", 15, "-" )             == "ljust me-------" );
-   // | assert( text::ljust( "ljust me", 7 )                   == "ljust me"        );
-   // | assert( text::ljust( "ljust me", 7, .trim_right( 1 ) ) == "ljust m"         );
+   // | assert( text::ljust( "ljust me", 7 )                   == "ljust me"        ); // widened to fit
+   // | assert( text::ljust( "ljust me", 7, .trim_right( 1 ) ) == "ljust m"         ); // trimmed
    //
    // See Also:
    //   <center>, <rjust>
@@ -997,14 +977,15 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: lstrip
-   //   Returns a copy of the given string with leading characters removed.
+   //   (STATIC) Returns a copy of the given string with leading characters
+   //   removed.
    //
    // Arguments:
-   //   s     - An input string.
+   //   s     - A string to be stripped.
    //   chars - (OPTIONAL) A string specifying the set of characters to be
-   //           removed. The default is whitespace: a space (" "), a tab ("\t"),
-   //           or a newline ("\n"). Note that the *chars* string is not a
-   //           prefix. All combinations of its characters are stripped.
+   //           removed. The default is whitespace characters: a space (" "), a
+   //           tab (*\t*), or a newline (*\n*). Note that the *chars* string is
+   //           not a prefix. All combinations of its characters are stripped.
    //
    // Returns:
    //   A copy of *s* with leading characters removed.
@@ -1014,7 +995,7 @@ virtual class text;
    // | assert( text::lstrip( "  \t\nabc" ) == "abc" );
    // | assert( text::lstrip( "aabbcc", "a"  ) == "bbcc" );
    // | assert( text::lstrip( "aabbcc", "ab" ) == "cc"   );
-   // | assert( text::lstrip( "aabbcc", "ba" ) == "cc"   ); // "ba" is not a prefix
+   // | assert( text::lstrip( "aabbcc", "ba" ) == "cc"   ); // "b"s and "a"s are stripped
    //
    // See Also:
    //   <chop>, <chomp>, <delete>, <rstrip>, <strip>, <trim>
@@ -1033,8 +1014,8 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: only
-   //   Returns 1 if the given string consists of only the specified set of
-   //   characters.
+   //   (STATIC) Returns 1 if the given string consists of only the specified
+   //   set of characters.
    //
    // Arguments:
    //   s     - An input string.
@@ -1071,11 +1052,12 @@ virtual class text;
    endfunction: only
 
    //---------------------------------------------------------------------------
-   // Function: partition
-   //   Searches the first occurrence of the specified separator in the given
-   //   string and returns three strings: the part before the separator, the
-   //   separator itself, and the part after the separator. If the separator is
-   //   not found, returns the given string and two empty strings.
+   // Function: partition 
+   //   (STATIC) Searches the first occurrence of the specified separator in the
+   //   given string and returns an array of three strings. The returned array
+   //   consists of: the string before the separator, the separator itself, and
+   //   the string after the separator. If the separator is not found, the given
+   //   string and two empty strings are returned.
    //
    // Arguments:
    //   s   - An input string.
@@ -1093,7 +1075,7 @@ virtual class text;
    // | assert( text::partition( "abcabc",  "X" ) == '{ "abcabc", "", "" } );
    //
    // See Also:
-   //   <rpartition>, <rsplit>, <split>, <split_lines>
+   //   <rpartition>, <rsplit>, <split>
    //---------------------------------------------------------------------------
 
    static function three_strings partition( string s,
@@ -1111,19 +1093,20 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: replace
-   //   Returns a copy of the given string with all occurrences of the specified
-   //   string replaced with a new string.
+   //   (STATIC) Returns a copy of the given string with the specified string
+   //   replaced with a new string.
    //
    // Arguments:
    //   s       - An input string.
    //   old_str - An old string. An empty string ("") matches no input string.
    //   new_str - A new string.
-   //   count   - (OPTIONAL) A number of strings to replace. If specified, only
-   //             the first *count* occurrences are replaced. By default, all
-   //             occurrences are replaced.
+   //   count - (OPTIONAL) The number of strings to replace. If specified, only
+   //           the first *count* occurrences are replaced. By default, all
+   //           occurrences are replaced.
    //
    // Returns:
-   //   A copy of *s* with all occurrences of *old_str* replaced with *new_str*.
+   //   A copy of *s* with the first *count* occurrences of *old_str* replaced
+   //   with *new_str*.
    //
    // Examples:
    // | assert( text::replace( "abcabc", "abc", "XYZ"    ) == "XYZXYZ" );
@@ -1151,7 +1134,8 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: reverse
-   //   Returns a copy of the given string with the characters in reverse order.
+   //   (STATIC) Returns a copy of the given string with the characters in
+   //   reverse order.
    //
    // Argument:
    //   s - An input string.
@@ -1159,8 +1143,9 @@ virtual class text;
    // Returns:
    //   A copy of *s* with the characters in reverse order.
    //
-   // Example:
+   // Examples:
    // | assert( text::reverse( "reverse me!" ) == "!em esrever" );
+   // | assert( text::reverse( "wonton? not now" ) == "won ton ?notnow" );
    //---------------------------------------------------------------------------
 
    static function string reverse( string s );
@@ -1173,8 +1158,8 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: rfind_any
-   //   Returns the highest index in the given string where each specified 
-   //   substring is found.
+   //   (STATIC) Returns the highest index in the given string where each
+   //   specified substring is found.
    //
    // Arguments:
    //   s         - An input string.
@@ -1182,22 +1167,25 @@ virtual class text;
    //               an array literal.
    //               An empty substring ("") matches no input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
    //   The highest index in *s* where each substring in *subs* is found. If no
    //   substring is found, -1 is returned.
    //
    // Examples:
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" } )                  == 10 );
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 );
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" } )                  == 10 ); // found "library" at index 10
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 ); // found "library" at index 10
    // | //                           |----------->|
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == -1 );
+   // | //                           3
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == -1 ); // no substring was found
    // | //                        |----->|
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  ==  2 );
+   // | //                               7
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  ==  2 ); // found "primary" at index 2
    // | //                        |------>|
+   // | //                               -9
    //
    // See Also:
    //   <contains>, <contains_str>, <count>, <ends_with>, <find_any>, <index>, 
@@ -1227,17 +1215,17 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: rindex
-   //   Returns the index of the last occurrence of the specified substring 
-   //   in the given string.
+   //   (STATIC) Returns the index of the last occurrence of the specified
+   //   substring in the given string within the optionally specified range.
    //
    // Arguments:
    //   s         - An input string.
-   //   sub       - A substring. 
+   //   sub       - A substring to search.
    //               An empty substring ("") matches no input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
    //   The index of the last occurrence of *sub* in *s*. If *sub* is not found,
@@ -1247,10 +1235,13 @@ virtual class text;
    // | assert( text::rindex( "a primary library", "ary" )                  == 14 );
    // | assert( text::rindex( "a primary library", "ary", .start_pos( 3 ) ) == 14 );
    // | //                        |----------->|
+   // | //                        3
    // | assert( text::rindex( "a primary library", "ary", .end_pos(  7 ) )  == -1 );
    // | //                     |----->|
+   // | //                            7
    // | assert( text::rindex( "a primary library", "ary", .end_pos( -9 ) )  ==  6 );
    // | //                     |------>|
+   // | //                            -9
    //
    // See Also:
    //   <contains>, <contains_str>, <count>, <ends_with>, <find_any>, <index>, 
@@ -1275,20 +1266,21 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: rjust
-   //   Returns a string of the specified width with the given string right
-   //   justified and padded with the specified character.
+   //   (STATIC) Returns a string of the specified width with the given string
+   //   right justified and padded with the specified character.
    //
    // Arguments:
-   //   s         - A string to right justify.
+   //   s         - A string to right-justify.
    //   width     - The width of the returned string.
-   //   fill_char - (OPTIONAL) A character used for padding if *width* is 
-   //               larger than the length of *s*.  The default is a space.
-   //   trim_left - (OPTIONAL) If *width* is smaller than the length of *s*
-   //               and: (i) if *trim_left* is 1, then the tail of *s* is
-   //               trimmed to fit within *width*; or (ii) if *trim_left* is 0,
-   //               then *width* is extended to the length of *s*.  If *width*
-   //               is larger than or equal to the length of *s*, *trim_left* is
-   //               ignored.  The default is 0.
+   //   fill_char - (OPTIONAL) A character used for padding if *width* is wider
+   //               than the length of *s*.  The default is a space character ("
+   //               ").
+   //   trim_left - (OPTIONAL) If *width* is narrower than the length of *s*
+   //               and *trim_left* is 1, then the head of *s* is trimmed to fit
+   //               within *width*. If *trim_left* is 0, then *width* is widened
+   //               to the length of *s*.  If *width* is wider than or equal to
+   //               the length of *s*, *trim_left* is ignored.  The default is
+   //               0.
    //
    // Returns:
    //   A string with *s* right justified and padded with *fill_char*.
@@ -1296,8 +1288,8 @@ virtual class text;
    // Examples:
    // | assert( text::rjust( "rjust me", 15 )                 == "       rjust me" );
    // | assert( text::rjust( "rjust me", 15, "-" )            == "-------rjust me" );
-   // | assert( text::rjust( "rjust me", 7 )                  ==        "rjust me" );
-   // | assert( text::rjust( "rjust me", 7, .trim_left( 1 ) ) ==         "just me" );
+   // | assert( text::rjust( "rjust me", 7 )                  ==        "rjust me" ); // widened to fit
+   // | assert( text::rjust( "rjust me", 7, .trim_left( 1 ) ) ==         "just me" ); // trimmed
    //
    // See Also:
    //   <center>, <ljust>
@@ -1322,10 +1314,11 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: rpartition
-   //   Searches the last occurrence of the specified separator in the given
-   //   string and returns three strings: the part before the separator, the
-   //   separator itself, and the part after the separator. If the separator is
-   //   not found, returns the given string and two empty strings.
+   //   (STATIC) Searches the last occurrence of the specified separator in the
+   //   given string and returns an array of three strings. The returned array
+   //   consists of: the string before the separator, the separator itself, and
+   //   the string after the separator. If the separator is not found, the given
+   //   string and two empty strings are returned.
    //
    // Arguments:
    //   s   - An input string.
@@ -1343,7 +1336,7 @@ virtual class text;
    // | assert( text::rpartition( "abcabc",  "X" ) == '{ "abcabc", "", "" } );
    //
    // See Also:
-   //   <partition>, <rsplit>, <split>, <split_lines>
+   //   <partition>, <rsplit>, <split>
    //---------------------------------------------------------------------------
 
    static function three_strings rpartition( string s,
@@ -1361,22 +1354,25 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: rsplit
-   //   Returns a queue of substrings by dividing the given string by the 
-   //   specified separator from the right.
+   //   (STATIC) Returns a queue of substrings by dividing the given string by
+   //   the specified separator from the right.
    //
    // Arguments:
    //   s         - An input string. If *s* is empty, an empty queue is 
    //               returned.
-   //   sep       - (OPTIONAL) A separator. If specified, *sep* is used as the
-   //               delimiter. The *sep* itself is not returned as an element
-   //               of the queue. If not specified, whitespace characters are
-   //               used. The whitespace characters are a space (" "), a tab
-   //               ("\t"), or a newline ("\n"). If *sep* is not specified, the
-   //               trailing whitespaces and contiguous whitespaces are ignored.
+   //   sep - (OPTIONAL) A separator. If specified, *sep* is used as the
+   //         delimiter. The *sep* itself is not returned as an element of the
+   //         queue. If not specified, whitespace characters (a space (" "), a
+   //         tab (*\t*), or a newline (*\n*)) are used. If *sep* is not
+   //         specified, the contiguous whitespaces and the trailing whitespaces
+   //         are ignored.
    //   max_split - (OPTIONAL) If specified, at most *max_split* splits are 
    //               done from the right and the remaining substring is returned
    //               as the first element of the queue.  If not specified or -1,
    //               there is no limit to the number of splits.
+   //
+   // Returns:
+   //   A queue of substrings (<string_q>).
    //
    // Examples:
    // | assert( text::rsplit( "  abc  pqr  xyz  "                  ) == '{ "abc", "pqr", "xyz" } );
@@ -1391,7 +1387,7 @@ virtual class text;
    // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == '{ "", "abc", "pqr", "xyz", "" } );
    //
    // See Also:
-   //   <partition>, <rpartition>, <split>, <split_lines>
+   //   <partition>, <rpartition>, <split>
    //---------------------------------------------------------------------------
 
    static function string_q rsplit( string s,
@@ -1432,14 +1428,15 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: rstrip
-   //   Returns a copy of the given string with trailing characters removed.
+   //   (STATIC) Returns a copy of the given string with trailing characters
+   //   removed.
    //
    // Arguments:
-   //   s     - An input string.
+   //   s     - A string to be stripped.
    //   chars - (OPTIONAL) A string specifying the set of characters to be
-   //           removed. The default is whitespace: a space (" "), a tab ("\t"),
-   //           or a newline ("\n"). Note that the *chars* string is not a
-   //           suffix. All combinations of its characters are stripped.
+   //           removed. The default is whitespace characters: a space (" "), a
+   //           tab (*\t*), or a newline (*\n*). Note that the *chars* string is
+   //           not a suffix. All combinations of its characters are stripped.
    //
    // Returns:
    //   A copy of *s* with trailing characters removed.
@@ -1449,7 +1446,7 @@ virtual class text;
    // | assert( text::rstrip( "abc  \t\n" ) == "abc" );
    // | assert( text::rstrip( "aabbcc", "c"  ) == "aabb" );
    // | assert( text::rstrip( "aabbcc", "bc" ) == "aa"   );
-   // | assert( text::rstrip( "aabbcc", "cb" ) == "aa"   ); // "cb" is not a suffix
+   // | assert( text::rstrip( "aabbcc", "cb" ) == "aa"   ); // "c"s and "b"s are stripped
    //
    // See Also:
    //   <chop>, <chomp>, <delete>, <lstrip>, <strip>, <trim>
@@ -1468,19 +1465,19 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: slice
-   //   Returns a substring formed by characters in the specified range. This
-   //   function is similar to the native substr() function in SystemVerilog, 
-   //   but you can specify negative numbers to specify the range.
+   //   (STATIC) Returns a substring in the specified range. This function is
+   //   similar to the *substr* function in native SystemVerilog, but one can
+   //   specify negative numbers to specify the range with this function.
    //
    // Arguments:
    //   s - An input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               substring. See <Common Arguments> for how to specify.
+   //               substring. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the 
-   //               substring. See <Common Arguments> for how to specify.
+   //               substring. See <Common Arguments>.
    // 
    // Returns:
-   //   Returns a substring formed by characters in the specified range.
+   //   Returns a substring in the specified range.
    //
    // Examples:
    // | assert( text::slice( "slice me",  2,  6 ) == "ice m" );
@@ -1499,19 +1496,18 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: slice_len
-   //   Returns a substring formed by characters in the specified range. This
-   //   function is similar to <slice()>, but you specify the length of the
-   //   slice instead of the end position.
+   //   (STATIC) Returns a substring in the specified range. Unlike <slice>,
+   //   this function takes the length to extract instead of the end position.
    //
    // Arguments:
    //   s         - An input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               substring. See <Common Arguments> for how to specify.
+   //               substring. See <Common Arguments>.
    //   length    - (OPTIONAL) The number of characters to extract. The default
-   //               is extracting the entire *s*.
+   //               is the length of *s*.
    // 
    // Returns:
-   //   Returns a substring formed by characters in the specified range.
+   //   Returns a substring in the specified range.
    //
    // Examples:
    // | assert( text::slice_len( "slice me",  2, 5 ) == "ice m" );
@@ -1524,7 +1520,7 @@ virtual class text;
    static function string slice_len( string s,
 				     int start_pos = 0,
 				     int unsigned length = s.len() );
-      int end_pos = -1; // dummy
+      int end_pos = -1; // dummy for normalize()
 
       if ( length == 0 ) return "";
       normalize( s, start_pos, end_pos ); // make start_pos positive
@@ -1533,22 +1529,25 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: split
-   //   Returns a queue of substrings by dividing the given string by the 
-   //   specified separator.
+   //   (STATIC) Returns a queue of substrings by dividing the given string by
+   //   the specified separator.
    //
    // Arguments:
    //   s         - An input string. If *s* is empty, an empty queue is
    //               returned.
-   //   sep       - (OPTIONAL) A separator. If specified, *sep* is used as the
-   //               delimiter. The *sep* itself is not returned as an element
-   //               of the queue. If not specified, whitespace characters are
-   //               used. The whitespace characters are a space (" "), a tab
-   //               ("\t"), or a newline ("\n"). If *sep* is not specified, the
-   //               leading whitespaces and contiguous whitespaces are ignored.
+   //   sep - (OPTIONAL) A separator. If specified, *sep* is used as the
+   //         delimiter. The *sep* itself is not returned as an element of the
+   //         queue. If not specified, whitespace characters (a space (" "), a
+   //         tab (*\t*), or a newline (*\n*)) are used. If *sep* is not
+   //         specified, the leading whitespaces and the contiguous whitespaces
+   //         are ignored.
    //   max_split - (OPTIONAL) If specified, at most *max_split* splits are 
    //               done and the remaining substring is returned as the last
    //               element of the queue.  If not specified or -1, there is no
    //               limit to the number of splits.
+   //
+   // Returns:
+   //   A queue of substrings (<string_q>).
    //
    // Examples:
    // | assert( text::split( "  abc  pqr  xyz  "                  ) == '{ "abc", "pqr", "xyz" } );
@@ -1563,7 +1562,7 @@ virtual class text;
    // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == '{ "", "abc", "pqr", "xyz", "" } );
    //
    // See Also:
-   //   <partition>, <rpartition>, <rsplit>, <split_lines>
+   //   <partition>, <rpartition>, <rsplit>
    //---------------------------------------------------------------------------
 
    static function string_q split( string s,
@@ -1603,11 +1602,11 @@ virtual class text;
    endfunction: split
 
    //---------------------------------------------------------------------------
-   // Function: split_lines
-   //   Returns a queue of strings by dividing a multi-line string at newline
-   //   characters.
+   // FunctionX: split_lines
+   //   (STATIC) Returns a queue of strings by dividing a multi-line string at
+   //   newline characters.
    //
-   // Arguments:
+   // ArgumentsX:
    //   s         - An input string. If *s* is empty, an empty queue is
    //               returned.
    //   keep_ends - (OPTIONAL) If 1, newline characters are included in the
@@ -1615,28 +1614,29 @@ virtual class text;
    //               in the resulting queue. The default is 0.
    //
    // Returns:
-   //   A queue of strings by dividing *s* at newline characters.
+   //   A queue of strings.
    //
-   // Examples:
-   // | assert( text::split_lines( ""   ) == '{} );
-   // | assert( text::split_lines( "\n" ) == '{} );
-   // | assert( text::split_lines( "\n", .keep_ends( 1 ) ) == '{ "\n" } );
-   // | 
-   // | assert( text::split_lines( "abc\nXYZ"                  ) == '{ "abc",   "XYZ" } );
-   // | assert( text::split_lines( "abc\nXYZ", .keep_ends( 1 ) ) == '{ "abc\n", "XYZ" } );
+   // ExamplesX:
+   // : assert( text::split_lines( ""   ) == '{} );
+   // : assert( text::split_lines( "\n" ) == '{} ); // trailing newline characters are dropped
+   // : assert( text::split_lines( "\n", .keep_ends( 1 ) ) == '{ "\n" } );
+   // : 
+   // : assert( text::split_lines( "abc\nXYZ"                  ) == '{ "abc",     "XYZ" } );
+   // : assert( text::split_lines( "abc\n\nXYZ"                ) == '{ "abc", "", "XYZ" } );
+   // : assert( text::split_lines( "abc\nXYZ", .keep_ends( 1 ) ) == '{ "abc\n",   "XYZ" } );
    //
-   // See Also:
+   // See AlsoX:
    //   <partition>, <rpartition>, <rsplit>, <split>
    //---------------------------------------------------------------------------
-
+/*
    static function string_q split_lines( string s,
 					 bit keep_ends = 0 );
       int pos;
 
       if ( s == "" ) return {};
       if ( only( s, "\n" ) ) begin
-	 if ( keep_ends ) return { s };
-	 else             return {};
+      	 if ( keep_ends ) return { s };
+      	 else             return {};
       end
 
       pos = find_any( s, { "\n" } );
@@ -1667,10 +1667,11 @@ virtual class text;
 	 end
       end
    endfunction: split_lines
-
+*/
    //---------------------------------------------------------------------------
    // Function: starts_with
-   //   Returns 1 if the given string starts with one of the specified prefixes.
+   //   (STATIC) Returns 1 if the given string starts with one of the specified
+   //   prefixes.
    //
    // Arguments:
    //   s         - An input string.
@@ -1678,22 +1679,25 @@ virtual class text;
    //               using an array literal.  An empty string ("") matches no
    //               input string.
    //   start_pos - (OPTIONAL) Specifies the position in *s* to begin the
-   //               search. See <Common Arguments> for how to specify.
+   //               search. See <Common Arguments>.
    //   end_pos   - (OPTIONAL) Specifies the position in *s* to end the search.
-   //               See <Common Arguments> for how to specify.
+   //               See <Common Arguments>.
    //
    // Returns:
-   //   If *s* starts with one of the *prefixes* given, 1 is returned. 
+   //   If *s* starts with one of the specified *prefixes*, 1 is returned. 
    //   Otherwise, 0 is returned.
    //
    // Examples:
    // | assert( text::starts_with( "a primary library", { "a primary", "library" } )                   == 1 );
    // | assert( text::starts_with( "a primary library", { "a primary", "library" }, .start_pos( 10 ) ) == 1 );
    // | //                                    |---->|
+   // | //                                   10
    // | assert( text::starts_with( "a primary library", { "a primary", "library" }, .end_pos(  7 ) )  == 0 );
    // | //                          |----->|
+   // | //                                 7
    // | assert( text::starts_with( "a primary library", { "a primary", "library" }, .end_pos( -9 ) )  == 1 );
    // | //                          |------>|
+   // | //                                 -9
    //
    // See Also:
    //   <contains>, <contains_str>, <count>, <ends_with>, <find_any>, <index>, 
@@ -1722,15 +1726,15 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: strip
-   //   Returns a copy of the given string with leading and trailing characters
-   //   removed.
+   //   (STATIC) Returns a copy of the given string with leading and trailing
+   //   characters removed.
    //
    // Arguments:
-   //   s     - An input string.
+   //   s     - A string to be stripped.
    //   chars - (OPTIONAL) A string specifying the set of characters to be
-   //           removed. The default is whitespace: a space (" "), a tab ("\t"),
-   //           or a newline ("\n"). Note that the *chars* string is not a
-   //           prefix or suffix. All combinations of its characters are
+   //           removed. The default is whitespace characters: a space (" "), a
+   //           tab (*\t*), or a newline (*\n*). Note that the *chars* string is
+   //           not a prefix or suffix. All combinations of its characters are
    //           stripped.
    //
    // Returns:
@@ -1754,11 +1758,11 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: swap_case
-   //   Returns a copy of the given string with uppercase characters converted
-   //   to lowercase, and lowercase characters converted to uppercase.
+   //   (STATIC) Returns a copy of the given string with uppercase characters
+   //   converted to lowercase, and lowercase characters converted to uppercase.
    //
    // Argument:
-   //   s - An input string.
+   //   s - A string to be swap-cased.
    //
    // Returns:
    //   A copy of *s* with uppercase characters converted to lowercase, and
@@ -1784,11 +1788,11 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: title_case
-   //   Returns a copy of the given string with the first character of words
-   //   uppercased and the remainder lowercased.
+   //   (STATIC) Returns a copy of the given string with the first character of
+   //   words uppercased and the remainder lowercased.
    //
    // Argument:
-   //   s - An input string.
+   //   s - A string to be title-cased.
    //
    // Returns:
    //   A copy of *s* with the first character of words uppercased and the
@@ -1824,11 +1828,11 @@ virtual class text;
    
    //---------------------------------------------------------------------------
    // Function: trim
-   //   Returns a copy of the given string with leading and trailing characters
-   //   removed.
+   //   (STATIC) Returns a copy of the given string with the specified numbers
+   //   of leading and trailing characters removed.
    //
    // Arguments:
-   //   s     - An input string.
+   //   s     - A string to be trimmed.
    //   left  - (OPTIONAL) The number of leading characters to remove. The
    //           default is 0.
    //   right - (OPTIONAL) The number of trailing characters to remove. The 
@@ -1855,8 +1859,8 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: uc_first
-   //   Returns a copy of the given string with the first character uppercased
-   //   and the remainder unchanged.
+   //   (STATIC) Returns a copy of the given string with the first character
+   //   uppercased and the remainder unchanged.
    //
    // Argument:
    //   s - An input string.
@@ -1881,12 +1885,13 @@ virtual class text;
 
    //---------------------------------------------------------------------------
    // Function: untabify
-   //   Returns a copy of the given string where all tab characters ("\t") are
-   //   replaced by one or more spaces, depending on the tab positions. If a
-   //   newline ("\n") is found, it is copied and the tab position is reset.
+   //   (STATIC) Returns a copy of the given string where all tab characters
+   //   (*\t*) are replaced by one or more spaces, depending on the tab
+   //   positions. If a newline (*\n*) is found, it is copied and the tab
+   //   position is reset.
    //
    // Arguments:
-   //   s        - An input string.
+   //   s        - A string to untabify.
    //   tab_size - (OPTIONAL) Tab positions occur every *tab_size* characters.
    //              The default is 8.
    //
