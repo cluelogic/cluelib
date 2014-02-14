@@ -179,8 +179,13 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | assert( packed_array#(bit,8)::to_dynamic_array( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da[];
+   // |
+   // | da = packed_array#(bit,8)::to_dynamic_array( pa );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | da = packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
    // See Also:
    //   <pa_to_da>
@@ -240,8 +245,13 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | assert( packed_array#(bit,8)::to_queue( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q[$];
+   // |
+   // | q = packed_array#(bit,8)::to_queue( pa );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | q = packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
    // See Also:
    //   <pa_to_q>

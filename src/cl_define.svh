@@ -57,7 +57,7 @@
 //------------------------------------------------------------------------------
 
 //`define CL_USE_INCISIVE
-`define CL_USE_MODELSIM
+//`define CL_USE_MODELSIM
 //`define CL_USE_QUESTA
 //`define CL_USE_VCS
 

@@ -259,10 +259,11 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 ) exten
 				     input bit little_endian = 0 );
       scramble = new[ ds.size() ];
       foreach ( ds[i] ) begin
+	 pa_type pa = ds[i];
 	 T bitstream[];
 	 T scrambled[];
 
-	 bitstream = packed_array#(T,WIDTH)::to_dynamic_array( ds[i],
+	 bitstream = packed_array#(T,WIDTH)::to_dynamic_array( pa,
 							       little_endian );
 	 scrambled = scrblr.scramble( bitstream, lfsr );
 	 scramble[i] = packed_array#(T,WIDTH)::from_dynamic_array( scrambled,

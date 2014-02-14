@@ -7,7 +7,7 @@ import cl::*;
 module test_from_examples;
   function automatic void test;
     $display( "==========starting test_from_examples==========" );
-    // test ./src/cl_text.svh
+    // test ../src/cl_text.svh
     begin
       assert( text::capitalize( "capitalize me!" ) == "Capitalize me!" );
     end
@@ -304,7 +304,7 @@ module test_from_examples;
       assert( text::untabify( "AB\nCDE\tFGHI\tJKLMN", 4 ) == "AB\nCDE FGHI    JKLMN" );
       // tab positions:    ^   ^   ^   ^   ^   ^
     end
-    // test ./src/cl_pair.svh
+    // test ../src/cl_pair.svh
     begin
       pair#(int, string) p = new( 1, "apple" );
       assert( p.first == 1 );
@@ -360,7 +360,7 @@ module test_from_examples;
       assert( p.second == "orange" );
       assert( q.second == "apple" );
     end
-    // test ./src/cl_tuple.svh
+    // test ../src/cl_tuple.svh
     begin
       tuple#(int,string,bit[7:0]) t = new( 1, "apple", 8'hFF );
       assert( t.first == 1 );
@@ -450,7 +450,7 @@ module test_from_examples;
       assert( t.third == 8'hAA );
       assert( u.third == 8'hFF );
     end
-    // test ./src/cl_packed_array.svh
+    // test ../src/cl_packed_array.svh
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
       assert( packed_array#(bit,8)::from_unpacked_array( ua                ) == 8'hD8 ); // bit[7:0]
@@ -468,8 +468,13 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      assert( packed_array#(bit,8)::to_dynamic_array( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit da[];
+      
+      da = packed_array#(bit,8)::to_dynamic_array( pa );
+      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      
+      da = packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) );
+      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
     begin
       bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
@@ -478,8 +483,13 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      assert( packed_array#(bit,8)::to_queue( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit q[$];
+      
+      q = packed_array#(bit,8)::to_queue( pa );
+      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      
+      q = packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) );
+      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
@@ -567,7 +577,7 @@ module test_from_examples;
       logic[15:0] pa = 16'b0000_1111_xxxx_zzzz;
       assert( packed_array#(logic,16)::count_hizs( pa ) == 4 );
     end
-    // test ./src/cl_unpacked_array.svh
+    // test ../src/cl_unpacked_array.svh
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
       assert( unpacked_array#(bit,8)::from_dynamic_array( da                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
@@ -575,8 +585,13 @@ module test_from_examples;
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      assert( unpacked_array#(bit,8)::to_dynamic_array( ua                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( unpacked_array#(bit,8)::to_dynamic_array( ua, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit da[];
+      
+      da = unpacked_array#(bit,8)::to_dynamic_array( ua );
+      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      
+      da = unpacked_array#(bit,8)::to_dynamic_array( ua, .reverse( 1 ) );
+      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
     begin
       bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
@@ -585,8 +600,13 @@ module test_from_examples;
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      assert( unpacked_array#(bit,8)::to_queue( ua                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( unpacked_array#(bit,8)::to_queue( ua, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit q[$];
+      
+      q = unpacked_array#(bit,8)::to_queue( ua );
+      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      
+      q = unpacked_array#(bit,8)::to_queue( ua, .reverse( 1 ) );
+      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]

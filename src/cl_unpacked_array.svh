@@ -90,7 +90,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    static function ua_type from_dynamic_array( const ref da_type da,
 					       input bit reverse = 0 );
       common_array#( T, SIZE, ua_type )::da_to_a( da, from_dynamic_array, 
-						   reverse );
+						  reverse );
    endfunction: from_dynamic_array
    
    //---------------------------------------------------------------------------
@@ -110,8 +110,13 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-   // | assert( unpacked_array#(bit,8)::to_dynamic_array( ua                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( unpacked_array#(bit,8)::to_dynamic_array( ua, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da[];
+   // |
+   // | da = unpacked_array#(bit,8)::to_dynamic_array( ua );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | da = unpacked_array#(bit,8)::to_dynamic_array( ua, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
    // See Also:
    //   <ua_to_da>
@@ -171,8 +176,13 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-   // | assert( unpacked_array#(bit,8)::to_queue( ua                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( unpacked_array#(bit,8)::to_queue( ua, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q[$];
+   // |
+   // | q = unpacked_array#(bit,8)::to_queue( ua );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | q = unpacked_array#(bit,8)::to_queue( ua, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
    // See Also:
    //   <ua_to_q>

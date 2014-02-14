@@ -13,7 +13,7 @@ src_dir  := ../src
 test_dir := ../test
 
 compile_files := $(src_dir)/cl_pkg.sv $(src_dir)/cl_dpi.cc $(test_dir)/test_from_examples.sv
-compile_opts  := +incdir+$(src_dir)+$(test_dir)
+compile_opts  := +incdir+$(src_dir)+$(test_dir) +define+CL_USE_MODELSIM
 run_cmd_file  := modelsim.cmd
 run_opts      :=
 top_module    := test_from_examples
