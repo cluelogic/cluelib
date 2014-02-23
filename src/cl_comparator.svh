@@ -30,29 +30,37 @@
 
 //------------------------------------------------------------------------------
 // Class: comparator
-//   Provides compare strategies.
+//   (SINGLETON) Provides strategies to compare objects.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of an object to be compared. The default is *int*.
 //------------------------------------------------------------------------------
 
 class comparator#( type T = int );
 
    //---------------------------------------------------------------------------
    // Typedef: this_type
-   //   The shorthand of comparator#(T).
+   //   The shorthand of <comparator> *#(T)*.
    //---------------------------------------------------------------------------
 
    typedef comparator#(T) this_type;
 
-   local static this_type inst = null;
+   local static this_type inst = null; // needs to place after the typedef above
+
+   //---------------------------------------------------------------------------
+   // Function: new
+   //   (PROTECTED) Creates a new comparator.
+   //---------------------------------------------------------------------------
 
    protected function new();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: get_instance
-   //   Returns a singleton instance of this comparator.
+   //   (STATIC) Returns the singleton instance of this comparator.
    //
    // Returns:
-   //   A singleton instance.
+   //   The singleton instance.
    //---------------------------------------------------------------------------
 
    static function this_type get_instance();
@@ -62,7 +70,8 @@ class comparator#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: eq
-   //   Returns 1 if two inputs are equal.
+   //   (VIRTUAL) Returns 1 if two inputs are equal. This function uses the
+   //   logical equality operator (==) for the object comparison.
    //
    // Arguments:
    //   x - An input of type T.
@@ -81,14 +90,14 @@ class comparator#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: ne
-   //   Returns 1 if two inputs are not equal.
+   //   (VIRTUAL) Returns 1 if two inputs are not equal.
    //
    // Arguments:
    //   x - An input of type T.
    //   y - Another input of type T.
    //
    // Returns:
-   //   If *x* is not equal to *y*, then returns 1. Otherwise, returns 0.
+   //   This function returns the negated value of <eq> *(x,y)*.
    //---------------------------------------------------------------------------
 
    virtual function bit ne( T x, T y );
@@ -97,14 +106,15 @@ class comparator#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: lt
-   //   Returns 1 if *x* is less than *y*.
+   //   (VIRTUAL) Returns 1 if *x* is less than *y*.
    //
    // Arguments:
    //   x - An input of type T.
    //   y - Another input of type T.
    //
    // Returns:
-   //   If *x* is less than *y*, then returns 1. Otherwise, returns 0.
+   //   This function always returns 0. A subclass should implement this
+   //   function if necessary.
    //---------------------------------------------------------------------------
 
    virtual function bit lt( T x, T y );
@@ -121,39 +131,30 @@ class comparator#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: gt
-   //   Returns 1 if *x* is greater than *y*.
+   //   (VIRTUAL) Returns 1 if *x* is greater than *y*.
    //
    // Arguments:
    //   x - An input of type T.
    //   y - Another input of type T.
    //
    // Returns:
-   //   If *x* is greater than *y*, then returns 1. Otherwise, returns 0.
+   //   This function returns the value of <lt> *(y,x)*.
    //---------------------------------------------------------------------------
 
    virtual function bit gt( T x, T y );
-
-`ifdef CL_SUPPORT_FATAL_SEVERITY_TASK
-      $fatal( 2, "gt() is not defined for %s", $typename( T ) );
-`else
-      $display( "gt() is not defined for %s", $typename( T ) );
-      $finish( 2 );
-`endif
-
-      return 0; // dummy
+      return lt( y, x ); // attention (y,x)
    endfunction: gt
 
    //---------------------------------------------------------------------------
    // Function: le
-   //   Returns 1 if *x* is less than or equal to *y*.
+   //   (VIRTUAL) Returns 1 if *x* is less than or equal to *y*.
    //
    // Arguments:
    //   x - An input of type T.
    //   y - Another input of type T.
    //
    // Returns:
-   //   If *x* is less than or equal to *y*, then returns 1. Otherwise, returns
-   //   0.
+   //   This function returns the negated value of <gt> *(x,y)*.
    //---------------------------------------------------------------------------
 
    virtual function bit le( T x, T y );
@@ -162,15 +163,14 @@ class comparator#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: ge
-   //   Returns 1 if *x* is greater than or equal to *y*.
+   //   (VIRTUAL) Returns 1 if *x* is greater than or equal to *y*.
    //
    // Arguments:
    //   x - An input of type T.
    //   y - Another input of type T.
    //
    // Returns:
-   //   If *x* is greaterthan or equal to *y*, then returns 1. Otherwise,
-   //   returns 0.
+   //   This function returns the negated value of <lt> *(x,y)*.
    //---------------------------------------------------------------------------
 
    virtual function bit ge( T x, T y );

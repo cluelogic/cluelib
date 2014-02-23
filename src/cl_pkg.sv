@@ -25,6 +25,8 @@
 // SOFTWARE.
 //==============================================================================
 
+// Title: Package
+
 `ifndef CL_PKG_SV
 `define CL_PKG_SV
 
@@ -32,6 +34,18 @@
 
 //------------------------------------------------------------------------------
 // Package: cl
+//   The ClueLib package. All library files are included in this package. A
+//   class declared within the package can be accessed using one of the
+//   following:
+//
+// - The class scope resolution operator *::*
+// | int i = cl::choice#(int)::min( 1, 2 );
+// - An explicit *import* declaration
+// | import cl::choice;
+// | int i = choice#(int)::min( 1, 2 );
+// - A wildcard *import*
+// | import cl::*;
+// | int i = choice#(int)::min( 1, 2 );
 //------------------------------------------------------------------------------
 
 package cl;
@@ -81,12 +95,12 @@ package cl;
    `include "cl_deque_iterator.svh"
    `include "cl_deque_descending_iterator.svh"
    `include "cl_deque.svh"
-   `include "cl_bidir_iterator.svh"
-   `include "cl_list_base.svh"
-   `include "cl_sub_list_base.svh"
-   `include "cl_list_iterator.svh"
-   `include "cl_list_bidir_iterator.svh"
-   `include "cl_list.svh"
+//   `include "cl_bidir_iterator.svh"
+//   `include "cl_list_base.svh"
+//   `include "cl_sub_list_base.svh"
+//   `include "cl_list_iterator.svh"
+//   `include "cl_list_bidir_iterator.svh"
+//   `include "cl_list.svh"
 
    `include "cl_random_num.svh"
    `include "cl_kitchen_timer.svh"

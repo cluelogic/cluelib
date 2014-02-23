@@ -30,31 +30,43 @@
 
 //------------------------------------------------------------------------------
 // Class: bit_stream
-//    A parameterized class that manages a bit stream.  The type *T* must be the
-//    single bit data types (*bit*, *logic*, *reg*).  The default type is *bit*.
+//    A parameterized class that manages a bit stream.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of the bit stream. The *T* must be the single bit
+//       data types (*bit*, *logic*, or *reg*). The default type is *bit*.
 //------------------------------------------------------------------------------
 
 virtual class bit_stream #( type T = bit ) extends data_stream #( T, 1 );
 
    //---------------------------------------------------------------------------
    // Typedef: bs_type
-   //   Bit stream type. The shorthand of the dynamic array of type *T*.
+   //   The bit stream type. The shorthand of the dynamic array of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T bs_type[];
 
    //---------------------------------------------------------------------------
    // Function: alternate
-   //   Returns a bit stream with the elements whose values are alternated
-   //   between 0 and 1.
+   //   (STATIC) Returns a new bit stream with the elements whose values
+   //   alternate between 0 and 1.
    //
    // Argument:
-   //   length               - The length of output bit stream.
-   //   init_value           - (OPTIONAL) The value of the first element. The 
-   //                          default is 0.
+   //   length     - The length of the output bit stream.
+   //   init_value - (OPTIONAL) The value of the first element (0 or 1). The
+   //                default is 0.
    //   randomize_init_value - (OPTIONAL) If 1, the value of the first element
-   //                          is randomized and the *init_value* argument is
-   //                          ignored. The default is 0.
+   //                          is randomized (the *init_value* argument is
+   //                          ignored). The default is 0.
+   //
+   // Returns:
+   //   A _new_ bit stream with the elements whose values alternate between 0
+   //   and 1.
+   //
+   // Example:
+   // | bit bs[];
+   // | bs = bit_stream#(bit)::alternate( 8, .init_value( 1 ) );
+   // | assert( bs == '{ 1, 0, 1, 0, 1, 0, 1, 0 } );
    //---------------------------------------------------------------------------
 
    static function bs_type alternate( int unsigned length,
@@ -65,13 +77,13 @@ virtual class bit_stream #( type T = bit ) extends data_stream #( T, 1 );
 
    //---------------------------------------------------------------------------
    // Function: count_zeros
-   //    Counts the number of bits having value 0.
+   //    (STATIC) Counts the number of bit-stream items having value 0.
    // 
    // Argument:
    //   bs - A bit stream.
    //
    // Returns:
-   //   The number of bits having value 0. If the type *T* is not a single-bit
+   //   The number of items having value 0. If the type *T* is not a single-bit
    //   data type, -1 is returned.
    //
    // Example:
@@ -81,8 +93,8 @@ virtual class bit_stream #( type T = bit ) extends data_stream #( T, 1 );
 
    static function int count_zeros( bs_type bs );
 
-      // $countbits( bs, '0 ) cannot be used as bs is a dynamic array, not a
-      // bit-vector.
+      // $countbits( bs, '0 ) cannot be used because 'bs' is a dynamic array,
+      // not a bit-vector.
 
       if ( text::is_single_bit_type( $typename( T ) ) ) begin
 	 count_zeros = 0;
@@ -94,13 +106,13 @@ virtual class bit_stream #( type T = bit ) extends data_stream #( T, 1 );
 
    //---------------------------------------------------------------------------
    // Function: count_ones
-   //   Counts the number of bits having value 1.
+   //   (STATIC) Counts the number of bit-stream items having value 1.
    //
    // Argument:
    //   bs - A bit stream.
    //
    // Returns:
-   //   The number of bits having value 1. If the type *T* is not a single-bit
+   //   The number of items having value 1. If the type *T* is not a single-bit
    //   data type, -1 is returned.
    //
    // Example:
@@ -123,13 +135,13 @@ virtual class bit_stream #( type T = bit ) extends data_stream #( T, 1 );
 
    //---------------------------------------------------------------------------
    // Function: count_unknowns
-   //   Counts the number of bits having value X.
+   //   (STATIC) Counts the number of bit-stream items having value X.
    //
    // Argument:
    //   bs - A bit stream.
    //
    // Returns:
-   //   The number of bits having value X. If the type *T* is not a single-bit
+   //   The number of items having value X. If the type *T* is not a single-bit
    //   data type, -1 is returned.
    //
    // Example:
@@ -152,13 +164,13 @@ virtual class bit_stream #( type T = bit ) extends data_stream #( T, 1 );
 
    //---------------------------------------------------------------------------
    // Function: count_hizs
-   //   Counts the number of bits having value Z.
+   //   (STATIC) Counts the number of bit-stream items having value Z.
    //
    // Argument:
    //   bs - A bit stream.
    //
    // Returns:
-   //   The number of bits having value Z. If the type *T* is not a single-bit
+   //   The number of items having value Z. If the type *T* is not a single-bit
    //   data type, -1 is returned.
    //
    // Example:

@@ -25,6 +25,8 @@
 // SOFTWARE.
 //==============================================================================
 
+// Title: Type Definitions
+
 `ifndef CL_TYPES_SVH
 `define CL_TYPES_SVH
 
@@ -37,7 +39,7 @@ typedef string string_q[$];
 
 //------------------------------------------------------------------------------
 // Typedef: three_strings
-//   The unpacked array of three strings.
+//   The array of three strings.
 //------------------------------------------------------------------------------
 
 typedef string three_strings[3];

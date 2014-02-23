@@ -29,33 +29,38 @@
 `ifndef CL_CRC_SVH
 `define CL_CRC_SVH
 
-//--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Class: crc
-//   Provides functions to calculate several CRC (cyclic redundancy check)
-//   values. The type *T* must be *bit*, *logic*, or *reg*.
-//--------------------------------------------------------------------------
+//   (VIRTUAL) Provides functions to calculate a variety of CRC (cyclic
+//   redundancy check) values from a bit stream.
+//
+// Parameters:
+//   T - (OPTIONAL) The type of the bit stream to calculate the CRC. The type
+//       *T* must be *bit*, *logic*, or *reg*.  The default type is *bit*.
+//------------------------------------------------------------------------------
 
 virtual class crc #( type T = bit );
 
    //---------------------------------------------------------------------------
    // Typedef: bs_type
-   //   Bit stream type. The shorthand of the dynamic array of type *T*.
+   //   The bit stream type. The shorthand of the dynamic array of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T bs_type[];
 
-   //-----------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Function: crc
-   //   Returns a CRC value using specified taps. Supports up to 64-bit tap.
+   //   (STATIC) Returns a CRC value using the specified taps. The function
+   //   supports up to 64-bit tap.
    //
    // Argument:
-   //   bs     - Input bit stream.
-   //   tap    - The bit vector representaion of CRC polynomial.
-   //   degree - The degree of CRC polynimial.
+   //   bs     - An input bit stream.
+   //   tap    - The bit vector representaion of a CRC polynomial.
+   //   degree - The degree of a CRC polynomial.
    //
    // Returns:
-   //   A CRC value.
-   //-----------------------------------------------------------------------
+   //   A calculated CRC value.
+   //---------------------------------------------------------------------------
 
    static function T[63:0] crc( bs_type bs,
 				T[63:0] tap,
@@ -74,29 +79,29 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc1
-   //   Returns a CRC-1 value; also known as a parity bit. 
+   //   (STATIC) Returns a CRC-1 value; also known as a parity bit. 
    //   The CRC polynomial is:
-   // : x + 1
+   //   (see crc1.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-1 value. 
    //-----------------------------------------------------------------------
 
    static function T crc1( bs_type bs );
-      return crc( bs, 1'b0 /*not used*/, .degree( 1 ) );
+      return crc( bs, 1'b0 /*not used*/, .degree( 1 ) ); // x+1
    endfunction: crc1
 
    //-----------------------------------------------------------------------
    // Function: crc4_itu
-   //   Returns a CRC-4-ITU value. 
+   //   (STATIC) Returns a CRC-4-ITU value. 
    //   The CRC polynomial is:
-   // : x^4 + x + 1
+   //   (see crc4_itu.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-4-ITU value. 
@@ -104,6 +109,7 @@ virtual class crc #( type T = bit );
 
    static function T[3:0] crc4_itu( bs_type bs );
 
+      // x^4 + x + 1
       // 1_0011
 
       return crc( bs, 4'h3, .degree( 4 ) );
@@ -111,12 +117,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc5_epc
-   //   Returns a CRC-5-EPC value.
-   //   The CRC polynomial is:
-   // : x^5 + x^3 + 1
+   //   (STATIC) Returns a CRC-5-EPC value. 
+   //   The CRC polynomial is: 
+   //   (see crc5_epc.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-5-EPC value.
@@ -124,6 +130,7 @@ virtual class crc #( type T = bit );
 
    static function T[4:0] crc5_epc( bs_type bs );
 
+      // x^5 + x^3 + 1
       // 10_1001
 
       return crc( bs, 5'h09, .degree( 5 ) );
@@ -131,12 +138,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc5_itu
-   //   Returns a CRC-5-ITU value.
+   //   (STATIC) Returns a CRC-5-ITU value.
    //   The CRC polynomial is:
-   // : x^5 + x^4 + x^2 + 1
+   //   (see crc5_itu.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-5-ITU value.
@@ -144,6 +151,7 @@ virtual class crc #( type T = bit );
 
    static function T[4:0] crc5_itu( bs_type bs );
 
+      // x^5 + x^4 + x^2 + 1
       // 11_0101
 
       return crc( bs, 5'h15, .degree( 5 ) );
@@ -151,12 +159,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc5_usb
-   //   Returns a CRC-5-USB value.
+   //   (STATIC) Returns a CRC-5-USB value.
    //   The CRC polynomial is:
-   // : x^5 + x^2 + 1
+   //   (see crc5_usb.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-5-USB value.
@@ -164,6 +172,7 @@ virtual class crc #( type T = bit );
 
    static function T[4:0] crc5_usb( bs_type bs );
 
+      // x^5 + x^2 + 1
       // 10_0101
 
       return crc( bs, 5'h05, .degree( 5 ) );
@@ -171,12 +180,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc6_cdma2000_a
-   //   Returns a CRC-6-CDMA2000-A value.
+   //   (STATIC) Returns a CRC-6-CDMA2000-A value.
    //   The CRC polynomial is:
-   // : x^6 + x^5 + x^2 + x + 1
+   //   (see crc6_cdma2000_a.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-6-CDMA2000-A value.
@@ -184,6 +193,7 @@ virtual class crc #( type T = bit );
 
    static function T[5:0] crc6_cdma2000_a( bs_type bs );
 
+      // x^6 + x^5 + x^2 + x + 1
       // 110_0111
 
       return crc( bs, 6'h27, .degree( 6 ) );
@@ -191,12 +201,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc6_cdma2000_b
-   //   Returns a CRC-6-CDMA2000-B value.
+   //   (STATIC) Returns a CRC-6-CDMA2000-B value.
    //   The CRC polynomial is:
-   // : x^6 + x^2 + x + 1
+   //   (see crc6_cdma2000_b.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    // 
    // Returns:
    //   A CRC-6-CDMA2000-B value.
@@ -204,6 +214,7 @@ virtual class crc #( type T = bit );
 
    static function T[5:0] crc6_cdma2000_b( bs_type bs );
 
+      // x^6 + x^2 + x + 1
       // 100_0111
 
       return crc( bs, 6'h07, .degree( 6 ) );
@@ -211,12 +222,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc6_itu
-   //   Returns a CRC-6-ITU value.
+   //   (STATIC) Returns a CRC-6-ITU value.
    //   The CRC polynomial is:
-   // : x^6 + x + 1
+   //   (see crc6_itu.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-6-ITU value.
@@ -224,6 +235,7 @@ virtual class crc #( type T = bit );
 
    static function T[5:0] crc6_itu( bs_type bs );
 
+      // x^6 + x + 1
       // 100_0011
 
       return crc( bs, 6'h03, .degree( 6 ) );
@@ -231,12 +243,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc7
-   //   Returns a CRC-7 value.
+   //   (STATIC) Returns a CRC-7 value.
    //   The CRC polynomial is:
-   // : x^7 + x^3 + 1
+   //   (see crc7.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-7 value.
@@ -244,6 +256,7 @@ virtual class crc #( type T = bit );
 
    static function T[6:0] crc7( bs_type bs );
 
+      // x^7 + x^3 + 1
       // 1000_1001
 
       return crc( bs, 7'h09, .degree( 7 ) );
@@ -251,12 +264,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc7_mvb
-   //   Returns a CRC-7-MVB value.
+   //   (STATIC) Returns a CRC-7-MVB value.
    //   The CRC polynomial is:
-   // : x^7 + x^6 + x^5 + x^2 + 1
+   //   (see crc7_mvb.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-7-MVB value.
@@ -264,6 +277,7 @@ virtual class crc #( type T = bit );
 
    static function T[6:0] crc7_mvb( bs_type bs );
 
+      // x^7 + x^6 + x^5 + x^2 + 1
       // 1110_0101
 
       return crc( bs, 7'h65, .degree( 7 ) );
@@ -271,12 +285,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc8
-   //   Returns a CRC-8 value.
+   //   (STATIC) Returns a CRC-8 value.
    //   The CRC polynomial is:
-   // : x^8 + x^7 + x^6 + x^4 + x^2 + 1
+   //   (see crc8.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-8 value.
@@ -284,6 +298,7 @@ virtual class crc #( type T = bit );
 
    static function T[7:0] crc8( bs_type bs );
 
+      // x^8 + x^7 + x^6 + x^4 + x^2 + 1
       // 1_1101_0101
 
       return crc( bs, 8'hD5, .degree( 8 ) );
@@ -291,12 +306,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc8_ccitt
-   //   Returns a CRC-8-CCITT value.
+   //   (STATIC) Returns a CRC-8-CCITT value.
    //   The CRC polynomial is:
-   // : x^8 + x^2 + x + 1
+   //   (see crc8_ccitt.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-8-CCITT value.
@@ -304,6 +319,7 @@ virtual class crc #( type T = bit );
 
    static function T[7:0] crc8_ccitt( bs_type bs );
 
+      // x^8 + x^2 + x + 1
       // 1_0000_0111
 
       return crc( bs, 8'h07, .degree( 8 ) );
@@ -311,12 +327,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc8_dallas_maxim
-   //   Returns a CRC-8-Dallas/Maxim value.
+   //   (STATIC) Returns a CRC-8-Dallas/Maxim value.
    //   The CRC polynomial is:
-   // : x^8 + x^5 + x^4 + 1
+   //   (see crc8_dallas_maxim.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-8-Dallas/Maxim value.
@@ -324,6 +340,7 @@ virtual class crc #( type T = bit );
 
    static function T[7:0] crc8_dallas_maxim( bs_type bs );
 
+      // x^8 + x^5 + x^4 + 1
       // 1_0011_0001
 
       return crc( bs, 8'h31, .degree( 8 ) );
@@ -331,12 +348,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc8_sae_j1850
-   //   Returns a CRC-8-SAE-J1850 value.
+   //   (STATIC) Returns a CRC-8-SAE-J1850 value.
    //   The CRC polynomial is:
-   // : x^8 + x^4 + x^3 + x^2 + 1
+   //   (see crc8_sae_j1850.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-8-SAE-J1850 value.
@@ -344,6 +361,7 @@ virtual class crc #( type T = bit );
 
    static function T[7:0] crc8_sae_j1850( bs_type bs );
 
+      // x^8 + x^4 + x^3 + x^2 + 1
       // 1_0001_1101
 
       return crc( bs, 8'h1D, .degree( 8 ) );
@@ -351,12 +369,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc8_wcdma
-   //   Returns a CRC-8-WCDMA value.
+   //   (STATIC) Returns a CRC-8-WCDMA value.
    //   The CRC polynomial is:
-   // : x^8 + x^7 + x^4 + x^3 + x + 1
+   //   (see crc8_wcdma.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-8-WCDMA value.
@@ -364,6 +382,7 @@ virtual class crc #( type T = bit );
 
    static function T[7:0] crc8_wcdma( bs_type bs );
 
+      // x^8 + x^7 + x^4 + x^3 + x + 1
       // 1_1001_1011
 
       return crc( bs, 8'h9B, .degree( 8 ) );
@@ -371,12 +390,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc10
-   //   Returns a CRC-10 value.
+   //   (STATIC) Returns a CRC-10 value.
    //   The CRC polynomial is:
-   // : x^10 + x^9 + x^5 + x^4 + x + 1
+   //   (see crc10.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-10 value.
@@ -384,6 +403,7 @@ virtual class crc #( type T = bit );
 
    static function T[9:0] crc10( bs_type bs );
 
+      // x^10 + x^9 + x^5 + x^4 + x + 1
       // 110_0011_0011
 
       return crc( bs, 10'h233, .degree( 10 ) );
@@ -391,12 +411,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc10_cdma2000
-   //   Returns a CRC-10-CDMA2000 value.
+   //   (STATIC) Returns a CRC-10-CDMA2000 value.
    //   The CRC polynomial is:
-   // : x^10 + x^9 + x^8 + x^7 + x^6 + x^4 + x^3 + 1
+   //   (see crc10_cdma2000.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-10-CDMA2000 value.
@@ -404,6 +424,7 @@ virtual class crc #( type T = bit );
 
    static function T[9:0] crc10_cdma2000( bs_type bs );
 
+      // x^10 + x^9 + x^8 + x^7 + x^6 + x^4 + x^3 + 1
       // 111_1101_1001
 
       return crc( bs, 10'h3D9, .degree( 10 ) );
@@ -411,12 +432,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc11
-   //   Returns a CRC-11 value.
+   //   (STATIC) Returns a CRC-11 value.
    //   The CRC polynomial is:
-   // : x^11 + x^9 + x^8 + x^7 + x^2 + 1
+   //   (see crc11.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-11 value.
@@ -424,6 +445,7 @@ virtual class crc #( type T = bit );
 
    static function T[10:0] crc11( bs_type bs );
 
+      // x^11 + x^9 + x^8 + x^7 + x^2 + 1
       // 1011_1000_0101
       
       return crc( bs, 11'h385, .degree( 11 ) );
@@ -431,12 +453,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc12
-   //   Returns a CRC-12 value.
+   //   (STATIC) Returns a CRC-12 value.
    //   The CRC polynomial is:
-   // : x^12 + x^11 + x^3 + x^2 + x + 1
+   //   (see crc12.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-12 value.
@@ -444,6 +466,7 @@ virtual class crc #( type T = bit );
 
    static function T[11:0] crc12( bs_type bs );
 
+      // x^12 + x^11 + x^3 + x^2 + x + 1
       // 1_1000_0000_1111
 
       return crc( bs, 12'h80F, .degree( 12 ) );
@@ -451,12 +474,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc12_cdma2000
-   //   Returns a CRC-12-CDMA2000 value.
+   //   (STATIC) Returns a CRC-12-CDMA2000 value.
    //   The CRC polynomial is:
-   // : x^12 + x^11 + x^10 + x^9 + x^8 + x^4 + x + 1
+   //   (see crc12_cdma2000.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-12-CDMA2000 value.
@@ -464,6 +487,7 @@ virtual class crc #( type T = bit );
 
    static function T[11:0] crc12_cdma2000( bs_type bs );
 
+      // x^12 + x^11 + x^10 + x^9 + x^8 + x^4 + x + 1
       // 1_1111_0001_0011
 
       return crc( bs, 12'hF13, .degree( 12 ) );
@@ -471,12 +495,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc13_bbc
-   //   Returns a CRC-13-BBC value.
+   //   (STATIC) Returns a CRC-13-BBC value.
    //   The CRC polynomial is:
-   // : x^13 + x^12 + x^11 + x^10 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
+   //   (see crc13_bbc.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-13-BBC value.
@@ -484,6 +508,7 @@ virtual class crc #( type T = bit );
 
    static function T[12:0] crc13_bbc( bs_type bs );
 
+      // x^13 + x^12 + x^11 + x^10 + x^7 + x^6 + x^5 + x^4 + x^2 + 1
       // 11_1100_1111_0101
 
       return crc( bs, 13'h1CF5, .degree( 13 ) );
@@ -491,12 +516,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc15_can
-   //   Returns a CRC-15-CAN value.
+   //   (STATIC) Returns a CRC-15-CAN value.
    //   The CRC polynomial is:
-   // : x^15 + x^14 + x^10 + x^8 + x^7 + x^4 + x^3 + 1
+   //   (see crc15_can.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-15-CAN value.
@@ -504,6 +529,7 @@ virtual class crc #( type T = bit );
 
    static function T[14:0] crc15_can( bs_type bs );
 
+      // x^15 + x^14 + x^10 + x^8 + x^7 + x^4 + x^3 + 1
       // 1100_0101_1001_1001
 
       return crc( bs, 15'h4599, .degree( 15 ) );
@@ -511,12 +537,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc15_mpt1327
-   //   Returns a CRC-15-MPT1327 value.
+   //   (STATIC) Returns a CRC-15-MPT1327 value.
    //   The CRC polynomial is:
-   // : x^15 + x^14 + x^13 + x^11 + x^4 + x^2 + 1
+   //   (see crc15_mpt1327.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-15-MPT1327 value.
@@ -524,6 +550,7 @@ virtual class crc #( type T = bit );
 
    static function T[14:0] crc15_mpt1327( bs_type bs );
 
+      // x^15 + x^14 + x^13 + x^11 + x^4 + x^2 + 1
       // 1110_1000_0001_0101
 
       return crc( bs, 15'h6815, .degree( 15 ) );
@@ -531,12 +558,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc16_arinc
-   //   Returns a CRC-16-ARINC value.
+   //   (STATIC) Returns a CRC-16-ARINC value.
    //   The CRC polynomial is:
-   // : x^16 + x^15 + x^13 + x^5 + x^3 + x + 1
+   //   (see crc16_arinc.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-16-ARINC value.
@@ -544,6 +571,7 @@ virtual class crc #( type T = bit );
 
    static function T[15:0] crc16_arinc( bs_type bs );
 
+      // x^16 + x^15 + x^13 + x^5 + x^3 + x + 1
       // 1_1010_0000_0010_1011
 
       return crc( bs, 16'hA02B, .degree( 16 ) );
@@ -551,12 +579,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc16_ccitt
-   //   Returns a CRC-16-CCITT value.
+   //   (STATIC) Returns a CRC-16-CCITT value.
    //   The CRC polynomial is:
-   // : x^16 + x^12 + x^5 + 1
+   //   (see crc16_ccitt.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-16-CCITT value.
@@ -564,6 +592,7 @@ virtual class crc #( type T = bit );
 
    static function T[15:0] crc16_ccitt( bs_type bs );
 
+      // x^16 + x^12 + x^5 + 1
       // 1_0001_0000_0010_0001
 
       return crc( bs, 16'h1021, .degree( 16 ) );
@@ -571,12 +600,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc16_cdma2000
-   //   Returns a CRC-16-CDMA2000 value.
+   //   (STATIC) Returns a CRC-16-CDMA2000 value.
    //   The CRC polynomial is:
-   // : x^16 + x^15 + x^14 + x^11 + x^6 + x^5 + x^2 + x + 1
+   //   (see crc16_cdma2000.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-16-CDMA2000 value.
@@ -584,6 +613,7 @@ virtual class crc #( type T = bit );
 
    static function T[15:0] crc16_cdma2000( bs_type bs );
 
+      // x^16 + x^15 + x^14 + x^11 + x^6 + x^5 + x^2 + x + 1
       // 1_1100_1000_0110_0111
 
       return crc( bs, 16'hC867, .degree( 16 ) );
@@ -591,12 +621,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc16_dect
-   //   Returns a CRC-16-CECT value.
+   //   (STATIC) Returns a CRC-16-CECT value.
    //   The CRC polynomial is:
-   // : x^16 + x^10 + x^8 + x^7 + x^3 + 1
+   //   (see crc16_dect.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-16-DECT value.
@@ -604,6 +634,7 @@ virtual class crc #( type T = bit );
 
    static function T[15:0] crc16_dect( bs_type bs );
 
+      // x^16 + x^10 + x^8 + x^7 + x^3 + 1
       // 1_0000_0101_1000_1001
 
       return crc( bs, 16'h0589, .degree( 16 ) );
@@ -611,12 +642,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc16_t10_dif
-   //   Returns a CRC-16-T10-DIF value.
+   //   (STATIC) Returns a CRC-16-T10-DIF value.
    //   The CRC polynomial is:
-   // : x^16 + x^15 + x^11 + x^9 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1
+   //   (see crc16_t10_dif.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-16-T10-DIF value.
@@ -624,6 +655,7 @@ virtual class crc #( type T = bit );
 
    static function T[15:0] crc16_t10_dif( bs_type bs );
 
+      // x^16 + x^15 + x^11 + x^9 + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1
       // 1_1000_1011_1011_0111
 
       return crc( bs, 16'h8BB7, .degree( 16 ) );
@@ -631,12 +663,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc16_dnp
-   //   Returns a CRC-16-DNP value.
+   //   (STATIC) Returns a CRC-16-DNP value.
    //   The CRC polynomial is:
-   // : x^16 + x^13 + x^12 + x^11 + x^10 + x^8 + x^6 + x^5 + x^2 + 1
+   //   (see crc16_dnp.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-16-DNP value.
@@ -644,6 +676,7 @@ virtual class crc #( type T = bit );
 
    static function T[15:0] crc16_dnp( bs_type bs );
 
+      // x^16 + x^13 + x^12 + x^11 + x^10 + x^8 + x^6 + x^5 + x^2 + 1
       // 1_0011_1101_0110_0101
 
       return crc( bs, 16'h3D65, .degree( 16 ) );
@@ -651,12 +684,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc16_ibm
-   //   Returns a CRC-16-IBM value.
+   //   (STATIC) Returns a CRC-16-IBM value.
    //   The CRC polynomial is:
-   // : x^16 + x^15 + x^2 + 1
+   //   (see crc16_ibm.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-16-IBM value.
@@ -664,6 +697,7 @@ virtual class crc #( type T = bit );
 
    static function T[15:0] crc16_ibm( bs_type bs );
 
+      // x^16 + x^15 + x^2 + 1
       // 1_1000_0000_0000_0101
 
       return crc( bs, 16'h8005, .degree( 16 ) );
@@ -671,12 +705,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc17_can
-   //   Returns a CRC-17-CAN value.
+   //   (STATIC) Returns a CRC-17-CAN value.
    //   The CRC polynomial is:
-   // : x^17 + x^16 + x^14 + x^13 + x^11 + x^6 + x^4 + x^3 + x + 1
+   //   (see crc17_can.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-17-CAN value.
@@ -684,6 +718,7 @@ virtual class crc #( type T = bit );
 
    static function T[16:0] crc17_can( bs_type bs );
 
+      // x^17 + x^16 + x^14 + x^13 + x^11 + x^6 + x^4 + x^3 + x + 1
       // 11_0110_1000_0101_1011
 
       return crc( bs, 17'h1_685B, .degree( 17 ) );
@@ -691,12 +726,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc21_can
-   //   Returns a CRC-21-CAN value.
+   //   (STATIC) Returns a CRC-21-CAN value.
    //   The CRC polynomial is:
-   // : x^21 + x^20 + x^13 + x^11 + x^7 + x^4 + x^3 + 1
+   //   (see crc21_can.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-21-CAN value.
@@ -704,6 +739,7 @@ virtual class crc #( type T = bit );
 
    static function T[20:0] crc21_can( bs_type bs );
 
+      // x^21 + x^20 + x^13 + x^11 + x^7 + x^4 + x^3 + 1
       //              11_0000
       // _0010_1000_1001_1001
 
@@ -712,13 +748,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc24
-   //   Returns a CRC-24 value.
+   //   (STATIC) Returns a CRC-24 value.
    //   The CRC polynomial is:
-   // : x^24 + x^22 + x^20 + x^19 + x^18 + x^16 + x^14 + x^13 + x^11 + 
-   // : x^10 + x^8 + x^7 + x^6 + x^3 + x + 1
+   //   (see crc24.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-24 value.
@@ -726,6 +761,8 @@ virtual class crc #( type T = bit );
 
    static function T[23:0] crc24( bs_type bs );
 
+      // x^24 + x^22 + x^20 + x^19 + x^18 + x^16 + x^14 + x^13 + x^11 + 
+      // x^10 + x^8 + x^7 + x^6 + x^3 + x + 1
       //          1_0101_1101
       // _0110_1101_1100_1011
 
@@ -734,13 +771,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc24_radix_64
-   //   Returns a CRC-24-Radix-64 value.
+   //   (STATIC) Returns a CRC-24-Radix-64 value.
    //   The CRC polynomial is:
-   // : x^24 + x^23 + x^18 + x^17 + x^14 + x^11 + x^10 + x^7 + x^6 + x^5 +
-   // : x^4 + x^3 + x + 1
+   //   (see crc24_radix_64.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-24-Radix-64 value.
@@ -748,6 +784,8 @@ virtual class crc #( type T = bit );
 
    static function T[23:0] crc24_radix_64( bs_type bs );
 
+      // x^24 + x^23 + x^18 + x^17 + x^14 + x^11 + x^10 + x^7 + x^6 + x^5 +
+      // x^4 + x^3 + x + 1
       //          1_1000_0110
       // _0100_1100_1111_1011
       
@@ -756,13 +794,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc30
-   //   Returns a CRC-30 value.
+   //   (STATIC) Returns a CRC-30 value.
    //   The CRC polynomial is:
-   // : x^30 + x^29 + x^21 + x^20 + x^15 + x^13 + x^12 + x^11 + x^8 + x^7 +
-   // : x^6 + x^2 + x + 1
+   //   (see crc30.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-30 value.
@@ -770,6 +807,8 @@ virtual class crc #( type T = bit );
 
    static function T[29:0] crc30( bs_type bs );
 
+      // x^30 + x^29 + x^21 + x^20 + x^15 + x^13 + x^12 + x^11 + x^8 + x^7 +
+      // x^6 + x^2 + x + 1
       //   110_0000_0011_0000
       // _1011_1001_1100_0111
 
@@ -778,13 +817,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc32
-   //   Returns a CRC-32 value.
+   //   (STATIC) Returns a CRC-32 value.
    //   The CRC polynomial is:
-   // : x^32 + x^26 + x^23 + x^22 + x^16 + x^12 + x^11 + x^10 + x^8 + x^7 +
-   // : x^5 + x^4 + x^2 + x + 1
+   //   (see crc32.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-32 value.
@@ -792,6 +830,8 @@ virtual class crc #( type T = bit );
 
    static function T[31:0] crc32( bs_type bs );
 
+      // x^32 + x^26 + x^23 + x^22 + x^16 + x^12 + x^11 + x^10 + x^8 + x^7 +
+      // x^5 + x^4 + x^2 + x + 1
       // 1_0000_0100_1100_0001
       //  _0001_1101_1011_0111
 
@@ -800,13 +840,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc32c
-   //   Returns a CRC-32C (Castagnoli) value.
+   //   (STATIC) Returns a CRC-32C (Castagnoli) value.
    //   The CRC polynomial is:
-   // : x^32 + x^28 + x^27 + x^26 + x^25 + x^23 + x^22 + x^20 + x^19 + 
-   // : x^18 + x^14 + x^13 + x^11 + x^10 + x^9 + x^8 + x^6 + 1
+   //   (see crc32c.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-32C (Castagnoli) value.
@@ -814,6 +853,8 @@ virtual class crc #( type T = bit );
 
    static function T[31:0] crc32c( bs_type bs );
 
+      // x^32 + x^28 + x^27 + x^26 + x^25 + x^23 + x^22 + x^20 + x^19 + 
+      // x^18 + x^14 + x^13 + x^11 + x^10 + x^9 + x^8 + x^6 + 1
       // 1_0001_1110_1101_1100
       //  _0110_1111_0100_0001
 
@@ -822,13 +863,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc32k
-   //   Returns a CRC-32K (Koopman) value.
+   //   (STATIC) Returns a CRC-32K (Koopman) value.
    //   The CRC polynomial is:
-   // : x^32 + x^30 + x^29 + x^28 + x^26 + x^20 + x^19 + x^17 + x^16 + 
-   // : x^15 + x^11 + x^10 + x^7 + x^6 + x^4 + x^2 + x + 1
+   //   (see crc32k.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-32K (Koopman) value.
@@ -836,6 +876,8 @@ virtual class crc #( type T = bit );
 
    static function T[31:0] crc32k( bs_type bs );
 
+      // x^32 + x^30 + x^29 + x^28 + x^26 + x^20 + x^19 + x^17 + x^16 + 
+      // x^15 + x^11 + x^10 + x^7 + x^6 + x^4 + x^2 + x + 1
       // 1_0111_0100_0001_1011
       //  _1000_1100_1101_0111
 
@@ -844,13 +886,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc32q
-   //   Returns a CRC-32Q value.
+   //   (STATIC) Returns a CRC-32Q value.
    //   The CRC polynomial is:
-   // : x^32 + x^31 + x^24 + x^22 + x^16 + x^14 + x^8 + x^7 + x^5 + x^3 +
-   // : x + 1
+   //   (see crc32q.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-32Q value.
@@ -858,6 +899,8 @@ virtual class crc #( type T = bit );
 
    static function T[31:0] crc32q( bs_type bs );
 
+      // x^32 + x^31 + x^24 + x^22 + x^16 + x^14 + x^8 + x^7 + x^5 + x^3 +
+      // x + 1
       // 1_1000_0001_0100_0001
       //  _0100_0001_1010_1011
       
@@ -866,12 +909,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc40_gsm
-   //   Returns a CRC-40-GSM value.
+   //   (STATIC) Returns a CRC-40-GSM value.
    //   The CRC polynomial is:
-   // : x^40 + x^26 + x^23 + x^17 + x^3 + 1
+   //   (see crc40_gsm.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-40-GSM value.
@@ -879,6 +922,7 @@ virtual class crc #( type T = bit );
 
    static function T[39:0] crc40_gsm( bs_type bs );
 
+      // x^40 + x^26 + x^23 + x^17 + x^3 + 1
       //           1_0000_0000
       //  _0000_0100_1000_0010
       //  _0000_0000_0000_1001
@@ -888,15 +932,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc64_ecma
-   //   Returns a CRC-64-ECMA value.
+   //   (STATIC) Returns a CRC-64-ECMA value.
    //   The CRC polynomial is:
-   // : x^64 + x^62 + x^57 + x^55 + x^54 + x^53 + x^52 + x^47 + x^46 + 
-   // : x^45 + x^40 + x^39 + x^38 + x^37 + x^35 + x^33 + x^32 + x^31 + 
-   // : x^29 + x^27 + x^24 + x^23 + x^22 + x^21 + x^19 + x^17 + x^13 + 
-   // : x^12 + x^10 + x^9 + x^7 + x^4 + x + 1
+   //   (see crc64_ecma.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-64-ECMA value.
@@ -904,6 +945,10 @@ virtual class crc #( type T = bit );
 
    static function T[63:0] crc64_ecma( bs_type bs );
 
+      // x^64 + x^62 + x^57 + x^55 + x^54 + x^53 + x^52 + x^47 + x^46 + 
+      // x^45 + x^40 + x^39 + x^38 + x^37 + x^35 + x^33 + x^32 + x^31 + 
+      // x^29 + x^27 + x^24 + x^23 + x^22 + x^21 + x^19 + x^17 + x^13 + 
+      // x^12 + x^10 + x^9 + x^7 + x^4 + x + 1
       // 1_0100_0010_1111_0000
       //  _1110_0001_1110_1011
       //  _1010_1001_1110_1010
@@ -914,12 +959,12 @@ virtual class crc #( type T = bit );
 
    //-----------------------------------------------------------------------
    // Function: crc64_iso
-   //   Returns a CRC-64-ISO value.
+   //   (STATIC) Returns a CRC-64-ISO value.
    //   The CRC polynomial is:
-   // : x^64 + x^4 + x^3 + x + 1
+   //   (see crc64_iso.png)
    //
    // Argument:
-   //   bs - Input bit stream.
+   //   bs - An input bit stream.
    //
    // Returns:
    //   A CRC-64-ISO value.
@@ -927,6 +972,7 @@ virtual class crc #( type T = bit );
 
    static function T[63:0] crc64_iso( bs_type bs );
 
+      // x^64 + x^4 + x^3 + x + 1
       // 1_0000_0000_0000_0000
       //  _0000_0000_0000_0000
       //  _0000_0000_0000_0000

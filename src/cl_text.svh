@@ -245,16 +245,16 @@ virtual class text;
    //   (STATIC) Returns a copy of the given string with ANSI escape codes.
    //
    // Arguments:
-   //   s         - A string to be colorized.
-   //   fg        - (OPTIONAL) Foreground color. See <fg_color_e> for available
-   //               colors. The default is black.
-   //   bg        - (OPTIONAL) Background color. See <bg_color_e> for available 
-   //               colors. The default is white.
-   //   bold      - (OPTIONAL) If 1, the string is boldfaced. The default is 0.
-   //   underline - (OPTIONAL) If 1, the string is underlined. The default is 0.
-   //   blink     - (OPTIONAL) If 1, the string is blinked. The default is 0.
+   //   s  - A string to be colorized.
+   //   fg - (OPTIONAL) The foreground color of *s*. See <fg_color_e> for available
+   //        colors. The default is black.
+   //   bg - (OPTIONAL) The background color of *s*. See <bg_color_e> for
+   //        available colors. The default is white.
+   //   bold      - (OPTIONAL) If 1, *s* is boldfaced. The default is 0.
+   //   underline - (OPTIONAL) If 1, *s* is underlined. The default is 0.
+   //   blink     - (OPTIONAL) If 1, *s* is blinked. The default is 0.
    //   reverse - (OPTIONAL) If 1, the foreground and the background colors of
-   //             the string are reversed. The default is 0.
+   //             *s* are reversed. The default is 0.
    //
    // Returns:
    //   A copy of *s* with ANSI escape codes.
@@ -485,7 +485,7 @@ virtual class text;
       int slen = s.len();
 
       if ( slen == 0 ) return 0;
-      normalize( s, start_pos, end_pos );
+      util::normalize( slen, start_pos, end_pos );
 
       foreach ( suffixes[i] ) begin
 	 int blen = suffixes[i].len();
@@ -518,14 +518,14 @@ virtual class text;
    //   substring is found, -1 is returned.
    //
    // Examples:
-   // | assert( text::find_any( "a primary library", { "primary", "library" } )                  ==  2 ); // found "primary" at index 2
-   // | assert( text::find_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 ); // found "library" at index 10
+   // | assert( text::find_any( "a primary library", { "primary", "library" } ) ==  2 );
+   // | assert( text::find_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 );
    // | //                          |----------->|
    // | //                          3
-   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == -1 ); // no substring was found
+   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) ) == -1 );
    // | //                       |----->|
    // | //                              7
-   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  ==  2 ); // found "primary" at index 2
+   // | assert( text::find_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) ) ==  2 );
    // | //                       |------>|
    // | //                              -9
    //
@@ -558,7 +558,7 @@ virtual class text;
    //---------------------------------------------------------------------------
    // Function: hash
    //   (STATIC) Returns the hash value of the given string. The hash value is
-   //   calculated as:
+   //   calculated by:
    //   (see hash.png) 
    //   where N is the length of the given string.
    //
@@ -620,7 +620,7 @@ virtual class text;
       int blen = sub.len();
 
       if ( slen == 0 || blen == 0 ) return -1;
-      normalize( s, start_pos, end_pos );
+      util::normalize( slen, start_pos, end_pos );
 
 `ifdef CL_USE_DPI_C
       begin
@@ -666,7 +666,7 @@ virtual class text;
 				  int 	 start_pos = 0 );
       int end_pos = -1;
       
-      normalize( s, start_pos, end_pos );
+      util::normalize( s.len(), start_pos, end_pos );
       return { s.substr( 0, start_pos - 1 ), 
 	       sub, 
 	       s.substr( start_pos, end_pos ) };
@@ -1176,14 +1176,14 @@ virtual class text;
    //   substring is found, -1 is returned.
    //
    // Examples:
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" } )                  == 10 ); // found "library" at index 10
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 ); // found "library" at index 10
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" } )                  == 10 );
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 );
    // | //                           |----------->|
    // | //                           3
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == -1 ); // no substring was found
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos(  7 ) )  == -1 );
    // | //                        |----->|
    // | //                               7
-   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  ==  2 ); // found "primary" at index 2
+   // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .end_pos( -9 ) )  ==  2 );
    // | //                        |------>|
    // | //                               -9
    //
@@ -1256,7 +1256,7 @@ virtual class text;
       int blen = sub.len();
       
       if ( slen == 0 || blen == 0 ) return -1;
-      normalize( s, start_pos, end_pos );
+      util::normalize( slen, start_pos, end_pos );
       for ( int i = end_pos - blen + 1; i >= start_pos; i-- ) begin
 	 if ( s.substr( i, i + blen - 1 ) == sub )
 	   return i;
@@ -1490,7 +1490,7 @@ virtual class text;
    static function string slice( string s,
 				 int start_pos = 0,
 				 int end_pos = - 1 );
-      normalize( s, start_pos, end_pos );
+      util::normalize( s.len(), start_pos, end_pos );
       return s.substr( start_pos, end_pos );
    endfunction: slice
 
@@ -1523,7 +1523,7 @@ virtual class text;
       int end_pos = -1; // dummy for normalize()
 
       if ( length == 0 ) return "";
-      normalize( s, start_pos, end_pos ); // make start_pos positive
+      util::normalize( s.len(), start_pos, end_pos ); // make start_pos positive
       return slice( s, start_pos, start_pos + length - 1 );
    endfunction: slice_len
 
@@ -1711,7 +1711,7 @@ virtual class text;
       int slen = s.len();
 
       if ( slen == 0 ) return 0;
-      normalize( s, start_pos, end_pos );
+      util::normalize( slen, start_pos, end_pos );
 
       foreach ( prefixes[i] ) begin
 	 int blen = prefixes[i].len();
@@ -1932,16 +1932,6 @@ virtual class text;
 	 end
       end // foreach ( s[i] )
    endfunction: untabify
-
-   //---------------------------------------------------------------------------
-   // Local function
-   //---------------------------------------------------------------------------
-
-   static local function void normalize( string s, 
-					 ref int start_pos,
-					 ref int end_pos );
-      util::normalize( s.len(), start_pos, end_pos );
-   endfunction: normalize
 
 endclass: text
 

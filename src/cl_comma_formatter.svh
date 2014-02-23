@@ -31,31 +31,39 @@
 
 //------------------------------------------------------------------------------
 // Class: comma_formatter
-//   Provides a strategy to convert an object of integral data types such as
-//   *int* and *time* into a string using a decimal format that has commas as
-//   thousands separators for better readability. This is a singleton class.
+//   (SINGLETON) Provides a strategy to convert an object of integral data types
+//   such as *int* and *time* into a string using a decimal format that has
+//   commas as thousands separators for better readability.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of an object to be converted. The default is *int*.
 //------------------------------------------------------------------------------
 
 class comma_formatter #( type T = int ) extends formatter#( T );
 
    //---------------------------------------------------------------------------
    // Typedef: this_type
-   //   The shorthand of comma_formatter#(T).
+   //   The shorthand of <comma_formatter> *#(T)*.
    //---------------------------------------------------------------------------
 
    typedef comma_formatter#(T) this_type;
 
    local static this_type inst = null;
 
+   //---------------------------------------------------------------------------
+   // Function: new
+   //   (PROTECTED) Creates a new formatter.
+   //---------------------------------------------------------------------------
+
    protected function new();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: get_instance
-   //   Returns a singleton instance of this formatter.
+   //   (STATIC) Returns the singleton instance of this formatter.
    //
    // Returns:
-   //   A singleton instance.
+   //   The singleton instance.
    //---------------------------------------------------------------------------
 
    static function this_type get_instance();
@@ -65,7 +73,7 @@ class comma_formatter #( type T = int ) extends formatter#( T );
 
    //---------------------------------------------------------------------------
    // Function: to_string
-   //   Returns a string representation of the given object of type *T*.
+   //   (VIRTUAL) Returns a string representation of the given object of type *T*.
    //
    // Argument:
    //   o - An object to convert to a string.

@@ -31,9 +31,9 @@
 // Title: Macro Definitions
 
 //------------------------------------------------------------------------------
-// Define CL_USE_DPI_C
-//   If defined, several functions are delegated to C functions through
-//   DPI-C. If not defined, only SystemVerilog is used.
+// Define: CL_USE_DPI_C
+//   If defined, some functions are delegated to C functions via DPI-C. If not
+//   defined, only SystemVerilog is used.
 //------------------------------------------------------------------------------
 
 `define CL_USE_DPI_C
@@ -47,13 +47,13 @@
 
 //------------------------------------------------------------------------------
 // Defines: Simulator Selection
-//   These macros are used to enable the features supported by a selected
-//   simulator. Only one simulator should be enabled.
+//   These macros enable the set of <Supported Features> based on the selected
+//   simulator. Only one simulator should be enabled at one time.
 //
-//   `CL_USE_INCISIVE - Use Cadence Incisive.
-//   `CL_USE_MODELSIM - Use Mentor ModelSim.
-//   `CL_USE_QUESTA   - Use Mentor QUesta.
-//   `CL_USE_VCS      - Use Synopsys VCS.
+//   CL_USE_INCISIVE - Use Incisive Enterpirse Simulator from Cadence Design Systems.
+//   CL_USE_MODELSIM - Use ModelSim from Mentor Graphics.
+//   CL_USE_QUESTA   - Use Questa from Mentor Graphics.
+//   CL_USE_VCS      - Use VCS from Synopsys.
 //------------------------------------------------------------------------------
 
 //`define CL_USE_INCISIVE
@@ -62,16 +62,33 @@
 //`define CL_USE_VCS
 
 //------------------------------------------------------------------------------
-// Derived macros
+// Defines: Supported Features
+//   These macros enable an individual feature of a simulator.
+//
+//   CL_SUPPORT_COUNTBITS - If defiend, *$countbits* bit vector system function
+//                          is used. See Section 20.9 of IEEE 1800-2012.
+//   CL_SUPPORT_COUNTONES - If defiend, *$countones* bit vector system function
+//                          is used. See Section 20.9 of IEEE 1800-2012.
+//   CL_SUPPORT_FATAL_SEVERITY_TASK - If defined, *$fatal* elaboration system
+//                                    task is used. See Section 20.11 of IEEE
+//                                    1800-2012.
+//   CL_SUPPORT_PARAMETERIZED_NESTED_CLASS - If defined, a parameterized nested
+//                                           class is used. See Section 8.25 of
+//                                           IEEE 1800-2012.
+//   CL_SUPPORT_POP_FROM_AN_EMPTY_QUEUE - If defined, a pop from an empty queue
+//                                        is supported. See Section 7.10.2.4 and
+//                                        7.10.2.5 of IEEE 1800-2012.
+//   CL_SUPPORT_RANDOMIZE - If defined, constrained random value generation is
+//                          supported. See Section 18 of IEEE 1800-2012.
 //------------------------------------------------------------------------------
 
 `ifdef CL_USE_INCISIVE
- `undef CL_SUPPORT_BIT_STREAM_CASTING
+//`undef CL_SUPPORT_BIT_STREAM_CASTING
  `undef CL_SUPPORT_FATAL_SEVERITY_TASK
 `endif
 
 `ifdef CL_USE_MODELSIM
- `define CL_SUPPORT_BIT_STREAM_CASTING
+//`define CL_SUPPORT_BIT_STREAM_CASTING
  `undef  CL_SUPPORT_COUNTBITS
  `define CL_SUPPORT_COUNTONES
  `define CL_SUPPORT_FATAL_SEVERITY_TASK

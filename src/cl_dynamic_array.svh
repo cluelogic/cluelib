@@ -30,172 +30,414 @@
 
 //------------------------------------------------------------------------------
 // Class: dynamic_array
-//   A parameterized class that manages a dynamic array. The default type is
-//   *bit*. *WIDTH* is used to specify the size of an unpacked array only if the
-//   dynamic array is converted to/from the unpacked array.
+//   A parameterized class that manages a dynamic array. 
+//
+// Parameters:
+//   T - (OPTIONAL) The type of a dynamic array. The default type is *bit*.
+//   SIZE - (OPTIONAL) The size of an unpacked array. This parameter is used
+//          only if a dynamic array is converted from/to an unpacked array. The
+//          default is 1.
 //------------------------------------------------------------------------------
 
-virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
+virtual class dynamic_array #( type T = bit, int SIZE = 1 );
 
-   local static formatter#(T) default_fmtr = hex_formatter#(T)::get_instance();
-   local static comparator#(T) default_cmp = comparator#(T)::get_instance();
+   //---------------------------------------------------------------------------
+   // Group: Common Arguments
+   //   from_index - The index of the first element of a dynamic array to be
+   //                processed.  If negative, the index counts from the last.
+   //                For example, if *from_index* is -9, a function starts at
+   //                the ninth element (inclusive) from the last.  The default
+   //                is 0 (starts at the first element).
+   //   to_index - The index of the last element of a dynamic array to be
+   //              processed.  If negative, the index counts from the last.  For
+   //              example, if *to_index* is -3, a function ends at the third
+   //              element (inclusive) from the last.  The default is -1 (ends
+   //              at the last element).
+   //---------------------------------------------------------------------------
+
+   // Group: Types
 
    //---------------------------------------------------------------------------
    // Typedef: ua_type
-   //   The shorthand of the unpacked array of type *T*.
+   //   The shorthand of the unpacked array type of type *T*.
    //---------------------------------------------------------------------------
 
-   typedef T ua_type[WIDTH];
+   typedef T ua_type[SIZE];
 
    //---------------------------------------------------------------------------
    // Typedef: da_type
-   //   The shorthand of the dynamic array of type *T*.
+   //   The shorthand of the dynamic array type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T da_type[];
 
    //---------------------------------------------------------------------------
    // Typedef: q_type
-   //   The shorthand of the queue of type *T*.
+   //   The shorthand of the queue type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T q_type[$];
 
+   // Group: Functions
+
    //---------------------------------------------------------------------------
    // Function: from_unpacked_array
-   //   Converts an unpacked array of type *T* to the dynamic array of the same
-   //   type.
+   //   (STATIC) Converts an unpacked array of type *T* to a dynamic array of
+   //   the same type.
    //
    // Arguments:
-   //   ua      - An input unpacked array.
-   //   reverse - (OPTIONAL) If 1, the item at index 0 of the unpacked array
-   //             occupies the index WIDTH-1 of the dynamic array. If 0, the
-   //             item at index 0 of the unpacked array occupies the index 0 of
-   //             the dynamic array. The default is 0.
+   //   ua      - An unpacked array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *ua* is
+   //             positioned to the index 0 of the dynamic array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
    //             
    // Returns:
-   //   The dynamic array converted from *ua*.
+   //   A dynamic array converted from *ua*.
    //
    // Examples:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
-   // | assert( dynamic_array#(bit,8)::from_unpacked_array( ua                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da[];
+   // |
+   // | da = dynamic_array#(bit,8)::from_unpacked_array( ua );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | da = dynamic_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <ua_to_da>
    //---------------------------------------------------------------------------
 
    static function da_type from_unpacked_array( const ref ua_type ua,
 						input bit reverse = 0 );
       from_unpacked_array = new[ $size( ua ) ];
-      common_array#( T, WIDTH, da_type )::ua_to_a( ua, from_unpacked_array,
+      common_array#( T, SIZE, da_type )::ua_to_a( ua, from_unpacked_array,
 						   reverse );
    endfunction: from_unpacked_array
 
    //---------------------------------------------------------------------------
    // Function: to_unpacked_array
+   //   (STATIC) Converts a dynamic array of type *T* to an unpacked array of
+   //   the same type.
+   //
+   // Arguments:
+   //   da      - A dynamic array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of the unpacked array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
+   //
+   // Returns:
+   //   An unpacked array converted from *da*.
+   //
+   // Examples:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( dynamic_array#(bit,8)::to_unpacked_array( da                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( dynamic_array#(bit,8)::to_unpacked_array( da, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <da_to_ua>
    //---------------------------------------------------------------------------
 
    static function ua_type to_unpacked_array( const ref da_type da,
 					      input bit reverse = 0 );
-      common_array#( T, WIDTH, ua_type )::da_to_a( da, to_unpacked_array, 
+      common_array#( T, SIZE, ua_type )::da_to_a( da, to_unpacked_array, 
 						   reverse );
    endfunction: to_unpacked_array
 
    //---------------------------------------------------------------------------
    // Function: from_queue
-   //   Converts a queue of type *T* to the dynamic array of the same type.
+   //   (STATIC) Converts a queue of type *T* to a dynamic array of the same
+   //   type.
    //
    // Arguments:
-   //   q       - An input queue.
-   //   reverse - (OPTIONAL) If 1, the item at index 0 of the queue
-   //             occupies the index WIDTH-1 of the dynamic array. If 0, the
-   //             item at index 0 of the queue occupies the index 0 of
-   //             the dynamic array. The default is 0.
+   //   q       - A queue to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of the dynamic array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
    //
    // Returns:
-   //   The dynamic array converted from *q*.
+   //   A dynamic array converted from *q*.
    //
    // Examples:
-   // | bit q[$] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
-   // | assert( dynamic_array#(bit)::from_queue( ua                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit)::from_queue( ua, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da[];
+   // |
+   // | da = dynamic_array#(bit)::from_queue( q );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | da = dynamic_array#(bit)::from_queue( q, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <q_to_da>
    //---------------------------------------------------------------------------
 
    static function da_type from_queue( const ref q_type q,
 				       input bit reverse = 0 );
       from_queue = new[ q.size() ];
-      common_array#( T, WIDTH, da_type )::q_to_a( q, from_queue, reverse );
+      common_array#( T, SIZE, da_type )::q_to_a( q, from_queue, reverse );
    endfunction: from_queue
 
    //---------------------------------------------------------------------------
    // Function: to_queue
-   //   Converts a dynamic array of type *T* to the queue of the same type.
+   //   (STATIC) Converts a dynamic array of type *T* to a queue of the same
+   //   type.
    //
    // Arguments:
-   //   da      - An input dynamic array.
-   //   reverse - (OPTIONAL) If 1, the item at index 0 of the dynamic array
-   //             occupies the index WIDTH-1 of the queue. If 0, the item at
-   //             index 0 of the dynamic array occupies the index 0 of the
-   //             queue. The default is 0.
+   //   da      - A dynamic array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of the queue. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
    //
    // Returns:
-   //   The queue converted from *da*.
+   //   A queue converted from *da*.
    //
    // Examples:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit)::to_queue( da                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit)::to_queue( da, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q[$];
+   // |
+   // | q = dynamic_array#(bit)::to_queue( da );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | q = dynamic_array#(bit)::to_queue( da, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <da_to_q>
    //---------------------------------------------------------------------------
 
    static function q_type to_queue( const ref da_type da,
 				    input bit reverse = 0 );
-      common_array#( T, WIDTH, da_type )::a_to_q( da, to_queue, reverse );
+      common_array#( T, SIZE, da_type )::a_to_q( da, to_queue, reverse );
    endfunction: to_queue
 
    //---------------------------------------------------------------------------
+   // Function: ua_to_da
+   //   (STATIC) Converts an unpacked array of type *T* to a dynamic array of
+   //   the same type. Unlike <from_unpacked_array>, this function populates the
+   //   dynamic array passed by reference, instead of returning a new dynamic
+   //   array.
+   //
+   // Arguments:
+   //   ua - An unpacked array to be converted.
+   //   da - A dynamic array to be populated. This function does _not_ resize
+   //        *da*. Make sure to set the size of the dynamic array to accommodate
+   //        the elements of *ua* before calling this function.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *ua* is
+   //             positioned to the index 0 of *da*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+   // | bit da[] = new[8]; // set the size of da[]
+   // |
+   // | dynamic_array#(bit,8)::ua_to_da( ua, da );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | dynamic_array#(bit,8)::ua_to_da( ua, da, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <from_unpacked_array>
+   //---------------------------------------------------------------------------
+
+   static function void ua_to_da( const ref ua_type ua,
+				  ref da_type da,
+				  input bit reverse = 0 );
+      common_array#( T, SIZE, da_type )::ua_to_a( ua, da, reverse );
+   endfunction: ua_to_da
+   
+   //---------------------------------------------------------------------------
+   // Function: da_to_ua
+   //   (STATIC) Converts a dynamic array of type *T* to an unpacked array of
+   //   the same type.  Unlike <to_unpacked_array>, this function populates the
+   //   unpacked array passed by reference, instead of returning a new unpacked
+   //   array. If the size of the dynamic array is larger than *SIZE*, the
+   //   excess elements are ignored. If the size of the dynamic array is smaller
+   //   than *SIZE*, the default value of type *T* is used for the missing
+   //   elements.
+   //
+   // Arguments:
+   //   da      - A dynamic array to be converted.
+   //   ua      - An unpacked array to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of *ua*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit ua[8];
+   // |
+   // | dynamic_array#(bit,8)::da_to_ua( da, ua );
+   // | assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | dynamic_array#(bit,8)::da_to_ua( da, ua, .reverse( 1 ) );
+   // | assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <to_unpacked_array>
+   //---------------------------------------------------------------------------
+
+   static function void da_to_ua( const ref da_type da,
+				  ref ua_type ua,
+				  input bit reverse = 0 );
+      common_array#( T, SIZE, ua_type )::da_to_a( da, ua, reverse );
+   endfunction: da_to_ua
+   
+   //---------------------------------------------------------------------------
+   // Function: q_to_da
+   //   (STATIC) Converts a queue of type *T* to a dynamic array of the same
+   //   type.  Unlike <from_queue>, this function populates the dynamic array
+   //   passed by reference, instead of returning a new dynamic array.
+   //
+   // Arguments:
+   //   q - A queue to be converted.
+   //   da - A dynamic array to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of *da*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da[] = new[8]; // set the size of da[]
+   // |
+   // | dynamic_array#(bit)::q_to_da( q, da );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | dynamic_array#(bit)::q_to_da( q, da, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <from_queue>
+   //---------------------------------------------------------------------------
+
+   static function void q_to_da( const ref q_type q,
+				 ref da_type da,
+				 input bit reverse = 0 );
+      common_array#( T, SIZE, da_type )::q_to_a( q, da, reverse );
+   endfunction: q_to_da
+
+   //---------------------------------------------------------------------------
+   // Function: da_to_q
+   //   (STATIC) Converts a dynamic array of type *T* to a queue of the same
+   //   type. Unlike <to_queue>, this function populates the queue passed by
+   //   reference instead of returning a new queue.
+   //
+   // Arguments:
+   //   da - A dynamic array to be converted.
+   //   q - A queue to be populated.  This function does _not_ change the size
+   //       of *q*. Make sure that *q* has enough items to accommodate the
+   //       elements of *da* before calling this function.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of *q*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // |
+   // | dynamic_array#(bit)::da_to_q( da, q );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | dynamic_array#(bit)::da_to_q( da, q, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <to_queue>
+   //---------------------------------------------------------------------------
+
+   static function void da_to_q( const ref da_type da,
+				 ref q_type q,
+				 input bit reverse = 0 );
+      common_array#( T, SIZE, q_type )::da_to_a( da, q, reverse );
+   endfunction: da_to_q
+   
+   //---------------------------------------------------------------------------
    // Function: init
+   //   (STATIC) Initializes the each element of the given dynamic array to the
+   //   specified value.
+   //
+   // Arguments:
+   //   da - A dynamic array to be initialized.
+   //   val - A value to initialize the elements of *da*.
+   //
+   // Returns:
+   //   None.
+   //
+   // Example:
+   // | bit da[] = new[8];
+   // | dynamic_array#(bit)::init( da, 1'b1 );
+   // | assert( da == '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
    //---------------------------------------------------------------------------
 
    static function void init( ref da_type da, input T val );
-      common_array#( T, WIDTH, da_type )::init( da, val );
+      common_array#( T, SIZE, da_type )::init( da, val );
    endfunction: init
 
    //---------------------------------------------------------------------------
    // Function: reverse
-   //   Returns a copy of the given dynamic array with the elements in reverse
-   //   order.
+   //   (STATIC) Reverses the order of the elements of the given dynamic array.
    //
    // Argument:
-   //   da - An input dynamic array.
+   //   da - A dynamic array to be reversed.
    //
    // Returns:
-   //   A copy of *da* with the elements in reverse order.
+   //   None.
    //
    // Example:
-   // | bit da[];
-   // | da = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit)::reverse( da ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da[] = new[8]( '{ 0, 0, 0, 0, 1, 1, 1, 1 } ); // da[0] to da[7]
+   // | dynamic_array#(bit)::reverse( da );
+   // | assert( da == '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
    //---------------------------------------------------------------------------
 
    static function void reverse( ref da_type da );
-      common_array#( T, WIDTH, da_type )::reverse( da );
+      common_array#( T, SIZE, da_type )::reverse( da );
    endfunction: reverse
 
    //---------------------------------------------------------------------------
    // Function: split
-   //   Splits the specified data stream into two data streams.
+   //   (STATIC) Splits the given dynamic array into two dynamic arrays.
    //
    // Arguments:
-   //   ds  - Input data stream.
-   //   ds0 - Output data stream with data elements at even location of the
-   //         input data stream.
-   //   ds1 - Output data stream with data elements at odd location of the
-   //         input data stream.
-   //   pad - (OPTIONAL) If the size of input data stream is odd and *pad* is 1,
-   //         the size of *ds1* is extended to be the same size as *ds0*. If 0,
+   //   da  - A dynamic array to be split.
+   //   da0 - A new dynamic array that contains the elements at the even index
+   //         of *da*.
+   //   da1 - A new dynamic array that contains the elements at the odd index of
+   //         *da*.
+   //   pad - (OPTIONAL) If the size of *da* is odd and *pad* is 1, the size of
+   //         *da1* is expanded to be the same size as *da0*. The padded
+   //         element is initialized with the default value of type *T*.  If 0,
    //         no padding element is added. The default is 0.
    //
    // Examples:
-   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3]    (pad=0)
-   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3][ ] (pad=1)
+   // | bit da[] = new[7]( '{ 0, 0, 0, 1, 1, 0, 1 } ); // da[0] to da[6]
+   // | bit da0[], da1[];
+   // |
+   // | dynamic_array#(bit)::split( da, da0, da1 );
+   // | assert( da0 == '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
+   // | assert( da1 == '{ 0, 1, 0 } );    // da[1], da[3], da[5]
+   // |
+   // | dynamic_array#(bit)::split( da, da0, da1, .pad( 1 ) );
+   // | assert( da0 == '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
+   // | assert( da1 == '{ 0, 1, 0, 0 } ); // da[1], da[3], da[5], 0 (padded with the default value of bit type)
+   //
+   // See Also:
+   //   <merge>
    //---------------------------------------------------------------------------
 
    static function void split( da_type da,
@@ -220,6 +462,36 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: merge
+   //   (STATIC) Merges two dynamic arrays into one by alternating the elements
+   //   from the two arrays.
+   //
+   // Arguments:
+   //   da0 - A dynamic array to be merged. The first element of this dynamic
+   //         array becomes the first element of the merged array.
+   //   da1 - Another dynamic array to be merged. The first element of this
+   //         dynamic array becomes the second element of the merged array.
+   //   truncate - (OPTIONAL) If the sizes of *da0* and *da1* are different and
+   //              *truncate* is 1, the merging stops when all the elements of
+   //              the smaller array are merged. The remaining elements of the
+   //              larger array are ignored. If *truncate* is 0, the remaining
+   //              elements are appended to the merged array. The default is 0.
+   //
+   // Returns:
+   //   A new merged dynamic array.
+   //
+   // Examples:
+   // | int da0[] = new[4]( '{ 0, 0, 0, 0 } );
+   // | int da1[] = new[6]( '{ 1, 2, 3, 4, 5, 6 } );
+   // | int da[];
+   // |
+   // | da = dynamic_array#(int)::merge( da0, da1 );
+   // | assert( da == '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+   // |
+   // | da = dynamic_array#(int)::merge( da0, da1, .truncate( 1 ) );
+   // | assert( da == '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+   //
+   // See Also:
+   //   <concat>, <split>
    //---------------------------------------------------------------------------
 
    static function da_type merge( da_type da0,
@@ -271,14 +543,27 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: concat
-   //   Concatenate the specified two dynamic arrays.
+   //   (STATIC) Concatenates two dynamic arrays into one.
    //
    // Arguments:
-   //   da0 - Input dynamic array.
-   //   da1 - Another dynamic array.
+   //   da0 - A dynamic array. This array becomes the first part of the
+   //         concatenated array.
+   //   da1 - Another dynamic array. The elements of this array are appended to
+   //         *da0*.
    //
    // Returns:
-   //   A new dynamic array by concatenating *da0* and *da1*.
+   //   A new dynamic array created by concatenating *da0* and *da1*.
+   //
+   // Example:
+   // | int da0[] = new[4]( '{ 0, 0, 0, 0 } );
+   // | int da1[] = new[6]( '{ 1, 2, 3, 4, 5, 6 } );
+   // | int da[];
+   // |
+   // | da = dynamic_array#(int)::concat( da0, da1 );
+   // | assert( da == '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
+   //
+   // See Also:
+   //   <merge>
    //---------------------------------------------------------------------------
 
    static function da_type concat( da_type da0,
@@ -294,6 +579,28 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: extract
+   //   (STATIC) Returns a new dynamic array by extracting a part of the given
+   //   dynamic array.
+   //
+   // Arguments:
+   //   da - A dynamic array to be extracted.
+   //   from_index - (OPTIONAL) The index of the first element of *da* to be
+   //                extracted. See <Common Arguments>. The default is 0.
+   //   to_index - (OPTIONAL) The index of the last element of *da* to be
+   //              extracted. See <Common Arguments>. The default is -1.
+   //
+   // Returns:
+   //   A new dynamic array extracted from *da*.
+   //
+   // Examples:
+   // | int da[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
+   // | int extracted[];
+   // |
+   // | extracted = dynamic_array#(int)::extract( da, 3, 7 );
+   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
+   // | 
+   // | extracted = dynamic_array#(int)::extract( da, 3, -3 );
+   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
    //---------------------------------------------------------------------------
 
    static function da_type extract( da_type da,
@@ -307,14 +614,22 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: append
-   //   Appends the specified element to the specified dynamic array.
+   //   (STATIC) Appends the specified element to the given dynamic array.
    //
    // Arguments:
-   //   da - The input dynamic array.
+   //   da - A dynamic array to be appended.
    //   e  - An element to append.
    //
    // Returns:
-   //   The copy of *da* appended with *e*.
+   //   A _copy_ of *da* appended with *e*. The input *da* is not modified.
+   //
+   // Example:
+   // | int da[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
+   // | int appended[];
+   // |
+   // | appended = dynamic_array#(int)::append( da, 10 );
+   // | assert( appended == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
+   // | assert( da       == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } ); // not modified
    //---------------------------------------------------------------------------
 
    static function da_type append( da_type da, T e );
@@ -326,44 +641,38 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: compare
-   //   Compares two dynamic arrays.
+   //   (STATIC) Compares two dynamic arrays.
    //
    // Arguments:
    //   da1         - A dynamic array.
    //   da2         - Another dynamic array to compare with *da1*.
-   //   from_index1 - (OPTIONAL) The first index of the *da1* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index1* is -9, compare from the ninth element
-   //                 (inclusive) from the last.  The default value is 0.
-   //   to_index1   - (OPTIONAL) The last index of the *da1* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index1* is -3, compare to the third element
-   //                 (inclusive) from the last.  The default value is -1
-   //                 (compare to the last element).
-   //   from_index2 - (OPTIONAL) The first index of the *da2* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index2* is -9, compare from the ninth element
-   //                 (inclusive) from the last.  The default value is 0.
-   //   to_index2   - (OPTIONAL) The last index of the *da2* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index2* is -3, compare to the third element
-   //                 (inclusive) from the last.  The default value is -1
-   //                 (compare to the last element).
-   //   cmp         - (OPTIONAL) Compare strategy. If not specified or null, 
-   //                 *comparator#(T)* is used. The default is null.
+   //   from_index1 - (OPTIONAL) The first index of the *da1* to compare. See
+   //                 <Common Arguments>. The default is 0.
+   //   to_index1 - (OPTIONAL) The last index of the *da1* to compare. See
+   //                 <Common Arguments>. The default is -1.
+   //   from_index2 - (OPTIONAL) The first index of the *da2* to compare. See
+   //                 <Common Arguments>. The default is 0.
+   //   to_index2 - (OPTIONAL) The last index of the *da2* to compare. See
+   //                 <Common Arguments>. The default is -1.
+   //   cmp - (OPTIONAL) A strategy object used to compare two dynamic
+   //         arrays. If not specified or null, *comparator#(T)* is used. The
+   //         default is null.
    //
    // Returns:
-   //   If two dynamic arrays contain the same data, 1 is returned. Otherwise, 
-   //   0 is returned.
+   //   If the numbers of elements to compare (*to_index1-from_index1+1* and
+   //   *to_index2-from_index2+1*) are different, 0 is returned.  If the two
+   //   dynamic arrays contain the same data in the specified range, 1 is
+   //   returned. Otherwise, 0 is returned.
    //
    // Examples:
-   // | bit da1[];
-   // | bit da2[];
-   // | da1 = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | da2 = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da1[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da2[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | //                           |<------>|
+   // | //                           2        5
    // | assert( dynamic_array#(bit)::compare( da1, da2 ) == 0 );
-   // | assert( dynamic_array#(bit)::compare( da1, da2, .from_index1( 2 ), .to_index1( 5 ), 
-   // |                                                 .from_index2( 2 ), .to_index2( 5 ) ) == 1 );
+   // | assert( dynamic_array#(bit)::compare( da1, da2, 
+   // |         .from_index1( 2 ), .to_index1( 5 ), 
+   // |         .from_index2( 2 ), .to_index2( 5 ) ) == 1 );
    //---------------------------------------------------------------------------
 
    static function bit compare( const ref da_type da1,
@@ -373,13 +682,13 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
 				int from_index2 = 0, 
 				int to_index2   = -1,
 				comparator#(T) cmp = null );
-      return common_array#( T, WIDTH, da_type )::
+      return common_array#( T, SIZE, da_type )::
 	compare( da1, da2, from_index1, to_index1, from_index2, to_index2, cmp );
    endfunction: compare
 
    //---------------------------------------------------------------------------
    // Function: clone
-   //   Returns a copy of the given dynamic array.
+   //   (STATIC) Returns a copy of the given dynamic array.
    //
    // Argument:
    //   da - A dynamic array to be cloned.
@@ -388,9 +697,9 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
    //   A copy of *da*.
    //
    // Example:
-   // | bit da[];
-   // | da = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit)::clone( da ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit cloned[] = dynamic_array#(bit)::clone( da );
+   // | assert( cloned == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    //---------------------------------------------------------------------------
 
    static function da_type clone( da_type da );
@@ -399,21 +708,37 @@ virtual class dynamic_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Function: to_string
-   //   Returns a string representation of this dynamic array.
+   //   (STATIC) Converts a dynamic array to the form of a string.
    //
-   // Argument:
-   //   da   - An input dynamic array.
-   //   fmtr - (OPTIONAL) An object that provides a function to convert the
-   //          element of type *T* to a string.
+   // Arguments:
+   //   da - An dynamic array to be converted.
+   //   separator - (OPTIONAL) A string to separate each element of *da*. The
+   //               default is a space (" ").
+   //   from_index - (OPTIONAL) The index of the first element of *da* to
+   //                convert. See <Common Arguments>. The default is 0.
+   //   to_index - (OPTIONAL) The index of the last element of *da* to convert.
+   //              See <Common Arguments>. The default is -1.
+   //   fmtr - (OPTIONAL) A strategy object used to format *da*. If not
+   //          specified or *null*, <hex_formatter> *#(T)* is used. The default
+   //          is *null*.
    //
    // Returns:
-   //   A string that represents this dynamic array.
+   //   A string to represent *da*.
+   //
+   // Example:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( dynamic_array#(bit,8)::to_string( da )                    == "0 0 0 1 1 0 1 1" );
+   // | assert( dynamic_array#(bit,8)::to_string( da, .separator( "-" ) ) == "0-0-0-1-1-0-1-1" );
+   // | assert( dynamic_array#(bit,8)::to_string( da, .from_index( 4 )  ) ==         "1 0 1 1" );
    //---------------------------------------------------------------------------
 
    static function string to_string( const ref da_type da,
 				     input string separator = " ",
+				     int from_index = 0,
+				     int to_index = -1,
 				     formatter#(T) fmtr = null );
-      return common_array#( T, WIDTH, da_type )::to_string( da, separator, fmtr );
+      return common_array#(T, SIZE, da_type )::
+	to_string( da, separator, from_index, to_index, fmtr );
    endfunction: to_string
 
 endclass: dynamic_array

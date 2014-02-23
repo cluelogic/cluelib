@@ -34,18 +34,33 @@ typedef class set;
 
 //-----------------------------------------------------------------------------
 // Class: set_iterator
-//   Provides an iterator to a *set*.
+//   Provides an iterator to a <set>.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of data collected in a <set>. The default is *int*.
 //-----------------------------------------------------------------------------
 
 class set_iterator #( type T = int ) extends iterator#( T );
 
-   typedef bit aa_type[T];
-   typedef set#( T ) set_type;
-
-   local set_type s;
    local T cur_key;
    local int cnt;
    local int aa_size;
+
+   //--------------------------------------------------------------------------
+   // Typedef: aa_type
+   //   The shorthand of the associative array type of type *T*.
+   //--------------------------------------------------------------------------
+
+   typedef bit aa_type[T];
+
+   //--------------------------------------------------------------------------
+   // Typedef: set_type
+   //   The shorthand of the <set> type of type *T*.
+   //--------------------------------------------------------------------------
+
+   typedef set#( T ) set_type;
+
+   local set_type s; // needs to place after the typedef above
 
    //--------------------------------------------------------------------------
    // Function: new
@@ -63,7 +78,7 @@ class set_iterator #( type T = int ) extends iterator#( T );
 
    //--------------------------------------------------------------------------
    // Function: has_next
-   //   Returns 1 if the iterator has more elements.
+   //   (VIRTUAL) Returns 1 if the iterator has more elements.
    //
    // Returns:
    //   If the iterator has more elements, returns 1. Otherwise, returns 0.
@@ -75,7 +90,7 @@ class set_iterator #( type T = int ) extends iterator#( T );
 
    //--------------------------------------------------------------------------
    // Function: next
-   //   Returns the next element.
+   //   (VIRTUAL) Returns the next element.
    //
    // Returns:
    //   The next element in the iterator.
@@ -93,8 +108,8 @@ class set_iterator #( type T = int ) extends iterator#( T );
 
    //--------------------------------------------------------------------------
    // Function: remove
-   //   Removes the last element returned by the iterator. This function can be
-   //   called once per call to *next()*.
+   //   (VIRTUAL) Removes the last element returned by the iterator. This
+   //   function can be called once per call to <next>.
    //--------------------------------------------------------------------------
 
    virtual function void remove();

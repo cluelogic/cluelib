@@ -30,35 +30,35 @@
 
 //------------------------------------------------------------------------------
 // Class: common_array
+//   The common array class used by the aggregate classes. There is no user
+//   accessible function in this class.
 //------------------------------------------------------------------------------
 
 virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    
-   local static formatter#(T) default_fmtr = hex_formatter#(T)::get_instance();
-
    //---------------------------------------------------------------------------
-   // Typedef: ua_type
+   // Typedef ua_type
    //   The shorthand of the unpacked array of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T ua_type[WIDTH];
 
    //---------------------------------------------------------------------------
-   // Typedef: da_type
+   // Typedef da_type
    //   The shorthand of the dynamic array of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T da_type[];
 
    //---------------------------------------------------------------------------
-   // Typedef: q_type
+   // Typedef q_type
    //   The shorthand of the queue of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T q_type[$];
 
    //---------------------------------------------------------------------------
-   // Function: da_to_a
+   // Function da_to_a
    //---------------------------------------------------------------------------
 
    static function void da_to_a( const ref da_type src,
@@ -70,17 +70,17 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
       int     min_size = choice#(integer)::min( src_size, dst_size );
 
       for ( int i = 0; i < min_size; i++ ) begin
-	 if ( reverse ) dst[WIDTH-1-i] = src[i];
-	 else           dst[i]         = src[i];
+	 if ( reverse ) dst[dst_size-1-i] = src[i];
+	 else           dst[i]            = src[i];
       end
       for ( int i = min_size; i < dst_size; i++ ) begin
-	 if ( reverse ) dst[WIDTH-1-i] = filler;
-	 else           dst[i]         = filler;
+	 if ( reverse ) dst[dst_size-1-i] = filler;
+	 else           dst[i]            = filler;
       end
    endfunction: da_to_a
    
    //---------------------------------------------------------------------------
-   // Function: ua_to_a
+   // Function ua_to_a
    //---------------------------------------------------------------------------
 
    static function void ua_to_a( const ref ua_type src,
@@ -92,17 +92,17 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
       int     min_size = choice#(integer)::min( src_size, dst_size );
 
       for ( int i = 0; i < min_size; i++ ) begin
-	 if ( reverse ) dst[WIDTH-1-i] = src[i];
-	 else           dst[i]         = src[i];
+	 if ( reverse ) dst[dst_size-1-i] = src[i];
+	 else           dst[i]            = src[i];
       end
       for ( int i = min_size; i < dst_size; i++ ) begin
-	 if ( reverse ) dst[WIDTH-1-i] = filler;
-	 else           dst[i]         = filler;
+	 if ( reverse ) dst[dst_size-1-i] = filler;
+	 else           dst[i]            = filler;
       end
    endfunction: ua_to_a
    
    //---------------------------------------------------------------------------
-   // Function: q_to_a
+   // Function q_to_a
    //---------------------------------------------------------------------------
 
    static function void q_to_a( const ref q_type src,
@@ -124,7 +124,7 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    endfunction: q_to_a
    
    //---------------------------------------------------------------------------
-   // Function: a_to_q
+   // Function a_to_q
    //---------------------------------------------------------------------------
 
    static function void a_to_q( const ref AT src,
@@ -139,7 +139,7 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    endfunction: a_to_q
    
    //---------------------------------------------------------------------------
-   // Function: reverse
+   // Function reverse
    //---------------------------------------------------------------------------
 
    static function void reverse( ref AT a );
@@ -155,7 +155,7 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    endfunction: reverse
 
    //---------------------------------------------------------------------------
-   // Function: init
+   // Function init
    //---------------------------------------------------------------------------
 
    static function void init( ref AT a, input T val );
@@ -163,7 +163,7 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    endfunction: init
 
    //---------------------------------------------------------------------------
-   // Function: compare
+   // Function compare
    //---------------------------------------------------------------------------
 
    static function bit compare( const ref AT a1,
@@ -201,19 +201,23 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    endfunction: compare
 
    //---------------------------------------------------------------------------
-   // Function: to_string
+   // Function to_string
    //---------------------------------------------------------------------------
 
    static function string to_string( const ref AT a,
 				     input string separator = " ",
+				     int from_index = 0,
+				     int to_index = -1,
 				     formatter#(T) fmtr = null );
       string s = "";
       integer a_size = $size( a );
 
-      foreach ( a[i] ) begin
-	 if ( fmtr ) s = { s, fmtr.to_string( a[i] ) };
-	 else        s = { s, default_fmtr.to_string( a[i] ) };
-	 if ( i < a_size - 1 ) s = { s, separator };
+      util::normalize( a_size, from_index, to_index );
+      if ( fmtr == null ) fmtr = hex_formatter#(T)::get_instance();
+
+      for ( int i = from_index; i <= to_index; i++ ) begin
+	 s = { s, fmtr.to_string( a[i] ) };
+	 if ( i != to_index ) s = { s, separator };
       end
       return s;
    endfunction: to_string

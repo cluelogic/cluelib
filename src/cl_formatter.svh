@@ -31,29 +31,38 @@
 
 //------------------------------------------------------------------------------
 // Class: formatter
-//   Provides a strategy to convert an object of type *T* into a string.
+//   (SINGLETON) Provides a strategy to convert an object of type *T* into a
+//   string.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of an object to be converted. The default is *int*.
 //------------------------------------------------------------------------------
 
 class formatter #( type T = int );
 
    //---------------------------------------------------------------------------
    // Typedef: this_type
-   //   The shorthand of formatter#(T).
+   //   The shorthand of <formatter> *#(T)*.
    //---------------------------------------------------------------------------
 
    typedef formatter#(T) this_type;
 
-   local static this_type inst = null;
+   local static this_type inst = null; // need to place after the typedef above
+
+   //---------------------------------------------------------------------------
+   // Function: new
+   //   (PROTECTED) Creates a new formatter.
+   //---------------------------------------------------------------------------
 
    protected function new();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: get_instance
-   //   Returns a singleton instance of this formatter.
+   //   (STATIC) Returns the singleton instance of this formatter.
    //
    // Returns:
-   //   A singleton instance.
+   //   The singleton instance.
    //---------------------------------------------------------------------------
 
    static function this_type get_instance();
@@ -63,18 +72,18 @@ class formatter #( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: to_string
-   //   Returns a string representation of the given object of type *T*. This
-   //   function should be overridden by extended classes.
+   //   (VIRTUAL) Returns a string representation of the given object of type
+   //   *T*. This function should be overridden by extended classes.
    //
    // Argument:
    //   o - An object to convert to a string.
    //
    // Returns:
-   //   *"<obj>"* is returned as a placeholder.
+   //   A string, "*obj*", is returned as a placeholder.
    //---------------------------------------------------------------------------
 
    virtual function string to_string( T o );
-      return "<obj>";
+      return "obj";
    endfunction: to_string
 
 endclass: formatter

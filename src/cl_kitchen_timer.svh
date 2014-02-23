@@ -32,7 +32,7 @@
 //------------------------------------------------------------------------------
 // Class: kitchen_timer
 //   Counts a simulation time (not a wall clock time) and triggers an event once
-//   the timer expires. This class is not thread-safe.
+//   the timer expires. This class is _not_ thread-safe.
 //------------------------------------------------------------------------------
 
 class kitchen_timer;
@@ -46,7 +46,7 @@ class kitchen_timer;
 
    //---------------------------------------------------------------------------
    // Event: ring
-   //   Triggers when the delay elapsed.
+   //   Triggers when the specified delay elapsed.
    //---------------------------------------------------------------------------
 
    event ring;
@@ -69,6 +69,13 @@ class kitchen_timer;
    //
    // Argumment:
    //   delay - The delay for the timer to ring.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | @kt.ring;
+   // | assert( kt.get_elapsed() == 100 );
    //---------------------------------------------------------------------------
 
    function void set_delay( time delay );
@@ -78,7 +85,8 @@ class kitchen_timer;
 
    //---------------------------------------------------------------------------
    // Function: add_delay
-   //   Adds the specified delay.
+   //   Adds the specified delay. If the timer is currently running, the timer
+   //   is paused, added the delay, then resumed.
    //
    // Argument:
    //   delay - The additional delay for the timer to ring.
@@ -104,10 +112,17 @@ class kitchen_timer;
    // Arguments:
    //   delay1 - The delay boundary 1.
    //   delay2 - The delay boundary 2. The delay is randomized between *delay1*
-   //            and *delay2* inclusive.
+   //            and *delay2*, inclusive.
    //
    // Returns:
    //   The randomized delay value.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | time random_delay = kt.set_random_delay( 100, 200 );
+   // | kt.start();
+   // | @kt.ring;
+   // | assert( kt.get_elapsed() == random_delay );
    //---------------------------------------------------------------------------
 
    function time set_random_delay( time delay1,
@@ -127,6 +142,13 @@ class kitchen_timer;
    //   Starts the timer. The <ring> event is triggered when the remaining time
    //   becomes 0.  The timer can be stopped by calling <stop> or be paused by
    //   calling <pause>. If the timer is already started, no action is taken.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | @kt.ring;
+   // | assert( kt.get_elapsed() == 100 );
    //---------------------------------------------------------------------------
 
    function void start();
@@ -156,6 +178,13 @@ class kitchen_timer;
    //---------------------------------------------------------------------------
    // Function: stop
    //   Stops the timer. The elapsed time is stamped if the timer was running.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #50 kt.stop();
+   // | assert( kt.get_elapsed() == 50 );
    //---------------------------------------------------------------------------
 
    function void stop();
@@ -168,6 +197,13 @@ class kitchen_timer;
    //   Pauses the timer. The elapsed time is stamped if the timer was
    //   running. The timer can be resumed by calling <resume>. If the timer was
    //   not running, no action is taken.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #50 kt.pause();
+   // | assert( kt.get_elapsed() == 50 );
    //---------------------------------------------------------------------------
 
    function void pause();
@@ -181,6 +217,16 @@ class kitchen_timer;
    // Function: resume
    //   Resumes the timer, if the timer was paused. Otherwise, no action is
    //   taken.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #30 kt.pause();
+   // | assert( kt.get_elapsed() == 30 );
+   // | kt.resume();
+   // | @kt.ring;
+   // | assert( kt.get_elapsed() == 70 );
    //---------------------------------------------------------------------------
 
    function void resume();
@@ -206,6 +252,13 @@ class kitchen_timer;
    //
    // Returns:
    //   The elapsed time.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | @kt.ring;
+   // | assert( kt.get_elapsed() == 100 );
    //---------------------------------------------------------------------------
 
    function time get_elapsed();
@@ -213,22 +266,114 @@ class kitchen_timer;
       return elapsed;
    endfunction: get_elapsed
 
+   //---------------------------------------------------------------------------
+   // Function: get_remaining
+   //   Returns the remaining time to ring.  If the timer is paused or stopped,
+   //   returns the remaining time from the last paused or stopped time.
+   //
+   // Returns:
+   //   The remaining time.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #30;
+   // | assert( kt.get_remaining() == 70 );
+   // | @kt.ring;
+   // | assert( kt.get_remaining() == 0 );
+   //---------------------------------------------------------------------------
+
    function time get_remaining();
       if ( is_running() ) stamp();
       return remaining - elapsed;
    endfunction: get_remaining
 
+   //---------------------------------------------------------------------------
+   // Function: is_stopped
+   //   Returns 1 if the timer is currently stopped.
+   //
+   // Returns:
+   //   If the timer is currently stopped, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #30;
+   // | assert( kt.is_stopped() == 0 );
+   // | @kt.ring;
+   // | assert( kt.is_stopped() == 1 );
+   //---------------------------------------------------------------------------
+
    function bit is_stopped();
       return state == STOPPED;
    endfunction: is_stopped
    
+   //---------------------------------------------------------------------------
+   // Function: is_running
+   //   Returns 1 if the timer is currently running.
+   //
+   // Returns:
+   //   If the timer is currently running, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #30;
+   // | assert( kt.is_running() == 1 );
+   // | @kt.ring;
+   // | assert( kt.is_running() == 0 );
+   //---------------------------------------------------------------------------
+
    function bit is_running();
       return state == RUNNING;
    endfunction: is_running
    
+   //---------------------------------------------------------------------------
+   // Function: is_paused
+   //   Returns 1 if the timer is currently paused.
+   //
+   // Returns:
+   //   If the timer is currently paused, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #50 kt.pause();
+   // | assert( kt.is_paused() == 1 );
+   // | kt.resume();
+   // | #10;
+   // | assert( kt.is_paused() == 0 );
+   //---------------------------------------------------------------------------
+
    function bit is_paused();
       return state == PAUSED;
    endfunction: is_paused
+
+   //---------------------------------------------------------------------------
+   // Function: get_state
+   //   Returns the current state of the timer.
+   //
+   // Returns:
+   //   The current state of the timer.
+   //
+   // Example:
+   // | kitchen_timer kt = new();
+   // | kt.set_delay( 100 );
+   // | kt.start();
+   // | #50 kt.pause();
+   // | assert( kt.get_state() == kitchen_timer::PAUSED );
+   // | kt.resume();
+   // | #10;
+   // | assert( kt.get_state() == kitchen_timer::RUNNING );
+   //---------------------------------------------------------------------------
+
+   function state_e get_state();
+      return state;
+   endfunction: get_state
 
    local function void stamp();
       elapsed = $time - start_time;

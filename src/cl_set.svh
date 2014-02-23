@@ -31,7 +31,10 @@
 
 //-----------------------------------------------------------------------------
 // Class: set
-//   Implements the set_base using an associative array.
+//   Implements the <set_base> using an associative array.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of data collected in a set. The default is *int*.
 //-----------------------------------------------------------------------------
 
 class set #( type T = int ) extends set_base#( T );
@@ -80,23 +83,31 @@ class set #( type T = int ) extends set_base#( T );
    // Argument:
    //   c    - (OPTIONAL) A collection whose elements are to be added to this 
    //          set.
-   //   fmtr - (OPTIONAL) An object that provides a function to convert the
-   //          element of type *T* to a string. If not specified or null,
-   //          <formatter> #(T) is used. The default is null.
+   //   cmp - (OPTIONAL) A strategy object used to compare the elements of type
+   //         *T*. If not specified or *null*, <comparator> *#(T)* is used. The
+   //         default is *null*.
+   //   fmtr - (OPTIONAL) A strategy object that provides a function to convert
+   //          the element of type *T* to a string. If not specified or *null*,
+   //          <hex_formatter> *#(T)* is used. The default is *null*.
    //
    // Example:
    // | set#(int) int_set = new();
    //--------------------------------------------------------------------------
 
    function new( collection#(T) c = null,
+		 comparator#(T) cmp = null,
 		 formatter#(T) fmtr = null );
-      this.fmtr = fmtr;
+      if ( cmp == null ) this.cmp = comparator#(T)::get_instance();
+      else               this.cmp = cmp;
+      if ( fmtr == null ) this.fmtr = hex_formatter#(T)::get_instance();
+      else                this.fmtr = fmtr;
       if ( c ) void'( this.add_all( c ) );
    endfunction: new
 
    //--------------------------------------------------------------------------
    // Function: add
-   //   Adds the given element to this set if it is not already present.
+   //   (VIRTUAL) Adds the given element to this set if it is not already
+   //   present.
    //
    // Argument:
    //   e - An element to be added to this set.
@@ -107,7 +118,9 @@ class set #( type T = int ) extends set_base#( T );
    //
    // Example:
    // | set#(int) int_set = new();
-   // | assert( int_set.add( 0 ) == 1 );
+   // |
+   // | assert( int_set.add( 123 ) == 1 );
+   // | assert( int_set.add( 123 ) == 0 ); // 123 is already in the set
    //--------------------------------------------------------------------------
 
    virtual function bit add( T e );
@@ -121,10 +134,11 @@ class set #( type T = int ) extends set_base#( T );
 
    //--------------------------------------------------------------------------
    // Function: clear
-   //   Removes all of the elements from this set.
+   //   (VIRTUAL) Removes all of the elements from this set.
    //
    // Example:
    // | set#(int) int_set = new();
+   // |
    // | int_set.clear();
    //--------------------------------------------------------------------------
 
@@ -134,16 +148,17 @@ class set #( type T = int ) extends set_base#( T );
 
    //--------------------------------------------------------------------------
    // Function: clone
-   //   Returns a shallow copy of this set. The element themselves are not
-   //   cloned.
+   //   (VIRTUAL) Returns a shallow copy of this set. The element themselves are
+   //   not cloned.
    //
    // Returns:
    //   A copy of this set.
    //
    // Example:
    // | set#(int) int_set = new();
-   // | collection#(int) cloned_int_set;
-   // | cloned_int_set = int_set.clone();
+   // | collection#(int) cloned;
+   // |
+   // | cloned = int_set.clone();
    //--------------------------------------------------------------------------
 
    virtual function collection#( T ) clone();
@@ -155,7 +170,7 @@ class set #( type T = int ) extends set_base#( T );
 
    //--------------------------------------------------------------------------
    // Function: contains
-   //   Returns 1 if this set contains the specified element.
+   //   (VIRTUAL) Returns 1 if this set contains the specified element.
    //
    // Argument:
    //   e - An element to be checked.
@@ -165,9 +180,10 @@ class set #( type T = int ) extends set_base#( T );
    //
    // Example:
    // | set#(int) int_set = new();
-   // | int_set.add( 0 );
-   // | assert( int_set.contains( 0 ) == 1 );
-   // | assert( int_set.contains( 1 ) == 0 );
+   // |
+   // | void'( int_set.add( 123 ) );
+   // | assert( int_set.contains( 123 ) == 1 );
+   // | assert( int_set.contains( 456 ) == 0 );
    //--------------------------------------------------------------------------
 
    virtual function bit contains( T e );
@@ -176,15 +192,16 @@ class set #( type T = int ) extends set_base#( T );
 
    //--------------------------------------------------------------------------
    // Function: is_empty
-   //   Returns 1 if this set contains no elements.
+   //   (VIRTUAL) Returns 1 if this set contains no elements.
    //
    // Returns:
    //   If this set is empty, returns 1. Otherwise, returns 0.
    //
    // Example:
    // | set#(int) int_set = new();
+   // |
    // | assert( int_set.is_empty() == 1 );
-   // | int_set.add( 0 );
+   // | void'( int_set.add( 123 ) );
    // | assert( int_set.is_empty() == 0 );
    //--------------------------------------------------------------------------
 
@@ -194,15 +211,19 @@ class set #( type T = int ) extends set_base#( T );
 
    //--------------------------------------------------------------------------
    // Function: get_iterator
-   //   Returns an iterator over the elements in this set.
+   //   (VIRTUAL) Returns an iterator over the elements in this set.
    //
    // Returns:
    //   An iterator.
    //
    // Example:
    // | set#(int) int_set = new();
-   // | iterator#(int) it = int_set.get_iterator();
-   // | while ( it.has_next() ) $display( it.next() );
+   // | iterator#(int) it;
+   // |
+   // | void'( int_set.add( 123 ) );
+   // | void'( int_set.add( 456 ) );
+   // | it = int_set.get_iterator();
+   // | while ( it.has_next() ) $display( it.next() ); // 123 456
    //--------------------------------------------------------------------------
 
    virtual function iterator#( T ) get_iterator();
@@ -218,7 +239,7 @@ class set #( type T = int ) extends set_base#( T );
 
    //--------------------------------------------------------------------------
    // Function: remove
-   //   Removes the given element from this set if it is present.
+   //   (VIRTUAL) Removes the given element from this set if it is present.
    //
    // Argument:
    //   e - An element to remove.
@@ -228,9 +249,10 @@ class set #( type T = int ) extends set_base#( T );
    //
    // Example:
    // | set#(int) int_set = new();
-   // | int_set.add( 0 );
-   // | assert( int_set.remove( 0 ) == 1 );
-   // | assert( int_set.remove( 0 ) == 0 ); // already removed
+   // |
+   // | void'( int_set.add( 123 ) );
+   // | assert( int_set.remove( 123 ) == 1 );
+   // | assert( int_set.remove( 123 ) == 0 ); // already removed
    //--------------------------------------------------------------------------
 
    virtual function bit remove( T e );
@@ -244,14 +266,15 @@ class set #( type T = int ) extends set_base#( T );
 
    //--------------------------------------------------------------------------
    // Function: size
-   //   Returns the number of elements in this set.
+   //   (VIRTUAL) Returns the number of elements in this set.
    //
    // Returns:
    //   The number of elements in this set.
    //
    // Example:
    // | set#(int) int_set = new();
-   // | int_set.add( 0 );
+   // |
+   // | void'( int_set.add( 123 ) );
    // | assert( int_set.size() == 1 );
    //--------------------------------------------------------------------------
 

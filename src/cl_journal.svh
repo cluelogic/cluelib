@@ -31,7 +31,8 @@
 
 //------------------------------------------------------------------------------
 // Class: journal
-//   Provides the logging function of transactions.
+//   (VIRTUAL) Provides a logging function to store transactions to a journal
+//   file.
 //------------------------------------------------------------------------------
 
 virtual class journal;
@@ -40,15 +41,25 @@ virtual class journal;
 
    //---------------------------------------------------------------------------
    // Function: log
-   //   Logs a transaction to the journal file specified by the
-   //   <CL_NAME_OF_JOURNAL> macro.
+   //   (STATIC) Logs a transaction to the journal file specified by the
+   //   <CL_NAME_OF_JOURNAL> macro. The journal file stores the transaction
+   //   using the following format: *from_unit->to_unit: @timestamp desc*.
    //
    // Arguments:
-   //   desc - The description of the transaction.
-   //   from_unit - (OPTIONAL) The name of the unit the transaction comes
-   //               from. The default name is "journal".
-   //   to_unit - (OPTIONAL) The name of the unit the transaction goes to. The
+   //   desc - The description of a transaction.
+   //   from_unit - (OPTIONAL) The name of the unit a transaction comes
+   //               from. The default name is "*journal*".
+   //   to_unit - (OPTIONAL) The name of the unit a transaction goes to. The
    //             default name is the value of *from_unit*.
+   //
+   // Examples:
+   // | journal::log( "request", "master", "slave" );
+   // | #100;
+   // | journal::log( "response", "slave", "master" );
+   // |
+   // | /* the journal file */
+   // | // master->slave: @0 request
+   // | // slave->master: @100 response
    //---------------------------------------------------------------------------
 
    static function void log( string desc,

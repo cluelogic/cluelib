@@ -34,16 +34,26 @@ typedef class deque;
 
 //-----------------------------------------------------------------------------
 // Class: deque_descending_iterator
-//   Provides an iterator to a *deque* in reverse order.
+//   Provides an iterator to a <deque> in reverse order.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of data collected in a <deque>. The default is
+//       *int*.
 //-----------------------------------------------------------------------------
 
 class deque_descending_iterator #( type T = int ) extends iterator#( T );
 
-   typedef deque#( T ) deque_type;
-
-   local deque_type dq;
    local int cur_index;
    local int q_size;
+
+   //--------------------------------------------------------------------------
+   // Typedef: deque_type
+   //   The shorthand of the <deque> type of type *T*.
+   //--------------------------------------------------------------------------
+
+   typedef deque#( T ) deque_type;
+
+   local deque_type dq; // needs to place after the typedef above
 
    //--------------------------------------------------------------------------
    // Function: new
@@ -61,7 +71,7 @@ class deque_descending_iterator #( type T = int ) extends iterator#( T );
 
    //--------------------------------------------------------------------------
    // Function: has_next
-   //   Returns 1 if the iterator has more elements.
+   //   (VIRTUAL) Returns 1 if the iterator has more elements.
    //
    // Returns:
    //   If the iterator has more elements, returns 1. Otherwise, returns 0.
@@ -73,7 +83,7 @@ class deque_descending_iterator #( type T = int ) extends iterator#( T );
 
    //--------------------------------------------------------------------------
    // Function: next
-   //   Returns the next element.
+   //   (VIRTUAL) Returns the next element.
    //
    // Returns:
    //   The next element in the iterator.
@@ -85,8 +95,11 @@ class deque_descending_iterator #( type T = int ) extends iterator#( T );
 
    //--------------------------------------------------------------------------
    // Function: remove
-   //   Removes the last element returned by the iterator. This function can be
-   //   called once per call to *next()*.
+   //   (VIRTUAL) Removes the last element returned by the iterator. This
+   //   function can be called once per call to <next>.
+   //
+   // Returns:
+   //   None.
    //--------------------------------------------------------------------------
 
    virtual function void remove();

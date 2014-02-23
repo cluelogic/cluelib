@@ -31,16 +31,18 @@
 
 //------------------------------------------------------------------------------
 // Class: util
-//   Provides several utility functions. See <putil> for parameterized utility
-//   functions.
+//   (VIRTUAL) Provides several utility functions.
+//
+// See Also:
+//   <putil>
 //------------------------------------------------------------------------------
 
 virtual class util;
 
    //---------------------------------------------------------------------------
    // Function: num_oct_digits
-   //   Returns the number of octal digits required to represent the specified
-   //   binary digits.
+   //   (STATIC) Returns the number of octal digits required to represent the
+   //   specified binary digits.
    //
    // Argument:
    //   num_bin_digits - The number of binary digits.
@@ -59,8 +61,8 @@ virtual class util;
 
    //---------------------------------------------------------------------------
    // Function: num_dec_digits
-   //   Returns the number of decimal digits required to represent the specified
-   //   binary digits.
+   //   (STATIC) Returns the number of decimal digits required to represent the
+   //   specified binary digits.
    //
    // Argument:
    //   num_bin_digits - The number of binary digits.
@@ -85,8 +87,8 @@ virtual class util;
 
    //---------------------------------------------------------------------------
    // Function: num_hex_digits
-   //   Returns the number of hexadecimal digits required to represent the
-   //   specified binary digits.
+   //   (STATIC) Returns the number of hexadecimal digits required to represent
+   //   the specified binary digits.
    //
    // Argument:
    //   num_bin_digits - The number of binary digits.
@@ -104,7 +106,7 @@ virtual class util;
    endfunction: num_hex_digits
 
    //---------------------------------------------------------------------------
-   // Function: normalize
+   // Function normalize
    //---------------------------------------------------------------------------
 
    static function void normalize( int len,

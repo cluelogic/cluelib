@@ -31,8 +31,11 @@
 
 //------------------------------------------------------------------------------
 // Class: hex_formatter
-//   Provides a strategy to convert an object of type *T* to a string using a
-//   hexadecimal format. This is a singleton class.
+//   (SINGLETON) Provides a strategy to convert an object of type *T* to a
+//   string using a hexadecimal format.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of an object to be converted. The default is *int*.
 //------------------------------------------------------------------------------
 
 class hex_formatter #( type T = int ) extends formatter#( T );
@@ -46,15 +49,20 @@ class hex_formatter #( type T = int ) extends formatter#( T );
 
    local static this_type inst = null;
 
+   //---------------------------------------------------------------------------
+   // Function: new
+   //   (PROTECTED) Creates a new formatter.
+   //---------------------------------------------------------------------------
+
    protected function new();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: get_instance
-   //   Returns a singleton instance of this formatter.
+   //   (STATIC) Returns the singleton instance of this formatter.
    //
    // Returns:
-   //   A singleton instance.
+   //   The singleton instance.
    //---------------------------------------------------------------------------
 
    static function this_type get_instance();
@@ -64,7 +72,8 @@ class hex_formatter #( type T = int ) extends formatter#( T );
 
    //---------------------------------------------------------------------------
    // Function: to_string
-   //   Returns a string representation of the given object of type *T*.
+   //   (VIRTUAL) Returns a string representation of the given object of type
+   //   *T* using the *%h* format string.
    //
    // Argument:
    //   o - An object to convert to a string.

@@ -31,28 +31,29 @@
 
 //------------------------------------------------------------------------------
 // Class: iterator
-//   Defines a uniform way of accessing collection elements sequentially.
+//   (VIRTUAL) Defines a uniform way of accessing collection elements
+//   sequentially.
 //------------------------------------------------------------------------------
 
 virtual class iterator #( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: has_next
-   //   Returns 1 if the iteration has more elements.
+   //   (PURE) (VIRTUAL) Returns 1 if the iteration has more elements.
    //---------------------------------------------------------------------------
 
    pure virtual function bit has_next();
 
    //---------------------------------------------------------------------------
    // Function: next
-   //   Returns the next element in the iteration.
+   //   (PURE) (VIRTUAL) Returns the next element in the iteration.
    //---------------------------------------------------------------------------
 
    pure virtual function T next();
 
    //---------------------------------------------------------------------------
    // Function: remove
-   //   Removes the last element returned by the iterator.
+   //   (PURE) (VIRTUAL) Removes the last element returned by the iterator.
    //---------------------------------------------------------------------------
 
    pure virtual function void remove();

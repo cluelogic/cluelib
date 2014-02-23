@@ -31,23 +31,28 @@
 
 //------------------------------------------------------------------------------
 // Class: string_formatter
-//   Provides a strategy to convert an object of string data type into a string.
-//   This is a singleton class.
+//   (SINGLETON) Provides a strategy to convert an object of string data type
+//   into a string.
 //------------------------------------------------------------------------------
 
 class string_formatter extends formatter#( string );
 
-   local static string_formatter inst = null; // "instance" is an SV keyword
+   local static string_formatter inst = null;
+
+   //---------------------------------------------------------------------------
+   // Function: new
+   //   (PROTECTED) Creates a new formatter.
+   //---------------------------------------------------------------------------
 
    protected function new();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: get_instance
-   //   Returns a singleton instance of this formatter.
+   //   (STATIC) Returns the singleton instance of this formatter.
    //
    // Returns:
-   //   A singleton instance.
+   //   The singleton instance.
    //---------------------------------------------------------------------------
 
    static function string_formatter get_instance();
@@ -57,13 +62,13 @@ class string_formatter extends formatter#( string );
 
    //---------------------------------------------------------------------------
    // Function: to_string
-   //   Returns a string representation of the given object of string type.
+   //   (VIRTUAL) Returns a string representation of the given object of string type.
    //
    // Argument:
    //   o - An object to convert to a string.
    //
    // Returns:
-   //   The *o* as is.
+   //   The *o* without change.
    //---------------------------------------------------------------------------
 
    virtual function string to_string( T o );

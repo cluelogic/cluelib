@@ -30,22 +30,40 @@
 
 //------------------------------------------------------------------------------
 // Class: queue
-//   A parameterized class that manages a dynamic array. The default type is
-//   *bit*. *WIDTH* is used to specify the size of an unpacked array only if the
-//   dynamic array is converted to/from the unpacked array.
+//   A parameterized class that manages a queue. 
+//
+//
+// Parameters:
+//   T - (OPTIONAL) The type of a queue. The default type is *bit*.
+//   SIZE - (OPTIONAL) The size of an unpacked array. This parameter is used
+//          only if a queue is converted from/to an unpacked array. The default
+//          is 1.
 //------------------------------------------------------------------------------
 
-virtual class queue #( type T = bit, int WIDTH = 1 );
+virtual class queue #( type T = bit, int SIZE = 1 );
 
-   local static formatter#(T) default_fmtr = hex_formatter#(T)::get_instance();
-   local static comparator#(T) default_cmp = comparator#(T)::get_instance();
+   //---------------------------------------------------------------------------
+   // Group: Common Arguments
+   //   from_index - The index of the first element of a queue to be processed.
+   //                If negative, the index counts from the last.  For example,
+   //                if *from_index* is -9, a function starts at the ninth
+   //                element (inclusive) from the last.  The default is 0
+   //                (starts at the first element).
+   //   to_index - The index of the last element of a queue to be processed.  If
+   //              negative, the index counts from the last.  For example, if
+   //              *to_index* is -3, a function ends at the third element
+   //              (inclusive) from the last.  The default is -1 (ends at the
+   //              last element).
+   //---------------------------------------------------------------------------
+
+   // Group: Types
 
    //---------------------------------------------------------------------------
    // Typedef: ua_type
    //   The shorthand of the unpacked array of type *T*.
    //---------------------------------------------------------------------------
 
-   typedef T ua_type[WIDTH];
+   typedef T ua_type[SIZE];
 
    //---------------------------------------------------------------------------
    // Typedef: da_type
@@ -61,134 +79,411 @@ virtual class queue #( type T = bit, int WIDTH = 1 );
 
    typedef T q_type[$];
 
+   // Group: Functions
+
    //---------------------------------------------------------------------------
    // Function: from_unpacked_array
-   //   Converts an unpacked array of type *T* to the dynamic array of the same
+   //   (STATIC) Converts an unpacked array of type *T* to a queue of the same
    //   type.
    //
    // Arguments:
-   //   ua      - An input unpacked array.
-   //   reverse - (OPTIONAL) If 1, the item at index 0 of the unpacked array
-   //             occupies the index WIDTH-1 of the dynamic array. If 0, the
-   //             item at index 0 of the unpacked array occupies the index 0 of
-   //             the dynamic array. The default is 0.
+   //   ua      - An unpacked array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *ua* is
+   //             positioned to the index 0 of the queue. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
    //             
    // Returns:
-   //   The dynamic array converted from *ua*.
+   //   A queue converted from *ua*.
    //
    // Examples:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
-   // | assert( queue#(bit,8)::from_unpacked_array( ua                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( queue#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q[$];
+   // |
+   // | q = queue#(bit,8)::from_unpacked_array( ua );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | q = queue#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <ua_to_q>
    //---------------------------------------------------------------------------
 
    static function q_type from_unpacked_array( const ref ua_type ua,
 					       input bit reverse = 0 );
-      common_array#( T, WIDTH, ua_type )::a_to_q( ua, from_unpacked_array,
-						  reverse );
+      common_array#( T, SIZE, ua_type )::a_to_q( ua, from_unpacked_array,
+						 reverse );
    endfunction: from_unpacked_array
 
    //---------------------------------------------------------------------------
    // Function: to_unpacked_array
+   //   (STATIC) Converts a queue of type *T* to an unpacked array of the same
+   //   type.
+   //
+   // Arguments:
+   //   q      - A queue to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of the unpacked array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
+   //
+   // Returns:
+   //   An unpacked array converted from *q*.
+   //
+   // Examples:
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | assert( queue#(bit,8)::to_unpacked_array( q                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( queue#(bit,8)::to_unpacked_array( q, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <q_to_ua>
    //---------------------------------------------------------------------------
 
    static function ua_type to_unpacked_array( const ref q_type q,
 					      input bit reverse = 0 );
-      common_array#( T, WIDTH, ua_type )::q_to_a( q, to_unpacked_array, 
-						  reverse );
+      common_array#( T, SIZE, ua_type )::q_to_a( q, to_unpacked_array, 
+						 reverse );
    endfunction: to_unpacked_array
 
    //---------------------------------------------------------------------------
    // Function: from_dynamic_array
+   //   (STATIC) Converts a dynamic array of type *T* to a queue of the same
+   //   type.
+   //
+   // Arguments:
+   //   da      - A dynamic array to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of the queue. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   A queue converted from *da*.
+   //
+   // Examples:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit q[$];
+   // |
+   // | q = queue#(bit)::from_dynamic_array( da );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | q = queue#(bit)::from_dynamic_array( da, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <da_to_q>
    //---------------------------------------------------------------------------
 
    static function q_type from_dynamic_array( const ref da_type da,
 					      input bit reverse = 0 );
-      common_array#( T, WIDTH, da_type )::a_to_q( da, from_dynamic_array, 
-						  reverse );
+      common_array#( T, SIZE, da_type )::a_to_q( da, from_dynamic_array, 
+						 reverse );
    endfunction: from_dynamic_array
    
    //---------------------------------------------------------------------------
    // Function: to_dynamic_array
+   //   (STATIC) Converts a queue of type *T* to a dynamic array of the same
+   //   type.
+   //
+   // Arguments:
+   //   q       - A queue to be converted.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of the dynamic array. If 1, the
+   //             elements are positioned in the reverse order. The default is
+   //             0.
+   //
+   // Returns:
+   //   A dynamic array converted from *q*.
+   //
+   // Examples:
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da[];
+   // |
+   // | da = queue#(bit)::to_dynamic_array( q );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | da = queue#(bit)::to_dynamic_array( q, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <q_to_da>
    //---------------------------------------------------------------------------
 
    static function da_type to_dynamic_array( const ref q_type q,
 					     input bit reverse = 0 );
       to_dynamic_array = new[ q.size() ];
-      common_array#( T, WIDTH, da_type )::q_to_a( q, to_dynamic_array, 
-						  reverse );
+      common_array#( T, SIZE, da_type )::q_to_a( q, to_dynamic_array, 
+						 reverse );
    endfunction: to_dynamic_array
    
    //---------------------------------------------------------------------------
+   // Function: ua_to_q
+   //   (STATIC) Converts an unpacked array of type *T* to a queue of the same
+   //   type. Unlike <from_unpacked_array>, this function populates the queue
+   //   passed by reference instead of returning a new queue.
+   //
+   // Arguments:
+   //   ua - An unpacked array to be converted.
+   //   q - A queue to be populated.  This function does _not_ change the size
+   //       of *q*. Make sure that *q* has enough items to accommodate the
+   //       elements of *ua* before calling this function.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *ua* is
+   //             positioned to the index 0 of *q*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+   // | bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // |
+   // | queue#(bit,8)::ua_to_q( ua, q );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | queue#(bit,8)::ua_to_q( ua, q, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <from_unpacked_array>
+   //---------------------------------------------------------------------------
+
+   static function void ua_to_q( const ref ua_type ua,
+				 ref q_type q,
+				 input bit reverse = 0 );
+      common_array#( T, SIZE, q_type )::ua_to_a( ua, q, reverse );
+   endfunction: ua_to_q
+
+   //---------------------------------------------------------------------------
+   // Function: q_to_ua
+   //   (STATIC) Converts a queue of type *T* to an unpacked array of the same
+   //   type.  Unlike <to_unpacked_array>, this function populates the unpacked
+   //   array passed by reference, instead of returning a new unpacked array. If
+   //   the size of the queue is larger than *SIZE*, the excess elements are
+   //   ignored. If the size of the queue is smaller than *SIZE*, the default
+   //   valus of type *T* is used for the missing elements.
+   //
+   // Arguments:
+   //   q - A queue to be converted.
+   //   ua - An unpacked array to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of *ua*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit ua[8];
+   // |
+   // | queue#(bit,8)::q_to_ua( q, ua );
+   // | assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | queue#(bit,8)::q_to_ua( q, ua, .reverse( 1 ) );
+   // | assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <to_unpacked_array>
+   //---------------------------------------------------------------------------
+
+   static function void q_to_ua( const ref q_type q,
+				 ref ua_type ua,
+				 input bit reverse = 0 );
+      common_array#( T, SIZE, ua_type )::q_to_a( q, ua, reverse );
+   endfunction: q_to_ua
+   
+   //---------------------------------------------------------------------------
+   // Function: da_to_q
+   //   (STATIC) Converts a dynamic array of type *T* to a queue of the same
+   //   type. Unlike <from_dynamic_array>, this function populates the queue
+   //   passed by reference instead of returning a new queue.
+   //
+   // Arguments:
+   //   da - A dynamic array to be converted.
+   //   q - A queue to be populated.  This function does _not_ change the size
+   //       of *q*. Make sure that *q* has enough items to accommodate the
+   //       elements of *da* before calling this function.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
+   //             positioned to the index 0 of *q*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // |
+   // | queue#(bit)::da_to_q( da, q );
+   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | queue#(bit)::da_to_q( da, q, .reverse( 1 ) );
+   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // 
+   // See Also:
+   //   <from_dynamic_array>
+   //---------------------------------------------------------------------------
+
+   static function void da_to_q( const ref da_type da,
+				 ref q_type q,
+				 input bit reverse = 0 );
+      common_array#( T, SIZE, q_type )::da_to_a( da, q, reverse );
+   endfunction: da_to_q
+   
+   //---------------------------------------------------------------------------
+   // Function: q_to_da
+   //   (STATIC) Converts a queue of type *T* to a dynamic array of the same
+   //   type.  Unlike <to_dynamic_array>, this function populates the dynamic
+   //   array passed by reference, instead of returning a new dynamic array.
+   //
+   // Arguments:
+   //   q - A queue to be converted.
+   //   da - A dynamic array to be populated.
+   //   reverse - (OPTIONAL) If 0, the element at the index 0 of *q* is
+   //             positioned to the index 0 of *da*. If 1, the elements are
+   //             positioned in the reverse order. The default is 0.
+   //
+   // Returns:
+   //   None.
+   //
+   // Examples:
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da[] = new[8]; // set the size of da[]
+   // |
+   // | queue#(bit)::q_to_da( q, da );
+   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // |
+   // | queue#(bit)::q_to_da( q, da, .reverse( 1 ) );
+   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   //
+   // See Also:
+   //   <to_dynamic_array>
+   //---------------------------------------------------------------------------
+
+   static function void q_to_da( const ref q_type q,
+				 ref da_type da,
+				 input bit reverse = 0 );
+      common_array#( T, SIZE, da_type )::q_to_a( q, da, reverse );
+   endfunction: q_to_da
+
+   //---------------------------------------------------------------------------
    // Function: init
+   //   (STATIC) Initializes the each element of the given queue to the
+   //   specified value.
+   //
+   // Arguments:
+   //   q - A queue to be initialized.  All the elements of *q* are initialized,
+   //       but this function does _not_ change the size of *q*.
+   //   val - A value to initialize the elements of *q*.
+   //
+   // Returns:
+   //   None.
+   //
+   // Example:
+   // | bit q[$] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+   // | queue#(bit)::init( q, 1'b1 );
+   // | assert( q == '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
    //---------------------------------------------------------------------------
 
    static function void init( ref q_type q, input T val );
-      common_array#( T, WIDTH, q_type )::init( q, val );
+      common_array#( T, SIZE, q_type )::init( q, val );
    endfunction: init
 
    //---------------------------------------------------------------------------
    // Function: reverse
-   //   Returns a copy of the given dynamic array with the elements in reverse
-   //   order.
+   //   (STATIC) Reverses the order of the elements of the given queue.
    //
    // Argument:
-   //   q - An input dynamic array.
+   //   q - A queue to be reversed.
    //
    // Returns:
-   //   A copy of *q* with the elements in reverse order.
+   //   None.
    //
    // Example:
-   // | bit q[];
-   // | q = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( queue#(bit)::reverse( q ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q[$] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+   // | queue#(bit)::reverse( q );
+   // | assert( q == '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
    //---------------------------------------------------------------------------
 
    static function void reverse( ref q_type q );
-      common_array#( T, WIDTH, q_type )::reverse( q );
+      common_array#( T, SIZE, q_type )::reverse( q );
    endfunction: reverse
 
    //---------------------------------------------------------------------------
    // Function: split
-   //   Splits the specified queue into two queues.
+   //   (STATIC) Splits the given queue into two queues.
    //
    // Arguments:
-   //   ds  - Input data stream.
-   //   ds0 - Output data stream with data elements at even location of the
-   //         input data stream.
-   //   ds1 - Output data stream with data elements at odd location of the
-   //         input data stream.
-   //   pad - (OPTIONAL) If the size of input data stream is odd and *pad* is 1,
-   //         the size of *ds1* is extended to be the same size as *ds0*. If 0,
-   //         no padding element is added. The default is 0.
+   //   q  - A queue to be split.
+   //   q0 - A new queue that contains the elements at the even index of *q*.
+   //   q1 - A new queue that contains the elements at the odd index of *q*.
+   //   pad - (OPTIONAL) If the size of *q* is odd and *pad* is 1, the size of
+   //         *q1* is expanded to be the same size as *q0*. The padded element
+   //         is initialized with the default value of type *T*.  If 0, no
+   //         padding element is added. The default is 0.
    //
    // Examples:
-   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3]    (pad=0)
-   // | ds=[0][1][2][3][4] --> ds0=[0][2][4] ds1=[1][3][ ] (pad=1)
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1 }; // q[0] to q[6]
+   // | bit q0[$], q1[$];
+   // |
+   // | queue#(bit)::split( q, q0, q1 );
+   // | assert( q0 == '{ 0, 0, 1, 1 } ); // q[0], q[2], q[4], q[6]
+   // | assert( q1 == '{ 0, 1, 0 } );    // q[1], q[3], q[5]
+   // |
+   // | q0.delete();
+   // | q1.delete();
+   // | queue#(bit)::split( q, q0, q1, .pad( 1 ) );
+   // | assert( q0 == '{ 0, 0, 1, 1 } ); // q[0], q[2], q[4], q[6]
+   // | assert( q1 == '{ 0, 1, 0, 0 } ); // q[1], q[3], q[5], 0 (padded with the default value of bit type)
+   //
+   // See Also:
+   //   <merge>
    //---------------------------------------------------------------------------
-   /*
+
    static function void split( q_type q,
 			       ref q_type q0,
 			       ref q_type q1,
 			       input bit pad = 0 );
+      T dummy;
       int q_size = q.size();
 
-      if ( q_size % 2 == 0 ) begin // even
-	 q0 = new[ q_size / 2 ];
-	 q1 = new[ q_size / 2 ];
-      end else if ( pad ) begin
-	 q0 = new[ ( q_size + 1 ) / 2 ];
-	 q1 = new[ ( q_size + 1 ) / 2 ];
-      end else begin
-	 q0 = new[ ( q_size + 1 ) / 2 ];
-	 q1 = new[ q_size / 2 ];
-      end
-      for ( int i = 0; i < q.size(); i += 2 ) q0[i/2] = q[i];
-      for ( int i = 1; i < q.size(); i += 2 ) q1[i/2] = q[i];
+      for ( int i = 0; i < q.size(); i += 2 ) q0.push_back( q[i] );
+      for ( int i = 1; i < q.size(); i += 2 ) q1.push_back( q[i] );
+      if ( q_size % 2 == 1 && pad ) q1.push_back( dummy );
    endfunction: split      
 
    //---------------------------------------------------------------------------
    // Function: merge
+   //   (STATIC) Merges two queues into one by alternating the elements from the
+   //   two queues.
+   //
+   // Arguments:
+   //   q0 - A queue to be merged. The first element of this queue becomes the
+   //        first element of the merged queue.
+   //   q1 - Another queue to be merged. The first element of this queue becomes
+   //        the second element of the merged queue.
+   //   truncate - (OPTIONAL) If the sizes of *q0* and *q1* are different and
+   //              *truncate* is 1, the merging stops when all the elements of
+   //              the smaller queue are merged. The remaining elements of the
+   //              larger queue are ignored. If *truncate* is 0, the remaining
+   //              elements are appended to the merged queue. The default is 0.
+   //
+   // Returns:
+   //   A new merged queue.
+   //
+   // Examples:
+   // | int q0[$] = { 0, 0, 0, 0 };
+   // | int q1[$] = { 1, 2, 3, 4, 5, 6 };
+   // | int q[$];
+   // |
+   // | q = queue#(int)::merge( q0, q1 );
+   // | assert( q == '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+   // |
+   // | q = queue#(int)::merge( q0, q1, .truncate( 1 ) );
+   // | assert( q == '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+   //
+   // See Also:
+   //   <concat>, <split>
    //---------------------------------------------------------------------------
 
    static function q_type merge( q_type q0,
@@ -198,141 +493,152 @@ virtual class queue #( type T = bit, int WIDTH = 1 );
       int q1_size = q1.size();
 
       if ( q0_size == q1_size ) begin
-	 merge = new[ q0_size + q1_size ];
 	 for ( int i = 0; i < q0_size; i++ ) begin
-	    merge[i*2  ] = q0[i];
-	    merge[i*2+1] = q1[i];
+	    merge.push_back( q0[i] );
+	    merge.push_back( q1[i] );
 	 end
       end else if ( q0_size < q1_size ) begin
-	 if ( truncate ) begin
-	    merge = new[ q0_size * 2 ];
-	    for ( int i = 0; i < q0_size; i++ ) begin
-	       merge[i*2  ] = q0[i];
-	       merge[i*2+1] = q1[i];
-	    end
-	 end else begin
-	    merge = new[ q0_size + q1_size ];
-	    for ( int i = 0; i < q0_size; i++ ) begin
-	       merge[i*2  ] = q0[i];
-	       merge[i*2+1] = q1[i];
-	    end
-	    for ( int i = 0; i < ( q1_size - q0_size ); i++ )
-	      merge[ q0_size * 2 + i ] = q1[ q0_size + i ];
-	 end // else: !if( truncate )
+	 for ( int i = 0; i < q0_size; i++ ) begin
+	    merge.push_back( q0[i] );
+	    merge.push_back( q1[i] );
+	 end
+	 if ( ! truncate ) begin
+	    for ( int i = q0_size; i < q1_size; i++ )
+	      merge.push_back( q1[i] );
+	 end
       end else begin // q0_size > q1_size
-	 if ( truncate ) begin
-	    merge = new[ q1_size * 2 ];
-	    for ( int i = 0; i < q1_size; i++ ) begin
-	       merge[i*2  ] = q0[i];
-	       merge[i*2+1] = q1[i];
-	    end
-	 end else begin
-	    merge = new[ q0_size + q1_size ];
-	    for ( int i = 0; i < q1_size; i++ ) begin
-	       merge[i*2  ] = q0[i];
-	       merge[i*2+1] = q1[i];
-	    end
-	    for ( int i = 0; i < ( q0_size - q1_size ); i++ )
-	      merge[ q1_size * 2 + i ] = q1[ q1_size + i ];
-	 end // else: !if( truncate )
-      end
+	 for ( int i = 0; i < q1_size; i++ ) begin
+	    merge.push_back( q0[i] );
+	    merge.push_back( q1[i] );
+	 end
+	 if ( ! truncate ) begin
+	    for ( int i = q1_size; i < q0_size; i++ )
+	      merge.push_back( q0[i] );
+	 end
+      end // else: !if( q0_size < q1_size )
    endfunction: merge
 
    //---------------------------------------------------------------------------
    // Function: concat
-   //   Concatenate the specified two dynamic arrays.
+   //   (STATIC) Concatenates two queues into one.
    //
    // Arguments:
-   //   q0 - Input dynamic array.
-   //   q1 - Another dynamic array.
+   //   q0 - A queue. This queue becomes the first part of the concatenated
+   //        queue.
+   //   q1 - Another queue. The elements of this queue are appended to *q0*.
    //
    // Returns:
-   //   A new dynamic array by concatenating *q0* and *q1*.
+   //   A new queue created by concatenating *q0* and *q1*.
+   //
+   // Example:
+   // | int q0[$] = { 0, 0, 0, 0 };
+   // | int q1[$] = { 1, 2, 3, 4, 5, 6 };
+   // | int q[$];
+   // |
+   // | q = queue#(int)::concat( q0, q1 );
+   // | assert( q == '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
+   //
+   // See Also:
+   //   <merge>
    //---------------------------------------------------------------------------
 
    static function q_type concat( q_type q0,
-				   q_type q1 );
-      int q0_size = q0.size();
-      int q1_size = q1.size();
-      q_type q = new[ q0_size + q1_size ] ( q0 );
-
-      for ( int i = 0; i < q1_size; i++ )
-	q[ q0_size + i ] = q1[i];
+				  q_type q1 );
+      q_type q = q0; // assign element by element
+      for ( int i = 0; i < q1.size(); i++ ) q.push_back( q1[i] );
       return q;
    endfunction: concat
 
    //---------------------------------------------------------------------------
    // Function: extract
+   //   (STATIC) Returns a new queue by extracting a part of the given queue.
+   //
+   // Arguments:
+   //   q - A queue to be extracted.
+   //   from_index - (OPTIONAL) The index of the first element of *q* to be
+   //                extracted. See <Common Arguments>. The default is 0.
+   //   to_index - (OPTIONAL) The index of the last element of *q* to be
+   //              extracted. See <Common Arguments>. The default is -1.
+   //
+   // Returns:
+   //   A new queue extracted from *q*.
+   //
+   // Examples:
+   // | int q[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+   // | int extracted[$];
+   // |
+   // | extracted = queue#(int)::extract( q, 3, 7 );
+   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
+   // | 
+   // | extracted = queue#(int)::extract( q, 3, -3 );
+   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
    //---------------------------------------------------------------------------
 
    static function q_type extract( q_type q,
-				    int from_index = 0,
-				    int to_index = -1 );
+				   int from_index = 0,
+				   int to_index   = -1 );
       util::normalize( q.size(), from_index, to_index );
-      extract = new[ to_index - from_index + 1 ];
-      for ( int i = from_index; i <= to_index; i++ )
-	extract[ i - from_index ] = q[i];
+      extract = q[ from_index : to_index ];
    endfunction: extract
 
    //---------------------------------------------------------------------------
    // Function: append
-   //   Appends the specified element to the specified dynamic array.
+   //   (STATIC) Appends the specified element to the given queue.
    //
    // Arguments:
-   //   q - The input dynamic array.
+   //   q - A queue to be appended.
    //   e  - An element to append.
    //
    // Returns:
-   //   The copy of *q* appended with *e*.
+   //   A _copy_ of *q* appended with *e*. The input *q* is not modified.
+   //
+   // Example:
+   // | int q[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+   // | int appended[$];
+   // |
+   // | appended = queue#(int)::append( q, 10 );
+   // | assert( appended == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
+   // | assert( q        == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } ); // not modified
    //---------------------------------------------------------------------------
 
    static function q_type append( q_type q, T e );
-      int q_size = q.size();
-      
-      append = new[ q_size + 1 ]( q );
-      append[q_size] = e;
+      append = q; // assign element by element
+      append.push_back( e );
    endfunction: append
 
    //---------------------------------------------------------------------------
    // Function: compare
-   //   Compares two dynamic arrays.
+   //   (STATIC) Compares two queues.
    //
    // Arguments:
-   //   q1         - A dynamic array.
-   //   q2         - Another dynamic array to compare with *q1*.
-   //   from_index1 - (OPTIONAL) The first index of the *q1* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index1* is -9, compare from the ninth element
-   //                 (inclusive) from the last.  The default value is 0.
-   //   to_index1   - (OPTIONAL) The last index of the *q1* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index1* is -3, compare to the third element
-   //                 (inclusive) from the last.  The default value is -1
-   //                 (compare to the last element).
-   //   from_index2 - (OPTIONAL) The first index of the *q2* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index2* is -9, compare from the ninth element
-   //                 (inclusive) from the last.  The default value is 0.
-   //   to_index2   - (OPTIONAL) The last index of the *q2* to compare.
-   //                 If negative, count from the last.  For example, if the
-   //                 *from_index2* is -3, compare to the third element
-   //                 (inclusive) from the last.  The default value is -1
-   //                 (compare to the last element).
-   //   cmp         - (OPTIONAL) Compare strategy. If not specified or null, 
-   //                 *comparator#(T)* is used. The default is null.
+   //   q1         - A queue.
+   //   q2         - Another queue to compare with *q1*.
+   //   from_index1 - (OPTIONAL) The first index of the *q1* to compare. See
+   //                 <Common Arguments>. The default is 0.
+   //   to_index1 - (OPTIONAL) The last index of the *q1* to compare. See
+   //               <Common Arguments>. The default is -1.
+   //   from_index2 - (OPTIONAL) The first index of the *q2* to compare. See
+   //                 <Common Arguments>. The default is 0.
+   //   to_index2 - (OPTIONAL) The last index of the *q2* to compare. See
+   //               <Common Arguments>. The default is -1.
+   //   cmp - (OPTIONAL) A strategy object used to compare two queues.  If not
+   //         specified or null, *comparator#(T)* is used. The default is null.
    //
    // Returns:
-   //   If two dynamic arrays contain the same data, 1 is returned. Otherwise, 
-   //   0 is returned.
+   //   If the numbers of elements to compare (*to_index1-from_index1+1* and
+   //   *to_index2-from_index2+1*) are different, 0 is returned.  If the two
+   //   queues contain the same data in the specified range, 1 is
+   //   returned. Otherwise, 0 is returned.
    //
    // Examples:
-   // | bit q1[];
-   // | bit q2[];
-   // | q1 = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | q2 = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q1[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q2[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
+   // | //                  |<------>|
+   // | //                  2        5
    // | assert( queue#(bit)::compare( q1, q2 ) == 0 );
-   // | assert( queue#(bit)::compare( q1, q2, .from_index1( 2 ), .to_index1( 5 ), 
-   // |                                                 .from_index2( 2 ), .to_index2( 5 ) ) == 1 );
+   // | assert( queue#(bit)::compare( q1, q2, 
+   // |         .from_index1( 2 ), .to_index1( 5 ), 
+   // |         .from_index2( 2 ), .to_index2( 5 ) ) == 1 );
    //---------------------------------------------------------------------------
 
    static function bit compare( const ref q_type q1,
@@ -342,49 +648,65 @@ virtual class queue #( type T = bit, int WIDTH = 1 );
 				int from_index2 = 0, 
 				int to_index2   = -1,
 				comparator#(T) cmp = null );
-      return common_array#( T, WIDTH, q_type )::
+      return common_array#( T, SIZE, q_type )::
 	compare( q1, q2, from_index1, to_index1, from_index2, to_index2, cmp );
    endfunction: compare
 
    //---------------------------------------------------------------------------
    // Function: clone
-   //   Returns a copy of the given dynamic array.
+   //   (STATIC) Returns a copy of the given queue.
    //
    // Argument:
-   //   q - A dynamic array to be cloned.
+   //   q - A queue to be cloned.
    //
    // Returns:
    //   A copy of *q*.
    //
    // Example:
-   // | bit q[];
-   // | q = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( queue#(bit)::clone( q ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit cloned[] = queue#(bit)::clone( q );
+   // | assert( cloned == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    //---------------------------------------------------------------------------
 
    static function q_type clone( q_type q );
-      clone = q; // same as new[ q.size() ]( q ); see LRM7.6
+      clone = q; // assign element by element
    endfunction: clone
 
    //---------------------------------------------------------------------------
    // Function: to_string
-   //   Returns a string representation of this dynamic array.
+   //   (STATIC) Converts a queue to the form of a string.
    //
-   // Argument:
-   //   q   - An input dynamic array.
-   //   fmtr - (OPTIONAL) An object that provides a function to convert the
-   //          element of type *T* to a string.
+   // Arguments:
+   //   q - An queue to be converted.
+   //   separator - (OPTIONAL) A string to separate each element of *q*. The
+   //               default is a space (" ").
+   //   from_index - (OPTIONAL) The index of the first element of *q* to
+   //                convert. See <Common Arguments>. The default is 0.
+   //   to_index - (OPTIONAL) The index of the last element of *q* to convert.
+   //              See <Common Arguments>. The default is -1.
+   //   fmtr - (OPTIONAL) A strategy object used to format *q*. If not
+   //          specified or *null*, <hex_formatter> *#(T)* is used. The default
+   //          is *null*.
    //
    // Returns:
-   //   A string that represents this dynamic array.
+   //   A string to represent *q*.
+   //
+   // Example:
+   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | assert( queue#(bit,8)::to_string( q )                    == "0 0 0 1 1 0 1 1" );
+   // | assert( queue#(bit,8)::to_string( q, .separator( "-" ) ) == "0-0-0-1-1-0-1-1" );
+   // | assert( queue#(bit,8)::to_string( q, .from_index( 4 )  ) ==         "1 0 1 1" );
    //---------------------------------------------------------------------------
 
    static function string to_string( const ref q_type q,
 				     input string separator = " ",
+				     int from_index = 0,
+				     int to_index = -1,
 				     formatter#(T) fmtr = null );
-      return common_array#( T, WIDTH, q_type )::to_string( q, separator, fmtr );
+      return common_array#(T, SIZE, q_type )::
+	to_string( q, separator, from_index, to_index, fmtr );
    endfunction: to_string
-*/
+
 endclass: queue
 
 `endif //  `ifndef CL_QUEUE_SVH

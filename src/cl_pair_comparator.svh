@@ -32,29 +32,38 @@ typedef class pair;
 
 //------------------------------------------------------------------------------
 // Class: pair_comparator
-//   Provides compare strategies for the objects of the pair type.
+//   (SINGLETON) Provides strategies to compare <pairs>.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of a pair object to be compared. The default is
+//       *pair* (with its default parameters).
 //------------------------------------------------------------------------------
 
 class pair_comparator#( type T = pair ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
    // Typedef: this_type
-   //   The shorthand of pair_comparator#(T).
+   //   The shorthand of <pair_comparator> *#(T)*.
    //---------------------------------------------------------------------------
 
    typedef pair_comparator#(T) this_type;
 
-   local static this_type inst = null;
+   local static this_type inst = null; // needs to place after the typedef above
+
+   //---------------------------------------------------------------------------
+   // Function: new
+   //   (PROTECTED) Creates a new comparator.
+   //---------------------------------------------------------------------------
 
    protected function new();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: get_instance
-   //   Returns a singleton instance of this comparator.
+   //   (STATIC) Returns the singleton instance of this comparator.
    //
    // Returns:
-   //   A singleton instance.
+   //   The singleton instance.
    //---------------------------------------------------------------------------
 
    static function this_type get_instance();
@@ -64,7 +73,7 @@ class pair_comparator#( type T = pair ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
    // Function: eq
-   //   Returns 1 if two pairs are equal.
+   //   (VIRTUAL) Returns 1 if two pairs are equal.
    //
    // Arguments:
    //   x - A pair.
@@ -80,25 +89,9 @@ class pair_comparator#( type T = pair ) extends comparator#(T);
    endfunction: eq
 
    //---------------------------------------------------------------------------
-   // Function: ne
-   //   Returns 1 if two pairs are not equal.
-   //
-   // Arguments:
-   //   x - A pair.
-   //   y - Another pair.
-   //
-   // Returns:
-   //   If ! eq( x, y ), then returns 1. Otherwise, returns 0.
-   //---------------------------------------------------------------------------
-
-   virtual function bit ne( T x, T y );
-      return ! eq( x, y );
-   endfunction: ne
-
-   //---------------------------------------------------------------------------
    // Function: lt
-   //   Returns 1 if *x* is less than *y*. Compares *x.first* and *y.first*. If
-   //   equal, then compares *x.second* and *y.second*.
+   //   (VIRTUAL) Returns 1 if *x* is less than *y*. Compares *x.first* and
+   //   *y.first*. If equal, then compares *x.second* and *y.second*.
    //
    // Arguments:
    //   x - A pair.
@@ -113,22 +106,6 @@ class pair_comparator#( type T = pair ) extends comparator#(T);
       else if ( x.first > y.first ) return 0;
       else return x.second < y.second;
    endfunction: lt
-
-   //---------------------------------------------------------------------------
-   // Function: gt
-   //   Returns 1 if *x* is greater than *y*.
-   //
-   // Arguments:
-   //   x - An input of type T.
-   //   y - Another input of type T.
-   //
-   // Returns:
-   //   If *x* is greater than *y*, then returns 1. Otherwise, returns 0.
-   //---------------------------------------------------------------------------
-
-   virtual function bit gt( T x, T y );
-      return lt( y, x );
-   endfunction: gt
 
 endclass: pair_comparator
 

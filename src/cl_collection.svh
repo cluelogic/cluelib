@@ -31,7 +31,10 @@
 
 //------------------------------------------------------------------------------
 // Class: collection
-//   Defines the core functionality of a collection.
+//   (VIRTUAL) Defines the core functionality of a collection.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of collected data. The default is *int*.
 //------------------------------------------------------------------------------
 
 virtual class collection#( type T = int );
@@ -45,36 +48,22 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Property: cmp
-   //   A comparator to compare the elements of type *T*.
+   //   (PROTECTED) A comparator to compare the elements of type *T*.
    //---------------------------------------------------------------------------
    
    protected comparator#( T ) cmp = null;
 
    //---------------------------------------------------------------------------
-   // Property: default_cmp
-   //   The default comparator used if *cmp* is not specified.
-   //---------------------------------------------------------------------------
-   
-   protected static comparator#(T) default_cmp = comparator#(T)::get_instance();
-
-   //---------------------------------------------------------------------------
    // Property: fmtr
-   //   An object that provides a function to convert the element of type *T* to 
-   //   a string.
+   //   (PROTECTED) An object that provides a function to convert the element of
+   //   type *T* to a string.
    //---------------------------------------------------------------------------
    
    protected formatter#( T ) fmtr = null;
 
    //---------------------------------------------------------------------------
-   // Property: default_fmtr
-   //   The default string converter used if *fmtr* is not specified.
-   //---------------------------------------------------------------------------
-   
-   protected static formatter#(T) default_fmtr = formatter#(T)::get_instance();
-
-   //---------------------------------------------------------------------------
    // Function: add
-   //   Adds the given element.
+   //   (VIRTUAL) Adds the given element.
    //
    // Argument:
    //   e - An element to be added.
@@ -98,10 +87,11 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: add_all
-   //   Adds all of the elements in the given collection to this collection.
+   //   (VIRTUAL) Adds all of the elements in the given collection to this
+   //   collection.
    //
    // Argument:
-   //   c - Collection containing elements to be added to this collection.
+   //   c - A collection containing elements to be added to this collection.
    //
    // Returns:
    //   If this collection changed as a result of the call, 1 is returned. 
@@ -118,7 +108,10 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: clear
-   //   Removes all of the elements from this collection.
+   //   (VIRTUAL) Removes all of the elements from this collection.
+   //
+   // Returns:
+   //   None.
    //---------------------------------------------------------------------------
 
    virtual function void clear();
@@ -133,10 +126,10 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: contains
-   //   Returns 1 if this collection contains the specified element.
+   //   (VIRTUAL) Returns 1 if this collection contains the specified element.
    //
    // Argument:
-   //   e - Element to be tested.
+   //   e - An element to be tested.
    //
    // Returns:
    //   If this collection contains the specified element, returns 1. Otherwise,
@@ -147,19 +140,18 @@ virtual class collection#( type T = int );
       iterator#( T ) it = this.get_iterator();
       while ( it.has_next() ) begin
 	 T item = it.next();
-	 if ( cmp ) return cmp.eq( e, item );
-	 else	    return default_cmp.eq( e, item );
+	 return cmp.eq( e, item );
       end
       return 0;
    endfunction: contains
    
    //---------------------------------------------------------------------------
    // Function: contains_all
-   //   Returns 1 if this collection contains all of the elements in the specified
-   //   collection.
+   //   (VIRTUAL) Returns 1 if this collection contains all of the elements in
+   //   the specified collection.
    //
    // Argument:
-   //   c - Collection to be checked.
+   //   c - A collection to be checked.
    //
    // Returns:
    //   If this collection contains all of the elements in the specified
@@ -176,7 +168,7 @@ virtual class collection#( type T = int );
    
    //---------------------------------------------------------------------------
    // Function: is_empty
-   //   Returns 1 if this collection contains no elements.
+   //   (VIRTUAL) Returns 1 if this collection contains no elements.
    //
    // Returns:
    //   If this collection contains no elements, returns 1. Otherwise, returns
@@ -189,7 +181,8 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: get_iterator
-   //   Returns an iterator over the elements contained in this collection.
+   //   (PURE) (VIRTUAL) Returns an iterator over the elements contained in this
+   //   collection.
    //
    // Returns:
    //   An iterator over the elements contained in this collection.
@@ -199,7 +192,7 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: remove
-   //   Removes the specified element from this collection.
+   //   (VIRTUAL) Removes the specified element from this collection.
    //
    // Argument:
    //   e - An element to be removed.
@@ -213,16 +206,9 @@ virtual class collection#( type T = int );
       iterator#( T ) it = this.get_iterator();
       while ( it.has_next() ) begin
 	 T item = it.next();
-	 if ( cmp ) begin // if cmp is not null, use the cmp
-	    if ( cmp.eq( e, item ) ) begin
-	       it.remove();
-	       return 1;
-	    end
-	 end else begin
-	    if ( default_cmp.eq( e, item ) ) begin
-	       it.remove();
-	       return 1;
-	    end
+	 if ( cmp.eq( e, item ) ) begin
+	    it.remove();
+	    return 1;
 	 end
       end
       return 0;
@@ -230,10 +216,11 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: remove_all
-   //   Removes the elements in the given collection from this collection.
+   //   (VIRTUAL) Removes the elements in the given collection from this
+   //   collection.
    //
    // Argument:
-   //   c - Collection containing elements to be removed from this collection.
+   //   c - A collection containing elements to be removed from this collection.
    //
    // Returns:
    //   If this collection changed as a result of the call, 1 is returned. 
@@ -255,11 +242,11 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: retain_all
-   //   Retains only the elements in this collection that are contained in the
-   //   specified collection.
+   //   (VIRTUAL) Retains only the elements in this collection that are
+   //   contained in the specified collection.
    //
    // Argument:
-   //   c - Collection containing elements to be retained in this collection.
+   //   c - A collection containing elements to be retained in this collection.
    //
    // Returns:
    //   If this collection changed as a result of the call, 1 is returned. 
@@ -281,7 +268,7 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: size
-   //   Returns the number of elements in this collection.
+   //   (PURE) (VIRTUAL) Returns the number of elements in this collection.
    //
    // Returns:
    //   The number of elements in this collection.
@@ -291,10 +278,11 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: to_dynamic_array
-   //   Returns a dynamic array that contains the elements in this collection.
+   //   (VIRTUAL) Returns a new dynamic array that contains the elements in this
+   //   collection.
    //
    // Returns:
-   //   A dynamic array that contains the elements in this collection.
+   //   A new dynamic array that contains the elements in this collection.
    //---------------------------------------------------------------------------
 
    virtual function da_type to_dynamic_array();
@@ -308,7 +296,7 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function to_string
-   //   Returns a string representation of this collection.
+   //   (VIRTUAL) Returns a string representation of this collection.
    //
    // Returns:
    //   A string that represents this collection.
@@ -320,10 +308,7 @@ virtual class collection#( type T = int );
 
       s = "[ ";
       while ( it.has_next() )
-	if ( fmtr )
-	  s = { s, fmtr.to_string( it.next() ), " " };
-	else
-	  s = { s, default_fmtr.to_string( it.next() ), " " };
+	s = { s, fmtr.to_string( it.next() ), " " };
       s = { s, "]" };
       return s;
    endfunction: to_string

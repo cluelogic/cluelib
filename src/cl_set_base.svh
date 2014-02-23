@@ -31,15 +31,17 @@
 
 //------------------------------------------------------------------------------
 // Class: set_base
-//   Defines the core functionality of a set, which is a collection that
-//   contains no duplicate elements.
+//   (VIRTUAL) Defines the core functionality of a <set>.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of data collected in a <set>. The default is *int*.
 //------------------------------------------------------------------------------
 
 virtual class set_base #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: equals
-   //   Returns 1 if the given collection equals this set.
+   //   (VIRTUAL) Returns 1 if the given collection equals this set.
    //
    // Argument:
    //   c - A collection to compare with.
@@ -49,6 +51,14 @@ virtual class set_base #( type T = int ) extends collection#( T );
    //   collection is not the same as the size of this set, returns 0. If the
    //   sizes are the same and this set contains all the elements in the given
    //   collection, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | set#(int) int_set0 = new();
+   // | set#(int) int_set1 = new();
+   // |
+   // | void'( int_set0.add( 123 ) );
+   // | void'( int_set1.add( 123 ) );
+   // | assert( int_set0.equals( int_set1 ) == 1 );
    //---------------------------------------------------------------------------
 
    virtual function bit equals( collection#(T) c );
@@ -66,14 +76,23 @@ virtual class set_base #( type T = int ) extends collection#( T );
 */
    //---------------------------------------------------------------------------
    // Function: remove_all
-   //   Removes the elements in the given collection from this set.
+   //   (VIRTUAL) Removes the elements in the given collection from this set.
    //
    // Argument:
-   //   c - Collection containing elements to be removed from this set.
+   //   c - A collection containing elements to be removed from this set.
    //
    // Returns:
    //   If this set changed as a result of the call, 1 is returned.  Otherwise,
    //   0 is returned.
+   //
+   // Example:
+   // | set#(int) int_set0 = new();
+   // | set#(int) int_set1 = new();
+   // |
+   // | void'( int_set0.add( 123 ) );
+   // | void'( int_set0.add( 456 ) );
+   // | void'( int_set1.add( 123 ) );
+   // | assert( int_set0.remove_all( int_set1 ) == 1 );
    //---------------------------------------------------------------------------
 
    virtual function bit remove_all( collection#(T) c );

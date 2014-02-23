@@ -31,14 +31,31 @@
 
 //------------------------------------------------------------------------------
 // Class: putil
-//   Provides several parameterized utility functions. See <util> for
-//   non-parameterized functions.
+//   (VIRTUAL) Provides a parameterized utility function.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of function arguments. The default is *int*.
+//
+// See Also:
+//   <util>
 //------------------------------------------------------------------------------
 
 virtual class putil #( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: swap
+   //   (STATIC) Swaps two objects.
+   //
+   // Arguments:
+   //   x - An object of type *T*.
+   //   y - Another object of type *T*.
+   //
+   // Example:
+   // | int x = 0;
+   // | int y = 1;
+   // | putil#(int)::swap( x, y );
+   // | assert( x == 1 );
+   // | assert( y == 0 );
    //---------------------------------------------------------------------------
 
    static function void swap( ref T x, ref T y );

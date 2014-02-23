@@ -26,18 +26,20 @@
 // SOFTWARE.
 //==============================================================================
 
+// Title: Scramblers
+
 `ifndef CL_SCRAMBLER_SVH
 `define CL_SCRAMBLER_SVH
 
 //------------------------------------------------------------------------------
 // Class: scrambler
 //   Provides a function to scramble an input bit stream using Galois LFSR,
-//   which is also known as internal LFSR. 
+//   which is also known as the internal LFSR. 
 //
 // Parameters:
-//   T - (OPTIONAL) The type of bit stream. The *T* must be *bit*, *logic*, or
+//   T - (OPTIONAL) The type of a bit stream. The *T* must be *bit*, *logic*, or
 //       *reg*.  The default is *bit*.
-//   DEGREE - (OPTIONAL) The degree of LFSR polynomial. The default is 2.
+//   DEGREE - (OPTIONAL) The degree of an LFSR polynomial. The default is 2.
 //------------------------------------------------------------------------------
 
 class scrambler #( type T = bit, int DEGREE = 2 );
@@ -76,12 +78,12 @@ class scrambler #( type T = bit, int DEGREE = 2 );
    //   Returns a scrambled bit stream.
    //
    // Arguments:
-   //   bs   - Input bit stream.
-   //   lfsr - The value of the LFSR, which can be used as the seed of the next
+   //   bs   - An input bit stream.
+   //   lfsr - The value of an LFSR, which can be used as the seed of the next
    //          call of this function. The initial value should be all ones.
    //
    // Returns:
-   //   The scrambled bit stream.
+   //   A scrambled bit stream.
    //---------------------------------------------------------------------------
 
    virtual function bs_type scramble( bs_type bs,
@@ -106,7 +108,7 @@ endclass: scrambler
 // Class: scrambler_2
 //   Provides a function to scramble an input bit stream using the following
 //   2-bit LFSR polynomial:
-// : x^2 + x + 1
+//   (see scrambler_2.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -121,6 +123,7 @@ class scrambler_2 #( type T = bit ) extends scrambler#(T, 2);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^2 + x + 1
       // 111
       //  ^^
       super.new( 2'h3 );
@@ -132,7 +135,7 @@ endclass: scrambler_2
 // Class: scrambler_3
 //   Provides a function to scramble an input bit stream using the following
 //   3-bit LFSR polynomial:
-// : x^3 + x^2 + 1
+//   (see scrambler_3.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -147,6 +150,7 @@ class scrambler_3 #( type T = bit ) extends scrambler#(T, 3);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^3 + x^2 + 1
       // 1101
       //  ^^^
       super.new( 3'h5 );
@@ -158,7 +162,7 @@ endclass: scrambler_3
 // Class: scrambler_4
 //   Provides a function to scramble an input bit stream using the following
 //   4-bit LFSR polynomial:
-// : x^4 + x^3 + 1
+//   (see scrambler_4.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -173,6 +177,7 @@ class scrambler_4 #( type T = bit ) extends scrambler#(T, 4);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^4 + x^3 + 1
       // 1_1001
       //   ^^^^
       super.new( 4'h9 );
@@ -184,7 +189,7 @@ endclass: scrambler_4
 // Class: scrambler_5
 //   Provides a function to scramble an input bit stream using the following
 //   5-bit LFSR polynomial:
-// : x^5 + x^3 + 1
+//   (see scrambler_5.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -199,6 +204,7 @@ class scrambler_5 #( type T = bit ) extends scrambler#(T, 5);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^5 + x^3 + 1
       // 10_1001
       //  ^ ^^^^
       super.new( 5'h9 );
@@ -210,7 +216,7 @@ endclass: scrambler_5
 // Class: scrambler_6
 //   Provides a function to scramble an input bit stream using the following
 //   6-bit LFSR polynomial:
-// : x^6 + x^5 + 1
+//   (see scrambler_6.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -225,6 +231,7 @@ class scrambler_6 #( type T = bit ) extends scrambler#(T, 6);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^6 + x^5 + 1
       // 110_0001
       //  ^^ ^^^^
       super.new( 6'h21 );
@@ -236,7 +243,7 @@ endclass: scrambler_6
 // Class: scrambler_7
 //   Provides a function to scramble an input bit stream using the following
 //   7-bit LFSR polynomial:
-// : x^7 + x^6 + 1
+//   (see scrambler_7.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -251,6 +258,7 @@ class scrambler_7 #( type T = bit ) extends scrambler#(T, 7);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^7 + x^6 + 1
       // 1100_0001
       //  ^^^ ^^^^
       super.new( 7'h41 );
@@ -262,7 +270,7 @@ endclass: scrambler_7
 // Class: scrambler_8
 //   Provides a function to scramble an input bit stream using the following
 //   8-bit LFSR polynomial:
-// : x^8 + x^6 + x^5 + x^4 + 1
+//   (see scrambler_8.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -277,6 +285,7 @@ class scrambler_8 #( type T = bit ) extends scrambler#(T, 8);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^8 + x^6 + x^5 + x^4 + 1
       // 1_0111_0001
       //   ^^^^ ^^^^
       super.new( 8'h71 );
@@ -288,7 +297,7 @@ endclass: scrambler_8
 // Class: scrambler_9
 //   Provides a function to scramble an input bit stream using the following
 //   9-bit LFSR polynomial:
-// : x^9 + x^5 + 1
+//   (see scrambler_9.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -303,6 +312,7 @@ class scrambler_9 #( type T = bit ) extends scrambler#(T, 9);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^9 + x^5 + 1
       // 10_0010_0001
       //  ^ ^^^^ ^^^^
       super.new( 9'h021 );
@@ -314,7 +324,7 @@ endclass: scrambler_9
 // Class: scrambler_10
 //   Provides a function to scramble an input bit stream using the following
 //   10-bit LFSR polynomial:
-// : x^10 + x^7 + 1
+//   (see scrambler_10.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -329,6 +339,7 @@ class scrambler_10 #( type T = bit ) extends scrambler#(T, 10);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^10 + x^7 + 1
       // 100_1000_0001
       //  ^^ ^^^^ ^^^^
       super.new( 10'h081 );
@@ -340,7 +351,7 @@ endclass: scrambler_10
 // Class: scrambler_11
 //   Provides a function to scramble an input bit stream using the following
 //   11-bit LFSR polynomial:
-// : x^11 + x^9 + 1
+//   (see scrambler_11.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -355,6 +366,7 @@ class scrambler_11 #( type T = bit ) extends scrambler#(T, 11);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^11 + x^9 + 1
       // 1010_0000_0001
       //  ^^^ ^^^^ ^^^^
       super.new( 11'h201 );
@@ -366,7 +378,7 @@ endclass: scrambler_11
 // Class: scrambler_12
 //   Provides a function to scramble an input bit stream using the following
 //   12-bit LFSR polynomial:
-// : x^12 + x^11 + x^10 + x^4 + 1
+//   (see scrambler_12.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -381,6 +393,7 @@ class scrambler_12 #( type T = bit ) extends scrambler#(T, 12);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^12 + x^11 + x^10 + x^4 + 1
       // 1_1100_0001_0001
       //   ^^^^ ^^^^ ^^^^
       super.new( 12'hC11 );
@@ -392,7 +405,7 @@ endclass: scrambler_12
 // Class: scrambler_13
 //   Provides a function to scramble an input bit stream using the following
 //   13-bit LFSR polynomial:
-// : x^13 + x^12 + x^11 + x^8 + 1
+//   (see scrambler_13.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -407,6 +420,7 @@ class scrambler_13 #( type T = bit ) extends scrambler#(T, 13);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^13 + x^12 + x^11 + x^8 + 1
       // 11_1001_0000_0001
       //  ^ ^^^^ ^^^^ ^^^^
       super.new( 13'h1901 );
@@ -418,7 +432,7 @@ endclass: scrambler_13
 // Class: scrambler_14
 //   Provides a function to scramble an input bit stream using the following
 //   14-bit LFSR polynomial:
-// : x^14 + x^13 + x^12 + x^2 + 1
+//   (see scrambler_14.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -433,6 +447,7 @@ class scrambler_14 #( type T = bit ) extends scrambler#(T, 14);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^14 + x^13 + x^12 + x^2 + 1
       // 111_0000_0000_0101
       //  ^^ ^^^^ ^^^^ ^^^^
       super.new( 14'h3005 );
@@ -444,7 +459,7 @@ endclass: scrambler_14
 // Class: scrambler_15
 //   Provides a function to scramble an input bit stream using the following
 //   15-bit LFSR polynomial:
-// : x^15 + x^14 + 1
+//   (see scrambler_15.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -459,6 +474,7 @@ class scrambler_15 #( type T = bit ) extends scrambler#(T, 15);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^15 + x^14 + 1
       // 1100_0000_0000_0001
       //  ^^^ ^^^^ ^^^^ ^^^^
       super.new( 15'h4001 );
@@ -470,7 +486,7 @@ endclass: scrambler_15
 // Class: scrambler_16
 //   Provides a function to scramble an input bit stream using the following
 //   16-bit LFSR polynomial:
-// : x^16 + x^14 + x^13 + x^11 + 1
+//   (see scrambler_16.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -485,6 +501,7 @@ class scrambler_16 #( type T = bit ) extends scrambler#(T, 16);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^16 + x^14 + x^13 + x^11 + 1
       // 1_0110_1000_0000_0001
       //   ^^^^ ^^^^ ^^^^ ^^^^
       super.new( 16'h6801 );
@@ -496,7 +513,7 @@ endclass: scrambler_16
 // Class: scrambler_17
 //   Provides a function to scramble an input bit stream using the following
 //   17-bit LFSR polynomial:
-// : x^17 + x^14 + 1
+//   (see scrambler_17.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -511,6 +528,7 @@ class scrambler_17 #( type T = bit ) extends scrambler#(T, 17);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^17 + x^14 + 1
       // 10_0100_0000_0000_0001
       //  ^ ^^^^ ^^^^ ^^^^ ^^^^
       super.new( 17'h0_4001 );
@@ -522,7 +540,7 @@ endclass: scrambler_17
 // Class: scrambler_18
 //   Provides a function to scramble an input bit stream using the following
 //   18-bit LFSR polynomial:
-// : x^18 + x^11 + 1
+//   (see scrambler_18.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -537,6 +555,7 @@ class scrambler_18 #( type T = bit ) extends scrambler#(T, 18);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^18 + x^11 + 1
       // 100_0000_1000_0000_0001
       //  ^^ ^^^^ ^^^^ ^^^^ ^^^^
       super.new( 18'h0_0801 );
@@ -548,7 +567,7 @@ endclass: scrambler_18
 // Class: scrambler_19
 //   Provides a function to scramble an input bit stream using the following
 //   19-bit LFSR polynomial:
-// : x^19 + x^18 + x^17 + x^14 + 1
+//   (see scrambler_19.png)
 //
 // Parameter:
 //   T - The type of bit stream. The *T* must be *bit*, *logic*, or *reg*.
@@ -563,6 +582,7 @@ class scrambler_19 #( type T = bit ) extends scrambler#(T, 19);
    //---------------------------------------------------------------------------
 
    function new();
+      // x^19 + x^18 + x^17 + x^14 + 1
       // 1110_0100_0000_0000_0001
       //  ^^^ ^^^^ ^^^^ ^^^^ ^^^^
       super.new( 19'h6_4001 );

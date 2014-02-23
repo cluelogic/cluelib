@@ -33,33 +33,41 @@
 
 //------------------------------------------------------------------------------
 // Typedef: dist_bin
-//   Defines the structure of random distribution bin.
+//   Defines the structure of a random distribution bin.
+//
+//   min_val - The minimum value of a bin.
+//   max_val - The maximum value of a bin.
+//   wt      - The distribution weight of a bin.
 //------------------------------------------------------------------------------
 
 typedef struct { 
    int 	         min_val;
    int           max_val;
-   byte unsigned wt = 0; /* distribution weight */
+   byte unsigned wt = 0;
 } dist_bin;
 
 //------------------------------------------------------------------------------
 // Class: random_util
-//   Provides the utility functions of random numbers.
+//   Provides a utility function to generate random numbers.
 //------------------------------------------------------------------------------
 
 class random_util;
 
    //---------------------------------------------------------------------------
    // Function: random_bool
-   //   Returns a randomized Boolean value based on the specified percentage.
+   //   (STATIC) Returns a randomized Boolean value based on the specified
+   //   percentage.
    //
    // Argument:
    //   true_pct - (OPTIONAL) The probability of the returned value to be
-   //              randomized to 1 (true). The unit is percent. The default is
-   //              50 (50% true, 50% false).
+   //              randomized to 1 (true). The unit is a percent. The default is
+   //              50 (50% true).
    //
    // Returns:
    //   The randomized Boolean value (1 or 0).
+   //
+   // Example:
+   // | bit rb = random_util::random_bool( .true_pct( 70 ) ); // 70% true
    //---------------------------------------------------------------------------
 
    static function bit random_bool( int unsigned true_pct = 50 );
@@ -97,7 +105,7 @@ class random_2_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: val
-   //   The randomized value.
+   //   (RAND) The randomized value.
    //---------------------------------------------------------------------------
 
    rand int val;
@@ -154,7 +162,7 @@ class random_4_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: val
-   //   The randomized value.
+   //   (RAND) The randomized value.
    //---------------------------------------------------------------------------
 
    rand int val;
@@ -218,7 +226,7 @@ class random_8_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: val
-   //   The randomized value.
+   //   (RAND) The randomized value.
    //---------------------------------------------------------------------------
 
    rand int val;
@@ -268,7 +276,7 @@ class random_16_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: val
-   //   The randomized value.
+   //   (RAND) The randomized value.
    //---------------------------------------------------------------------------
 
    rand int val;
@@ -326,7 +334,7 @@ class random_32_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: val
-   //   The randomized value.
+   //   (RAND) The randomized value.
    //---------------------------------------------------------------------------
 
    rand int val;
@@ -384,41 +392,44 @@ endclass: random_32_bin_num
 
 //------------------------------------------------------------------------------
 // Class: random_power_of_2_num
-//   Provides a random number with power of 2 distributions. This class uses the
-//   following pre-populated distribution bins.
-// | //           min    max  wt       bin
-// | db = '{ '{     0,     0, 1 },   //  0
-// |         '{     1,     1, 1 },   //  1
-// |	     '{     2,     2, 1 },   //  2
-// |	     '{     3,     3, 1 },   //  3
-// |	     '{     4,     4, 1 },   //  4
-// |	     '{     5,     7, 1 },   //  5
-// |	     '{     8,     8, 1 },   //  6
-// |	     '{     9,    15, 1 },   //  7
-// |	     '{    16,    16, 1 },   //  8
-// |	     '{    17,    31, 1 },   //  9
-// |	     '{    32,    32, 1 },   // 10
-// |	     '{    33,    63, 1 },   // 11
-// |	     '{    64,    64, 1 },   // 12
-// |	     '{    65,   127, 1 },   // 13
-// |	     '{   128,   128, 1 },   // 14
-// |	     '{   129,   255, 1 },   // 15
-// |	     '{   256,   256, 1 },   // 16
-// |	     '{   257,   511, 1 },   // 17
-// |	     '{   512,   512, 1 },   // 18
-// |	     '{   513,  1023, 1 },   // 19
-// |	     '{  1024,  1024, 1 },   // 20
-// |	     '{  1025,  2047, 1 },   // 21
-// |	     '{  2048,  2048, 1 },   // 22
-// |	     '{  2049,  4095, 1 },   // 23
-// |	     '{  4096,  4096, 1 },   // 24
-// |	     '{  4097,  8191, 1 },   // 25
-// |	     '{  8192,  8192, 1 },   // 26
-// |	     '{  8193, 16383, 1 },   // 27
-// |	     '{ 16384, 16384, 1 },   // 28
-// |	     '{ 16385, 32767, 1 },   // 29
-// |	     '{ 32768, 32768, 1 },   // 30
-// |	     '{ 32769, 65535, 1 } }; // 31
+//   Provides a random number with power-of-two distributions. This class uses
+//   the following pre-populated distribution bins.
+//
+//   (begin table)
+//   //           min    max  wt       bin
+//   db = '{ '{     0,     0, 1 },   //  0
+//           '{     1,     1, 1 },   //  1
+//           '{     2,     2, 1 },   //  2
+//           '{     3,     3, 1 },   //  3
+//           '{     4,     4, 1 },   //  4
+//           '{     5,     7, 1 },   //  5
+//           '{     8,     8, 1 },   //  6
+//           '{     9,    15, 1 },   //  7
+//           '{    16,    16, 1 },   //  8
+//           '{    17,    31, 1 },   //  9
+//           '{    32,    32, 1 },   // 10
+//           '{    33,    63, 1 },   // 11
+//           '{    64,    64, 1 },   // 12
+//           '{    65,   127, 1 },   // 13
+//           '{   128,   128, 1 },   // 14
+//           '{   129,   255, 1 },   // 15
+//           '{   256,   256, 1 },   // 16
+//           '{   257,   511, 1 },   // 17
+//           '{   512,   512, 1 },   // 18
+//           '{   513,  1023, 1 },   // 19
+//           '{  1024,  1024, 1 },   // 20
+//           '{  1025,  2047, 1 },   // 21
+//           '{  2048,  2048, 1 },   // 22
+//           '{  2049,  4095, 1 },   // 23
+//           '{  4096,  4096, 1 },   // 24
+//           '{  4097,  8191, 1 },   // 25
+//           '{  8192,  8192, 1 },   // 26
+//           '{  8193, 16383, 1 },   // 27
+//           '{ 16384, 16384, 1 },   // 28
+//           '{ 16385, 32767, 1 },   // 29
+//           '{ 32768, 32768, 1 },   // 30
+//           '{ 32769, 65535, 1 } }; // 31
+//   (end)
 //
 // Example:
 // | random_power_of_2_num n = new();
@@ -430,7 +441,7 @@ class random_power_of_2_num extends random_32_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: min_val
-   //   The minimum limit of *val*. The *val* is randomized to at least this
+   //   The minimum limit of *val*. The *val* is randomized to be at least this
    //   value.
    //---------------------------------------------------------------------------
 
@@ -438,7 +449,7 @@ class random_power_of_2_num extends random_32_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: max_val
-   //   The maximum limit of *val*. The *val* is randomized to at most this 
+   //   The maximum limit of *val*. The *val* is randomized to be at most this 
    //   value.
    //---------------------------------------------------------------------------
 
@@ -457,9 +468,10 @@ class random_power_of_2_num extends random_32_bin_num;
    //   default_val - (OPTIONAL) The value of *val* before randomization. The
    //                 default is 0.
    //   min_val     - (OPTIONAL) The minimum limit of *val*. The *val* is 
-   //                 randomized to at least this value. The default is 0.
+   //                 randomized to be at least this value. The default is 0.
    //   max_val     - (OPTIONAL) The maximum limit of *val*. The *val* is 
-   //                 randomized to at most this value. The default is 65535.
+   //                 randomized to be at most this value. The default is
+   //                 65,535.
    //---------------------------------------------------------------------------
 
    function new( int default_val = 0,
@@ -507,25 +519,28 @@ endclass: random_power_of_2_num
 
 //------------------------------------------------------------------------------
 // Class: random_power_of_10_num
-//   Provides a random number with power of 10 distributions. This class uses the
-//   following pre-populated distribution bins.
-// | //                min         max  wt       bin
-// | db = '{ '{          0,          0, 1 },   //  0
-// |         '{          1,          1, 1 },   //  1
-// | 	     '{          2,          9, 1 },   //  2
-// | 	     '{         10,         10, 1 },   //  3
-// | 	     '{         11,         99, 1 },   //  4
-// | 	     '{        100,        100, 1 },   //  5
-// | 	     '{        101,        999, 1 },   //  6
-// | 	     '{      1_000,      1_000, 1 },   //  7
-// | 	     '{      1_001,      9_999, 1 },   //  8
-// | 	     '{     10_000,     10_000, 1 },   //  9
-// | 	     '{     10_001,     99_999, 1 },   // 10
-// | 	     '{    100_000,    100_000, 1 },   // 11
-// | 	     '{    100_001,    999_999, 1 },   // 12
-// | 	     '{  1_000_000,  1_000_000, 1 },   // 13
-// | 	     '{  1_000_001,  9_999_999, 1 },   // 14
-// | 	     '{ 10_000_000, 10_000_000, 1 } }; // 15
+//   Provides a random number with power-of-ten distributions. This class uses
+//   the following pre-populated distribution bins.
+//
+//   (begin table)
+//   //                min         max  wt       bin
+//   db = '{ '{          0,          0, 1 },   //  0
+//           '{          1,          1, 1 },   //  1
+//   	     '{          2,          9, 1 },   //  2
+//   	     '{         10,         10, 1 },   //  3
+//   	     '{         11,         99, 1 },   //  4
+//   	     '{        100,        100, 1 },   //  5
+//   	     '{        101,        999, 1 },   //  6
+//   	     '{      1_000,      1_000, 1 },   //  7
+//   	     '{      1_001,      9_999, 1 },   //  8
+//   	     '{     10_000,     10_000, 1 },   //  9
+//   	     '{     10_001,     99_999, 1 },   // 10
+//   	     '{    100_000,    100_000, 1 },   // 11
+//   	     '{    100_001,    999_999, 1 },   // 12
+//   	     '{  1_000_000,  1_000_000, 1 },   // 13
+//   	     '{  1_000_001,  9_999_999, 1 },   // 14
+//   	     '{ 10_000_000, 10_000_000, 1 } }; // 15
+//   (end)
 //
 // Example:
 // | random_power_of_10_num n = new();
@@ -537,7 +552,7 @@ class random_power_of_10_num extends random_16_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: min_val
-   //   The minimum limit of *val*. The *val* is randomized to at least this
+   //   The minimum limit of *val*. The *val* is randomized to be at least this
    //   value.
    //---------------------------------------------------------------------------
 
@@ -545,7 +560,7 @@ class random_power_of_10_num extends random_16_bin_num;
 
    //---------------------------------------------------------------------------
    // Property: max_val
-   //   The maximum limit of *val*. The *val* is randomized to at most this 
+   //   The maximum limit of *val*. The *val* is randomized to be at most this 
    //   value.
    //---------------------------------------------------------------------------
 
@@ -564,9 +579,9 @@ class random_power_of_10_num extends random_16_bin_num;
    //   default_val - (OPTIONAL) The value of *val* before randomization. The
    //                 default is 0.
    //   min_val     - (OPTIONAL) The minimum limit of *val*. The *val* is 
-   //                 randomized to at least this value. The default is 0.
+   //                 randomized to be at least this value. The default is 0.
    //   max_val     - (OPTIONAL) The maximum limit of *val*. The *val* is 
-   //                 randomized to at most this value. The default is 
+   //                 randomized to be at most this value. The default is 
    //                 10,000,000.
    //---------------------------------------------------------------------------
 

@@ -1,0 +1,179 @@
+#Content {
+  width: 970px;
+}
+#MainTopic .CTitle {
+  background-color: #30418c;
+  border-width: 0 0 0 0;
+}
+.CTopic h2.CTitle {
+  background-color: #30418c;
+  border-width: 0 0 0 0;
+}
+.SEntry a {
+  font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+}
+.SDescription {
+  font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+  color: #333;
+}
+.SBorder {
+  border-radius: 3px;
+}
+.CClass .Prototype {
+  border-width: 1px 1px 1px 1px;
+}
+.CGroup .CTitle {
+  border-color: #30418c;
+}
+.CTitle {
+  font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+  color: #30418c;
+}
+.CHeading {
+  font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+  color: #333;
+}
+.CDLEntry {
+  font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  color: #356de4;
+}
+.CDLDescription {
+  font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+  color: #333;
+}
+.CBody pre {
+  font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  background: #303030;
+  color: #fff;
+  border-style: none;
+  border-radius: 3px;
+}
+table.Prototype {
+  font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  border-radius: 3px;
+}
+a:link {
+  color: #356de4;
+}
+a:visited {
+  color: #30418c;
+}
+p {
+  font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+  color: #333;
+  text-indent: 0;
+  margin-bottom: 1em;
+}
+b {
+  font-weight: normal;
+  font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  color: #356de4;
+}
+li {
+  list-style-type: none;
+}
+li.level1 {
+  padding-left: 20px;
+}
+li.level2 {
+  padding-left: 70px;
+}
+li.level3 {
+  padding-left: 120px;
+}
+span.optional {
+  background-color: #7f7f7f;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.static {
+  background-color: #5cb85c;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.parameterized {
+  background-color: #8c4130;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.virtual {
+  background-color: #428bca;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.pure {
+  background-color: #d9534f;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.protected {
+  background-color: #f0ad4e;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.singleton {
+  background-color: #5bc0de;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.rand {
+  background-color: #8c4130;
+  background-clip: border-box;
+  padding-top: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: xx-small;
+}
+span.under-construction {
+  background-image: url("http://ajax.cluelogic.com/libs/images/fugue-icons/icons/construction.png");
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+

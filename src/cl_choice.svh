@@ -31,7 +31,10 @@
 
 //------------------------------------------------------------------------------
 // Class: choice
-//   Provides functions to choose items.
+//   (VIRTUAL) Provides functions to choose an item.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of items. The default is *int*.
 //------------------------------------------------------------------------------
 
 virtual class choice #( type T = int );
@@ -40,13 +43,14 @@ virtual class choice #( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: min
-   //   Returns the smaller item.
+   //   (STATIC) Returns the smaller item.
    //
    // Arguments:
    //   x - An item of type *T*.
    //   y - Another item of type *T*.
-   //   cmp - (OPTIONAL) Compare strategy. If not specified or null,
-   //                    *comparator#(T)* is used. The default is null.
+   //   cmp - (OPTIONAL) A strategy object used to compare the items. If not
+   //         specified or *null*, <comparator> *#(T)* is used. The default is
+   //         *null*.
    //
    // Example:
    // | assert( choice#(int)::min( 1, 2 ) == 1 );
@@ -64,13 +68,14 @@ virtual class choice #( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: max
-   //   Returns the larger item.
+   //   (STATIC) Returns the larger item.
    //
    // Arguments:
    //   x - An item of type *T*.
    //   y - Another item of type *T*.
-   //   cmp - (OPTIONAL) Compare strategy. If not specified or null,
-   //                    *comparator#(T)* is used. The default is null.
+   //   cmp - (OPTIONAL) A strategy object used to compare the items. If not
+   //         specified or *null*, <comparator> *#(T)* is used. The default is
+   //         *null*.
    //
    // Example:
    // | assert( choice#(int)::max( 1, 2 ) == 2 );

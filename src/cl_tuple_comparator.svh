@@ -32,29 +32,38 @@ typedef class tuple;
 
 //------------------------------------------------------------------------------
 // Class: tuple_comparator
-//   Provides compare strategies for the objects of the tuple type.
+//   (SINGLETON) Provides strategies to compare <tuples>.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of a tuple object to be compared. The default is
+//       *tuple* (with its default parameters).
 //------------------------------------------------------------------------------
 
 class tuple_comparator#( type T = tuple ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
    // Typedef: this_type
-   //   The shorthand of pair_comparator#(T).
+   //   The shorthand of <pair_comparator> *#(T)*.
    //---------------------------------------------------------------------------
 
    typedef tuple_comparator#(T) this_type;
 
-   local static this_type inst = null;
+   local static this_type inst = null; // needs to place after the typedef above
+
+   //---------------------------------------------------------------------------
+   // Function: new
+   //   (PROTECTED) Creates a new comparator.
+   //---------------------------------------------------------------------------
 
    protected function new();
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: get_instance
-   //   Returns a singleton instance of this comparator.
+   //   (STATIC) Returns the singleton instance of this comparator.
    //
    // Returns:
-   //   A singleton instance.
+   //   The singleton instance.
    //---------------------------------------------------------------------------
 
    static function this_type get_instance();
@@ -64,7 +73,7 @@ class tuple_comparator#( type T = tuple ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
    // Function: eq
-   //   Returns 1 if two tuples are equal.
+   //   (VIRTUAL) Returns 1 if two tuples are equal.
    //
    // Arguments:
    //   x - A tuple.
@@ -89,25 +98,9 @@ class tuple_comparator#( type T = tuple ) extends comparator#(T);
    endfunction: eq
 
    //---------------------------------------------------------------------------
-   // Function: ne
-   //   Returns 1 if two tuples are not equal.
-   //
-   // Arguments:
-   //   x - A tuple.
-   //   y - Another tuple.
-   //
-   // Returns:
-   //   If ! eq( x, y ), then returns 1. Otherwise, returns 0.
-   //---------------------------------------------------------------------------
-
-   virtual function bit ne( T x, T y );
-      return ! eq( x, y );
-   endfunction: ne
-
-   //---------------------------------------------------------------------------
    // Function: lt
-   //   Returns 1 if *x* is less than *y*. Compares *x.first* and *y.first*. If
-   //   equal, then compares *x.second* and *y.second*, and so on.
+   //   (VIRTUAL) Returns 1 if *x* is less than *y*. Compares *x.first* and
+   //   *y.first*. If equal, then compares *x.second* and *y.second*, and so on.
    //
    // Arguments:
    //   x - A tuple.
@@ -138,22 +131,6 @@ class tuple_comparator#( type T = tuple ) extends comparator#(T);
       else if ( x.ninth   > y.ninth   ) return 0;
       else return x.tenth < y.tenth;              // x.ninth   == y.ninth
    endfunction: lt
-
-   //---------------------------------------------------------------------------
-   // Function: gt
-   //   Returns 1 if *x* is greater than *y*.
-   //
-   // Arguments:
-   //   x - An input of type T.
-   //   y - Another input of type T.
-   //
-   // Returns:
-   //   If *x* is greater than *y*, then returns 1. Otherwise, returns 0.
-   //---------------------------------------------------------------------------
-
-   virtual function bit gt( T x, T y );
-      return lt( y, x );
-   endfunction: gt
 
 endclass: tuple_comparator
 

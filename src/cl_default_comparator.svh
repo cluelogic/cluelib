@@ -30,21 +30,25 @@
 
 //------------------------------------------------------------------------------
 // Class: default_comparator
-//   Provides compare strategies.
+//   (SINGLETON) Provides the default strategies to compare objects.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of an object to be compared. The default is *int*.
 //------------------------------------------------------------------------------
 
 class default_comparator#( type T = int ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
    // Function: lt
-   //   Returns 1 if *x* is less than *y*.
+   //   (VIRTUAL) Returns 1 if *x* is less than *y*. Uses the binary relational
+   //   operator (*<*) to compare the objects.
    //
    // Arguments:
    //   x - An input of type T.
    //   y - Another input of type T.
    //
    // Returns:
-   //   If *x* is less than *y*, then returns 1. Otherwise, returns 0.
+   //   The value of *x < y*.
    //---------------------------------------------------------------------------
 
    virtual function bit lt( T x, T y );
@@ -53,14 +57,15 @@ class default_comparator#( type T = int ) extends comparator#(T);
 
    //---------------------------------------------------------------------------
    // Function: gt
-   //   Returns 1 if *x* is greater than *y*.
+   //   (VIRTUAL) Returns 1 if *x* is greater than *y*. Uses the binary
+   //   relational operator (*>*) to compare the objects.
    //
    // Arguments:
    //   x - An input of type T.
    //   y - Another input of type T.
    //
    // Returns:
-   //   If *x* is greater than *y*, then returns 1. Otherwise, returns 0.
+   //   The value of *x > y*.
    //---------------------------------------------------------------------------
 
    virtual function bit gt( T x, T y );

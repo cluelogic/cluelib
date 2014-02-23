@@ -43,28 +43,28 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    //---------------------------------------------------------------------------
    // Typedef: pa_type
-   //   The shorthand of the packed array of type *T*.
+   //   The shorthand of the packed array type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T [WIDTH-1:0] pa_type;
 
    //---------------------------------------------------------------------------
    // Typedef: ua_type
-   //   The shorthand of the unpacked array of type *T*.
+   //   The shorthand of the unpacked array type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T ua_type[WIDTH];
 
    //---------------------------------------------------------------------------
    // Typedef: da_type
-   //   The shorthand of the dynamic array of type *T*.
+   //   The shorthand of the dynamic array type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T da_type[];
 
    //---------------------------------------------------------------------------
    // Typedef: q_type
-   //   The shorthand of the queue of type *T*.
+   //   The shorthand of the queue type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T q_type[$];

@@ -30,19 +30,21 @@
 
 //------------------------------------------------------------------------------
 // Class: common_packed_array
+//   The common packed array class used by the aggregate classes. There is no
+//   user accessible function in this class.
 //------------------------------------------------------------------------------
 
 virtual class common_packed_array #( type T = bit, int WIDTH = 1, type AT = T[WIDTH-1:0] );
 
    //---------------------------------------------------------------------------
-   // Typedef: pa_type
+   // Typedef pa_type
    //   The shorthand of the packed array of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T [WIDTH-1:0] pa_type;
 
    //---------------------------------------------------------------------------
-   // Function: pa_to_a
+   // Function pa_to_a
    //---------------------------------------------------------------------------
 
    static function void pa_to_a( const ref pa_type src,

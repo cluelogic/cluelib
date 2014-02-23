@@ -32,6 +32,9 @@
 //------------------------------------------------------------------------------
 // Class: deque
 //   Implements a double-ended queue using a queue.
+//
+// Parameter:
+//   T - (OPTIONAL) The type of data collected in a deque. The default is *int*.
 //------------------------------------------------------------------------------
 
 class deque #( type T = int ) extends collection#( T );
@@ -98,12 +101,12 @@ class deque #( type T = int ) extends collection#( T );
    // Argument:
    //   c    - (OPTIONAL) A collection whose elements are to be added to this 
    //          deque.
-   //   cmp  - (OPTIONAL) A comparator to compare the elements of type *T*. If
-   //          not specified or null, <comparator> #(T) is used. The default is
-   //          null.
-   //   fmtr - (OPTIONAL) An object that provides a function to convert the
-   //           element of type *T* to a string. If not specified or null,
-   //           <formatter> #(T) is used. The default is null.
+   //   cmp - (OPTIONAL) A strategy object used to compare the elements of type
+   //         *T*. If not specified or *null*, <comparator> *#(T)* is used. The
+   //         default is *null*.
+   //   fmtr - (OPTIONAL) A strategy object that provides a function to convert
+   //          the element of type *T* to a string. If not specified or *null*,
+   //          <hex_formatter> *#(T)* is used. The default is *null*.
    //
    // Example:
    // | deque#(int) int_dq = new();
@@ -112,14 +115,16 @@ class deque #( type T = int ) extends collection#( T );
    function new( collection#(T) c = null,
 		 comparator#(T) cmp = null,
 		 formatter#(T) fmtr = null );
-      this.cmp  = cmp;
-      this.fmtr = fmtr;
+      if ( cmp == null ) this.cmp = comparator#(T)::get_instance();
+      else               this.cmp = cmp;
+      if ( fmtr == null ) this.fmtr = hex_formatter#(T)::get_instance();
+      else                this.fmtr = fmtr;
       if ( c ) void'( this.add_all( c ) );
    endfunction: new
 
    //---------------------------------------------------------------------------
    // Function: add
-   //   Adds the given element at the end of this deque.
+   //   (VIRTUAL) Adds the given element at the end of this deque.
    //
    // Argument:
    //   e - An element to be added to this deque.
@@ -129,7 +134,8 @@ class deque #( type T = int ) extends collection#( T );
    //
    // Example:
    // | deque#(int) int_dq = new();
-   // | assert( int_dq.add( 0 ) == 1 );
+   // |
+   // | assert( int_dq.add( 123 ) == 1 );
    //---------------------------------------------------------------------------
 
    virtual function bit add( T e );
@@ -139,14 +145,18 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: add_first
-   //   Adds the given element at the front of this deque.
+   //   (VIRTUAL) Adds the given element at the front of this deque.
    //
    // Argument:
    //   e - An element to be added to this deque.
    //
+   // Returns:
+   //   None.
+   //
    // Example:
    // | deque#(int) int_dq = new();
-   // | int_dq.add_first( 0 );
+   // |
+   // | int_dq.add_first( 123 );
    //---------------------------------------------------------------------------
 
    virtual function void add_first( T e );
@@ -155,14 +165,18 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: add_last
-   //   Adds the given element at the end of this deque.
+   //   (VIRTUAL) Adds the given element at the end of this deque.
    //
    // Argument:
    //   e - An element to be added to this deque.
    //
+   // Returns:
+   //   None.
+   //
    // Example:
    // | deque#(int) int_dq = new();
-   // | int_dq.add_last( 0 );
+   // |
+   // | int_dq.add_last( 123 );
    //---------------------------------------------------------------------------
 
    virtual function void add_last( T e );
@@ -171,10 +185,14 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: clear
-   //   Removes all of the elements from this deque.
+   //   (VIRTUAL) Removes all of the elements from this deque.
+   //
+   // Returns:
+   //   None.
    //
    // Example:
    // | deque#(int) int_dq = new();
+   // |
    // | int_dq.clear();
    //---------------------------------------------------------------------------
 
@@ -184,16 +202,17 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: clone
-   //   Returns a shallow copy of this deque. The element themselves are not
-   //   cloned.
+   //   (VIRTUAL) Returns a shallow copy of this deque. The element themselves
+   //   are not cloned.
    //
    // Returns:
    //   A copy of this deque.
    //
    // Example:
    // | deque#(int) int_dq = new();
-   // | collection#(int) cloned_int_dq;
-   // | cloned_int_dq = int_dq.clone();
+   // | collection#(int) cloned;
+   // |
+   // | cloned = int_dq.clone();
    //---------------------------------------------------------------------------
 
    virtual function collection#( T ) clone();
@@ -206,7 +225,7 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: contains
-   //   Returns 1 if this deque contains the specified element.
+   //   (VIRTUAL) Returns 1 if this deque contains the specified element.
    //
    // Argument:
    //   e - An element to be checked.
@@ -216,31 +235,40 @@ class deque #( type T = int ) extends collection#( T );
    //
    // Example:
    // | deque#(int) int_dq = new();
-   // | int_dq.add( 0 );
-   // | assert( int_dq.contains( 0 ) == 1 );
-   // | assert( int_dq.contains( 1 ) == 0 );
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | assert( int_dq.contains( 123 ) == 1 );
+   // | assert( int_dq.contains( 456 ) == 0 );
    //---------------------------------------------------------------------------
 
    virtual function bit contains( T e );
-      int  qi[$];
+      int qi[$];
       
-      if ( cmp )
-	qi = q.find_first_index with ( cmp.eq( item, e ) );
-      else
-	qi = q.find_first_index with (collection#(T)::default_cmp.eq(item, e));
+      qi = q.find_first_index with ( cmp.eq( item, e ) );
       return qi.size() != 0;
    endfunction: contains
 
    //---------------------------------------------------------------------------
    // Function: get
-   //   Retrieves the head of the deque and remove the element. This function 
-   //   is equivalent to *get_first()*.
+   //   (VIRTUAL) Retrieves the head of the deque and remove the element. This
+   //   function is equivalent to <get_first>.
    //
    // Argument:
    //   e - The head of the deque to be returned.
    //
    // Returns:
    //   If *e* is valid, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // | int i;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | assert( int_dq.get( i ) == 1 );
+   // | assert( i == 123 );
+   //
+   // See Also:
+   //   <get_first>
    //---------------------------------------------------------------------------
 
    virtual function bit get( ref T e );
@@ -249,13 +277,24 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: get_first
-   //   Retrieves the head of the deque and remove the element.
+   //   (VIRTUAL) Retrieves the head of the deque and remove the element.
    //
    // Argument:
    //   e - The head of the deque to be returned.
    //
    // Returns:
    //   If *e* is valid, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // | int i;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | assert( int_dq.get_first( i ) == 1 );
+   // | assert( i == 123 );
+   //
+   // See Also:
+   //   <get>
    //---------------------------------------------------------------------------
 
    virtual function bit get_first( ref T e );
@@ -269,13 +308,24 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: get_last
-   //   Retrieves the tail of the deque and remove the element.
+   //   (VIRTUAL) Retrieves the tail of the deque and remove the element.
    //
    // Argument:
    //   e - The tail of the deque to be returned.
    //
    // Returns:
    //   If *e* is valid, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // | int i;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | assert( int_dq.get_last( i ) == 1 );
+   // | assert( i == 123 );
+   //
+   // See Also:
+   //   <get_first>
    //---------------------------------------------------------------------------
 
    virtual function bit get_last( ref T e );
@@ -289,15 +339,19 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: get_iterator
-   //   Returns an iterator over the elements in this deque.
+   //   (VIRTUAL) Returns an iterator over the elements in this deque.
    //
    // Returns:
    //   An iterator.
    //
    // Example:
    // | deque#(int) int_dq = new();
-   // | iterator#(int) it = int_dq.get_iterator();
-   // | while ( it.has_next() ) $display( it.next() );
+   // | iterator#(int) it;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | it = int_dq.get_iterator();
+   // | while ( it.has_next() ) $display( it.next() ); // 123 456
    //---------------------------------------------------------------------------
 
    virtual function iterator#( T ) get_iterator();
@@ -313,15 +367,20 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: get_descending_iterator
-   //   Returns an iterator over the elements in this deque in reverse order.
+   //   (VIRTUAL) Returns an iterator over the elements in this deque in reverse
+   //   order.
    //
    // Returns:
-   //   An iterator.
+   //   A descending iterator.
    //
    // Example:
    // | deque#(int) int_dq = new();
-   // | iterator#(int) it = int_dq.get_descending_iterator();
-   // | while ( it.has_next() ) $display( it.next() );
+   // | iterator#(int) it;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | it = int_dq.get_descending_iterator();
+   // | while ( it.has_next() ) $display( it.next() ); // 456 123
    //---------------------------------------------------------------------------
 
    virtual function iterator#( T ) get_descending_iterator();
@@ -337,14 +396,26 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: peek
-   //   Retrieves the head of the deque but does not remove the element. This
-   //   function is equivalent to *peek_first()*.
+   //   (VIRTUAL) Retrieves the head of the deque but does not remove the
+   //   element. This function is equivalent to <peek_first>.
    //
    // Argument:
    //   e - The head of the deque to be returned.
    //
    // Returns:
    //   If *e* is valid, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // | int i;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | assert( int_dq.peek( i ) == 1 );
+   // | assert( i == 123 );
+   //
+   // See Also:
+   //   <peek_first>
    //---------------------------------------------------------------------------
 
    virtual function bit peek( ref T e );
@@ -353,13 +424,26 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: peek_first
-   //   Retrieves the head of the deque but does not remove the element.
+   //   (VIRTUAL) Retrieves the head of the deque but does not remove the
+   //   element.
    //
    // Argument:
    //   e - The head of the deque to be returned.
    //
    // Returns:
    //   If *e* is valid, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // | int i;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | assert( int_dq.peek_first( i ) == 1 );
+   // | assert( i == 123 );
+   //
+   // See Also:
+   //   <peek>, <peek_last>
    //---------------------------------------------------------------------------
 
    virtual function bit peek_first( ref T e );
@@ -373,13 +457,25 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: peek_last
-   //   Retrieves the tail of the deque but does not remove the element.
+   //   (VIRTUAL) Retrieves the tail of the deque but does not remove the element.
    //
    // Argument:
    //   e - The tail of the deque to be returned.
    //
    // Returns:
    //   If *e* is valid, returns 1. Otherwise, returns 0.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // | int i;
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | assert( int_dq.peek_last( i ) == 1 );
+   // | assert( i == 456 );
+   //
+   // See Also:
+   //   <peek_first>
    //---------------------------------------------------------------------------
 
    virtual function bit peek_last( ref T e );
@@ -393,27 +489,39 @@ class deque #( type T = int ) extends collection#( T );
 
    //----------------------------------------------------------------------------
    // Function: pop
-   //   Pops an element from the deque as if it is a stack.
+   //   (VIRTUAL) Pops an element from the deque as if it is a stack.
    //
-   // Returns:
-   //   The head of the deque. If the deque is empty, the behavior is undefined.
+   // Returns: 
+   //   The head of the deque. If the deque is empty, the value of type *T* read
+   //   from a nonexistent queue entry is returned (See IEEE Std 1800-2012 Table
+   //   7-1).
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // |
+   // | int_dq.push( 123 );
+   // | int_dq.push( 456 );
+   // | assert( int_dq.pop() == 456 );
    //----------------------------------------------------------------------------
 
    virtual function T pop();
-      // T o;
-      //
-      // if ( is_empty() ) return o;
-      // else              return q.pop_front();
-
       return q.pop_front();
    endfunction: pop
 
    //----------------------------------------------------------------------------
    // Function: push
-   //   Pushes an element to the deque as if it is a stack.
+   //   (VIRTUAL) Pushes an element to the deque as if it is a stack.
    //
    // Argument:
    //   e - An element to push.
+   //
+   // Returns:
+   //   None.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // |
+   // | int_dq.push( 123 );
    //----------------------------------------------------------------------------
 
    virtual function void push( T e );
@@ -422,8 +530,8 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: remove
-   //   Removes the specified element from this deque. This function is
-   //   equivalent to *remove_first_occurrence()*.
+   //   (VIRTUAL) Removes the specified element from this deque. This function
+   //   is equivalent to <remove_first_occurrence>.
    //
    // Argument:
    //   e - An element to be removed.
@@ -431,6 +539,17 @@ class deque #( type T = int ) extends collection#( T );
    // Returns:
    //   If this deque changed as a result of the call, 1 is returned. Otherwise,
    //   0 is returned.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | assert( int_dq.remove( 123 ) == 1 );
+   // | assert( int_dq.remove( 789 ) == 0 );
+   //
+   // See Also:
+   //   <remove_first_occurence>
    //---------------------------------------------------------------------------
 
    virtual function bit remove( T e );
@@ -439,10 +558,17 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: remove_first
-   //   Removes the first element from this deque.
+   //   (VIRTUAL) Removes the first element from this deque.
    //
    // Returns:
    //   If this deque is not empty, 1 is returned. Otherwise, 0 is returned.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | assert( int_dq.remove_first() == 1 );
+   // | assert( int_dq.remove_first() == 0 ); // deque is empty
    //---------------------------------------------------------------------------
 
    virtual function bit remove_first();
@@ -456,10 +582,17 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: remove_last
-   //   Removes the last element from this deque.
+   //   (VIRTUAL) Removes the last element from this deque.
    //
    // Returns:
    //   If this deque is not empty, 1 is returned. Otherwise, 0 is returned.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | assert( int_dq.remove_last() == 1 );
+   // | assert( int_dq.remove_last() == 0 ); // deque is empty
    //---------------------------------------------------------------------------
 
    virtual function bit remove_last();
@@ -473,8 +606,8 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: remove_first_occurrence
-   //   Removes the first occurrence of the specified element by traversing the
-   //   deque from head to tail.
+   //   (VIRTUAL) Removes the first occurrence of the specified element by
+   //   traversing the deque from head to tail.
    //
    // Argument:
    //   e - An element to be removed.
@@ -482,16 +615,23 @@ class deque #( type T = int ) extends collection#( T );
    // Returns:
    //   If this deque changed as a result of the call, 1 is returned. Otherwise,
    //   0 is returned.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | assert( int_dq.remove_first_occurrence( 123 ) == 1 );
+   // | assert( int_dq.remove_first_occurrence( 789 ) == 0 );
+   //
+   // See Also:
+   //   <remove>, <remove_last_occurrence>
    //---------------------------------------------------------------------------
 
    virtual function bit remove_first_occurrence( T e );
       int  qi[$];
       
-      if ( cmp )
-	qi = q.find_first_index with ( cmp.eq( item, e ) );
-      else
-	qi = q.find_first_index with (collection#(T)::default_cmp.eq(item, e));
-
+      qi = q.find_first_index with ( cmp.eq( item, e ) );
       if ( qi.size() == 0 ) begin
 	 return 0;
       end else begin
@@ -502,8 +642,8 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: remove_last_occurrence
-   //   Removes the last occurrence of the specified element by traversing the
-   //   deque from tail to head.
+   //   (VIRTUAL) Removes the last occurrence of the specified element by
+   //   traversing the deque from tail to head.
    //
    // Argument:
    //   e - An element to be removed.
@@ -511,16 +651,23 @@ class deque #( type T = int ) extends collection#( T );
    // Returns:
    //   If this deque changed as a result of the call, 1 is returned. Otherwise,
    //   0 is returned.
+   //
+   // Example:
+   // | deque#(int) int_dq = new();
+   // |
+   // | void'( int_dq.add( 123 ) );
+   // | void'( int_dq.add( 456 ) );
+   // | assert( int_dq.remove_last_occurrence( 123 ) == 1 );
+   // | assert( int_dq.remove_last_occurrence( 789 ) == 0 );
+   //
+   // See Also:
+   //   <remove>, <remove_first_occurrence>
    //---------------------------------------------------------------------------
 
    virtual function bit remove_last_occurrence( T e );
       int  qi[$];
       
-      if ( cmp )
-	qi = q.find_last_index with ( cmp.eq( item, e ) );
-      else
-	qi = q.find_last_index with ( collection#(T)::default_cmp.eq(item, e) );
-
+      qi = q.find_last_index with ( cmp.eq( item, e ) );
       if ( qi.size() == 0 ) begin
 	 return 0;
       end else begin
@@ -531,14 +678,15 @@ class deque #( type T = int ) extends collection#( T );
 
    //---------------------------------------------------------------------------
    // Function: size
-   //   Returns the number of elements in this deque.
+   //   (VIRTUAL) Returns the number of elements in this deque.
    //
    // Returns:
    //   The number of elements in this deque.
    //
    // Example:
    // | deque#(int) int_dq = new();
-   // | int_dq.add( 0 );
+   // |
+   // | void'( int_dq.add( 123 ) );
    // | assert( int_dq.size() == 1 );
    //---------------------------------------------------------------------------
 

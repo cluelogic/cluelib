@@ -40,29 +40,47 @@
 virtual class unpacked_array #( type T = bit, int SIZE = 1 );
 
    //---------------------------------------------------------------------------
+   // Group: Common Arguments
+   //   from_index - The index of the first element of an unpacked array to be
+   //                processed.  If negative, the index counts from the last.
+   //                For example, if *from_index* is -9, a function starts at
+   //                the ninth element (inclusive) from the last.  The default
+   //                is 0 (starts at the first element).
+   //   to_index - The index of the last element of an unpacked array to be
+   //              processed.  If negative, the index counts from the last.  For
+   //              example, if *to_index* is -3, a function ends at the third
+   //              element (inclusive) from the last.  The default is -1 (ends
+   //              at the last element).
+   //---------------------------------------------------------------------------
+
+   // Group: Types
+
+   //---------------------------------------------------------------------------
    // Typedef: ua_type
-   //   The shorthand of the unpacked array of type *T*.
+   //   The shorthand of the unpacked array type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T ua_type[SIZE];
 
    //---------------------------------------------------------------------------
    // Typedef: da_type
-   //   The shorthand of the dynamic array of type *T*.
+   //   The shorthand of the dynamic array type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T da_type[];
 
    //---------------------------------------------------------------------------
    // Typedef: q_type
-   //   The shorthand of the queue of type *T*.
+   //   The shorthand of the queue type of type *T*.
    //---------------------------------------------------------------------------
 
    typedef T q_type[$];
 
+   // Group: Functions
+
    //---------------------------------------------------------------------------
    // Function: from_dynamic_array
-   //   (STATIC) Converts a dynamic array of type *T* to an unpacked array of
+   //   (STATIC) Converts a dynamic array of type *T* to un unpacked array of
    //   the same type.  If the size of the dynamic array is larger than *SIZE*,
    //   the excess elements are ignored. If the size of the dynamic array is
    //   smaller than *SIZE*, the default value of type *T* is used for the
@@ -76,7 +94,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    //             0.
    //
    // Returns:
-   //   The unpacked array converted from *da*.
+   //   An unpacked array converted from *da*.
    //
    // Examples:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
@@ -399,31 +417,19 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    //   ua1         - An unpacked array.
    //   ua2         - Another unpacked array to compare with *ua1*.
    //   from_index1 - (OPTIONAL) The index of the first element of *ua1* to
-   //                 compare.  If negative, the index counts from the last.
-   //                 For example, if *from_index1* is -9, the function compares
-   //                 from the ninth element (inclusive) from the last.  The
-   //                 default is 0.
+   //                 compare. See <Common Arguments>. The default is 0.
    //   to_index1 - (OPTIONAL) The index of the last element of *ua1* to
-   //               compare.  If negative, the index counts from the last.  For
-   //               example, if *from_index1* is -3, the function compares to
-   //               the third element (inclusive) from the last.  The default is
-   //               -1 (compare to the last element).
+   //               compare. See <Common Arguments>. The default is -1.
    //   from_index2 - (OPTIONAL) The index of the first element of *ua2* to
-   //                 compare.  If negative, the index counts from the last.
-   //                 For example, if *from_index2* is -9, the function compares
-   //                 from the ninth element (inclusive) from the last.  The
-   //                 default is 0.
+   //                 compare. See <Common Arguments>. The default is 0.
    //   to_index2 - (OPTIONAL) The index of the last element of *ua2* to
-   //               compare.  If negative, the index counts from the last.  For
-   //               example, if *from_index2* is -3, the function compares to
-   //               the third element (inclusive) from the last.  The default is
-   //               -1 (compare to the last element).
+   //               compare. See <Common Arguments>. The default is -1.
    //   cmp - (OPTIONAL) A strategy object used to compare two unpacked
    //         arrays. If not specified or *null*, <comparator> *#(T)* is
    //         used. The default is *null*.
    //
    // Returns:
-   //   If the numbers of data to compare (*to_index1-from_index1+1* and
+   //   If the numbers of elements to compare (*to_index1-from_index1+1* and
    //   *to_index2-from_index2+1*) are different, 0 is returned.  If the two
    //   unpacked arrays contain the same data in the specified range, 1 is
    //   returned. Otherwise, 0 is returned.
@@ -452,12 +458,37 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
 
    //---------------------------------------------------------------------------
    // Function: to_string
+   //   (STATIC) Converts an unpacked array to the form of a string.
+   //
+   // Arguments:
+   //   ua - An unpacked array to be converted.
+   //   separator - (OPTIONAL) A string to separate each element of *ua*. The
+   //               default is a space (" ").
+   //   from_index - (OPTIONAL) The index of the first element of *ua* to
+   //                convert. See <Common Arguments>. The default is 0.
+   //   to_index - (OPTIONAL) The index of the last element of *ua* to convert.
+   //              See <Common Arguments>. The default is -1.
+   //   fmtr - (OPTIONAL) A strategy object used to format *ua*. If not
+   //          specified or *null*, <hex_formatter> *#(T)* is used. The default
+   //          is *null*.
+   //
+   // Returns:
+   //   A string to represent *ua*.
+   //
+   // Example:
+   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+   // | assert( unpacked_array#(bit,8)::to_string( ua )                    == "0 0 0 1 1 0 1 1" );
+   // | assert( unpacked_array#(bit,8)::to_string( ua, .separator( "-" ) ) == "0-0-0-1-1-0-1-1" );
+   // | assert( unpacked_array#(bit,8)::to_string( ua, .from_index( 4 )  ) ==         "1 0 1 1" );
    //---------------------------------------------------------------------------
 
    static function string to_string( const ref ua_type ua,
 				     input string separator = " ",
+				     int from_index = 0,
+				     int to_index = -1,
 				     formatter#(T) fmtr = null );
-      return common_array#(T, SIZE, ua_type )::to_string( ua, separator, fmtr );
+      return common_array#(T, SIZE, ua_type )::
+	to_string( ua, separator, from_index, to_index, fmtr );
    endfunction: to_string
 endclass: unpacked_array
 
