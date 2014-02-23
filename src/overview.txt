@@ -76,3 +76,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Some icons by <Yusuke Kamiyamane at http://p.yusukekamiyamane.com>. Licensed under a <Creative Commons Attribution 3.0 License at http://creativecommons.org/licenses/by/3.0>.
+
+Trademarks:
+  - *Cadence* is a registered trademark (#3474136) of Cadence Design Systems, Inc.
+  - *Incisive* is a registered trademark (#2890264) of Cadence Design Systems, Inc.
+  - *Mentor* is a registered trademark (#2388156) of Mentor Graphics Corporation.
+  - *ModelSim* is a registered trademark (#2317058) of Mentor Graphics Corporation.
+  - *Questa* is a registered trademark (#3308638) of Mentor Graphics Corporation.
+  - *Synopsys* is a registered trademark (#1618482) of Synopsys, Inc.
+  - *VCS* is a registered trademark (#2777162) of Synopsys, Inc.
+  - *IEEE* is a registered trademark (#3666752) of The Institute of Electrical and Electronics Engineers, Inc.
+
