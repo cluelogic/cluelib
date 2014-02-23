@@ -112,8 +112,8 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    static function da_type from_unpacked_array( const ref ua_type ua,
 						input bit reverse = 0 );
       from_unpacked_array = new[ $size( ua ) ];
-      common_array#( T, SIZE, da_type )::ua_to_a( ua, from_unpacked_array,
-						   reverse );
+      common_array#( T, ua_type, da_type )::a_to_a( ua, from_unpacked_array,
+						    reverse );
    endfunction: from_unpacked_array
 
    //---------------------------------------------------------------------------
@@ -142,8 +142,8 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
 
    static function ua_type to_unpacked_array( const ref da_type da,
 					      input bit reverse = 0 );
-      common_array#( T, SIZE, ua_type )::da_to_a( da, to_unpacked_array, 
-						   reverse );
+      common_array#( T, da_type, ua_type )::a_to_a( da, to_unpacked_array, 
+						    reverse );
    endfunction: to_unpacked_array
 
    //---------------------------------------------------------------------------
@@ -178,7 +178,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    static function da_type from_queue( const ref q_type q,
 				       input bit reverse = 0 );
       from_queue = new[ q.size() ];
-      common_array#( T, SIZE, da_type )::q_to_a( q, from_queue, reverse );
+      common_array#( T, q_type, da_type )::a_to_a( q, from_queue, reverse );
    endfunction: from_queue
 
    //---------------------------------------------------------------------------
@@ -211,7 +211,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
 
    static function q_type to_queue( const ref da_type da,
 				    input bit reverse = 0 );
-      common_array#( T, SIZE, da_type )::a_to_q( da, to_queue, reverse );
+      common_array#( T, da_type, q_type )::a_to_q( da, to_queue, reverse );
    endfunction: to_queue
 
    //---------------------------------------------------------------------------
@@ -250,7 +250,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    static function void ua_to_da( const ref ua_type ua,
 				  ref da_type da,
 				  input bit reverse = 0 );
-      common_array#( T, SIZE, da_type )::ua_to_a( ua, da, reverse );
+      common_array#( T, ua_type, da_type )::a_to_a( ua, da, reverse );
    endfunction: ua_to_da
    
    //---------------------------------------------------------------------------
@@ -290,7 +290,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    static function void da_to_ua( const ref da_type da,
 				  ref ua_type ua,
 				  input bit reverse = 0 );
-      common_array#( T, SIZE, ua_type )::da_to_a( da, ua, reverse );
+      common_array#( T, da_type, ua_type )::a_to_a( da, ua, reverse );
    endfunction: da_to_ua
    
    //---------------------------------------------------------------------------
@@ -326,7 +326,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    static function void q_to_da( const ref q_type q,
 				 ref da_type da,
 				 input bit reverse = 0 );
-      common_array#( T, SIZE, da_type )::q_to_a( q, da, reverse );
+      common_array#( T, q_type, da_type )::a_to_a( q, da, reverse );
    endfunction: q_to_da
 
    //---------------------------------------------------------------------------
@@ -349,11 +349,12 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-   // | bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // | bit q[$];
    // |
    // | dynamic_array#(bit)::da_to_q( da, q );
    // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // |
+   // | q.delete();
    // | dynamic_array#(bit)::da_to_q( da, q, .reverse( 1 ) );
    // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
@@ -364,7 +365,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    static function void da_to_q( const ref da_type da,
 				 ref q_type q,
 				 input bit reverse = 0 );
-      common_array#( T, SIZE, q_type )::da_to_a( da, q, reverse );
+      common_array#( T, da_type, q_type )::a_to_q( da, q, reverse );
    endfunction: da_to_q
    
    //---------------------------------------------------------------------------
@@ -386,7 +387,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //---------------------------------------------------------------------------
 
    static function void init( ref da_type da, input T val );
-      common_array#( T, SIZE, da_type )::init( da, val );
+      common_array#( T, da_type )::init( da, val );
    endfunction: init
 
    //---------------------------------------------------------------------------
@@ -406,7 +407,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //---------------------------------------------------------------------------
 
    static function void reverse( ref da_type da );
-      common_array#( T, SIZE, da_type )::reverse( da );
+      common_array#( T, da_type )::reverse( da );
    endfunction: reverse
 
    //---------------------------------------------------------------------------
@@ -682,7 +683,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
 				int from_index2 = 0, 
 				int to_index2   = -1,
 				comparator#(T) cmp = null );
-      return common_array#( T, SIZE, da_type )::
+      return common_array#( T, da_type, da_type )::
 	compare( da1, da2, from_index1, to_index1, from_index2, to_index2, cmp );
    endfunction: compare
 
@@ -737,7 +738,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
 				     int from_index = 0,
 				     int to_index = -1,
 				     formatter#(T) fmtr = null );
-      return common_array#(T, SIZE, da_type )::
+      return common_array#(T, da_type )::
 	to_string( da, separator, from_index, to_index, fmtr );
    endfunction: to_string
 

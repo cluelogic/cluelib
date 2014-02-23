@@ -34,22 +34,8 @@
 //   accessible function in this class.
 //------------------------------------------------------------------------------
 
-virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
+virtual class common_array #( type T = bit, type AT1 = bit, type AT2 = bit );
    
-   //---------------------------------------------------------------------------
-   // Typedef ua_type
-   //   The shorthand of the unpacked array of type *T*.
-   //---------------------------------------------------------------------------
-
-   typedef T ua_type[WIDTH];
-
-   //---------------------------------------------------------------------------
-   // Typedef da_type
-   //   The shorthand of the dynamic array of type *T*.
-   //---------------------------------------------------------------------------
-
-   typedef T da_type[];
-
    //---------------------------------------------------------------------------
    // Typedef q_type
    //   The shorthand of the queue of type *T*.
@@ -58,55 +44,11 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    typedef T q_type[$];
 
    //---------------------------------------------------------------------------
-   // Function da_to_a
+   // Function a_to_a
    //---------------------------------------------------------------------------
 
-   static function void da_to_a( const ref da_type src,
-				 ref AT dst,
-				 input bit reverse = 0 );
-      T filler;
-      integer src_size = $size( src );
-      integer dst_size = $size( dst );
-      int     min_size = choice#(integer)::min( src_size, dst_size );
-
-      for ( int i = 0; i < min_size; i++ ) begin
-	 if ( reverse ) dst[dst_size-1-i] = src[i];
-	 else           dst[i]            = src[i];
-      end
-      for ( int i = min_size; i < dst_size; i++ ) begin
-	 if ( reverse ) dst[dst_size-1-i] = filler;
-	 else           dst[i]            = filler;
-      end
-   endfunction: da_to_a
-   
-   //---------------------------------------------------------------------------
-   // Function ua_to_a
-   //---------------------------------------------------------------------------
-
-   static function void ua_to_a( const ref ua_type src,
-				 ref AT dst,
-				 input bit reverse = 0 );
-      T filler;
-      integer src_size = $size( src );
-      integer dst_size = $size( dst );
-      int     min_size = choice#(integer)::min( src_size, dst_size );
-
-      for ( int i = 0; i < min_size; i++ ) begin
-	 if ( reverse ) dst[dst_size-1-i] = src[i];
-	 else           dst[i]            = src[i];
-      end
-      for ( int i = min_size; i < dst_size; i++ ) begin
-	 if ( reverse ) dst[dst_size-1-i] = filler;
-	 else           dst[i]            = filler;
-      end
-   endfunction: ua_to_a
-   
-   //---------------------------------------------------------------------------
-   // Function q_to_a
-   //---------------------------------------------------------------------------
-
-   static function void q_to_a( const ref q_type src,
-				ref AT dst,
+   static function void a_to_a( const ref AT1 src,
+				ref AT2 dst,
 				input bit reverse = 0 );
       T filler;
       integer src_size = $size( src );
@@ -121,13 +63,13 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
 	 if ( reverse ) dst[dst_size-1-i] = filler;
 	 else           dst[i]            = filler;
       end
-   endfunction: q_to_a
+   endfunction: a_to_a
    
    //---------------------------------------------------------------------------
    // Function a_to_q
    //---------------------------------------------------------------------------
 
-   static function void a_to_q( const ref AT src,
+   static function void a_to_q( const ref AT1 src,
 				ref q_type dst,
 				input bit reverse = 0 );
       integer src_size = $size( src );
@@ -142,7 +84,7 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    // Function reverse
    //---------------------------------------------------------------------------
 
-   static function void reverse( ref AT a );
+   static function void reverse( ref AT1 a );
       T tmp;
       integer a_size = $size( a );
       integer half_size = a_size / 2;
@@ -158,7 +100,7 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    // Function init
    //---------------------------------------------------------------------------
 
-   static function void init( ref AT a, input T val );
+   static function void init( ref AT1 a, input T val );
       foreach( a[i] ) a[i] = val;
    endfunction: init
 
@@ -166,8 +108,8 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    // Function compare
    //---------------------------------------------------------------------------
 
-   static function bit compare( const ref AT a1,
-				const ref AT a2,
+   static function bit compare( const ref AT1 a1,
+				const ref AT2 a2,
 				input int from_index1 = 0, 
 				int to_index1   = -1,
 				int from_index2 = 0, 
@@ -204,7 +146,7 @@ virtual class common_array #( type T = bit, int WIDTH = 1, type AT = bit );
    // Function to_string
    //---------------------------------------------------------------------------
 
-   static function string to_string( const ref AT a,
+   static function string to_string( const ref AT1 a,
 				     input string separator = " ",
 				     int from_index = 0,
 				     int to_index = -1,

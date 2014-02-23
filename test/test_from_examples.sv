@@ -543,11 +543,12 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      bit q[$] = { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+      bit q[$];
       
       packed_array#(bit,8)::pa_to_q( pa, q );
       assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
       
+      q.delete();
       packed_array#(bit,8)::pa_to_q( pa, q, .reverse( 1 ) );
       assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
@@ -640,11 +641,12 @@ module test_from_examples;
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+      bit q[$];
       
       unpacked_array#(bit,8)::ua_to_q( ua, q );
       assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
       
+      q.delete();
       unpacked_array#(bit,8)::ua_to_q( ua, q, .reverse( 1 ) );
       assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
@@ -742,11 +744,12 @@ module test_from_examples;
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-      bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+      bit q[$];
       
       dynamic_array#(bit)::da_to_q( da, q );
       assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
       
+      q.delete();
       dynamic_array#(bit)::da_to_q( da, q, .reverse( 1 ) );
       assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
@@ -868,11 +871,12 @@ module test_from_examples;
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+      bit q[$];
       
       queue#(bit,8)::ua_to_q( ua, q );
       assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
       
+      q.delete();
       queue#(bit,8)::ua_to_q( ua, q, .reverse( 1 ) );
       assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end
@@ -888,11 +892,12 @@ module test_from_examples;
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-      bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+      bit q[$];
       
       queue#(bit)::da_to_q( da, q );
       assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
       
+      q.delete();
       queue#(bit)::da_to_q( da, q, .reverse( 1 ) );
       assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
     end

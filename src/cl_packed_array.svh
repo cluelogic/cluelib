@@ -95,8 +95,8 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    static function pa_type from_unpacked_array( const ref ua_type ua,
 						input bit reverse = 0 );
-      common_array#( T, WIDTH, pa_type )::ua_to_a( ua, from_unpacked_array,
-						   reverse );
+      common_array#( T, ua_type, pa_type )::a_to_a( ua, from_unpacked_array,
+						    reverse );
    endfunction: from_unpacked_array
 
    //---------------------------------------------------------------------------
@@ -158,8 +158,8 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    static function pa_type from_dynamic_array( const ref da_type da,
 					       input bit reverse = 0 );
-      common_array#( T, WIDTH, pa_type )::da_to_a( da, from_dynamic_array, 
-						   reverse );
+      common_array#( T, da_type, pa_type )::a_to_a( da, from_dynamic_array, 
+						    reverse );
    endfunction: from_dynamic_array
 
    //---------------------------------------------------------------------------
@@ -226,7 +226,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    static function pa_type from_queue( const ref q_type q,
 				       input bit reverse = 0 );
-      common_array#( T, WIDTH, pa_type )::q_to_a( q, from_queue, reverse );
+      common_array#( T, q_type, pa_type )::a_to_a( q, from_queue, reverse );
    endfunction: from_queue
 
    //---------------------------------------------------------------------------
@@ -259,7 +259,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    static function q_type to_queue( const ref pa_type pa,
 				    input bit reverse = 0 );
-      common_array#( T, WIDTH, pa_type )::a_to_q( pa, to_queue, reverse );
+      common_array#( T, pa_type, q_type )::a_to_q( pa, to_queue, reverse );
    endfunction: to_queue
 
    //---------------------------------------------------------------------------
@@ -296,7 +296,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    static function void ua_to_pa( const ref ua_type ua,
 				  ref pa_type pa,
 				  input bit reverse = 0 );
-      common_array#( T, WIDTH, pa_type )::ua_to_a( ua, pa, reverse );
+      common_array#( T, ua_type, pa_type )::a_to_a( ua, pa, reverse );
    endfunction: ua_to_pa
 
    //---------------------------------------------------------------------------
@@ -373,7 +373,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    static function void da_to_pa( const ref da_type da,
 				  ref pa_type pa,
 				  input bit reverse = 0 );
-      common_array#( T, WIDTH, pa_type )::da_to_a( da, pa, reverse );
+      common_array#( T, da_type, pa_type )::a_to_a( da, pa, reverse );
    endfunction: da_to_pa
 
    //---------------------------------------------------------------------------
@@ -451,7 +451,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    static function void q_to_pa( const ref q_type q,
 				 ref pa_type pa,
 				 input bit reverse = 0 );
-      common_array#( T, WIDTH, pa_type )::q_to_a( q, pa, reverse );
+      common_array#( T, q_type, pa_type )::a_to_a( q, pa, reverse );
    endfunction: q_to_pa
 
    //---------------------------------------------------------------------------
@@ -462,9 +462,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Arguments:
    //   pa - A packed array to be converted.
-   //   q - A queue to be populated.  This function does _not_ change the size
-   //       of *q*. Make sure that *q* has enough items to accommodate the
-   //       elements of *pa* before calling this function.
+   //   q - A queue to be populated.
    //   reverse - (OPTIONAL) If 0, the element at the index 0 of *pa* is
    //             positioned to the index 0 of *q*. If 1, the elements are
    //             positioned in the reverse order. The default is 0.
@@ -474,11 +472,12 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | bit q[$] = { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // | bit q[$];
    // |
    // | packed_array#(bit,8)::pa_to_q( pa, q );
    // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // |
+   // | q.delete();
    // | packed_array#(bit,8)::pa_to_q( pa, q, .reverse( 1 ) );
    // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
@@ -489,8 +488,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    static function void pa_to_q( const ref pa_type pa,
 				 ref q_type q,
 				 input bit reverse = 0 );
-//    common_array#( T, WIDTH, pa_type )::a_to_q( pa, q, reverse );
-      common_packed_array#( T, WIDTH, q_type )::pa_to_a( pa, q, reverse );
+      common_array#( T, pa_type, q_type )::a_to_q( pa, q, reverse );
    endfunction: pa_to_q
 
    //---------------------------------------------------------------------------
@@ -512,7 +510,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //---------------------------------------------------------------------------
 
    static function void init( ref pa_type pa, input T val );
-      common_array#( T, WIDTH, pa_type )::init( pa, val );
+      common_array#( T, pa_type )::init( pa, val );
    endfunction: init
 
    //---------------------------------------------------------------------------
@@ -532,7 +530,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //---------------------------------------------------------------------------
 
    static function void reverse( ref pa_type pa );
-      common_array#( T, WIDTH, pa_type )::reverse( pa );
+      common_array#( T, pa_type )::reverse( pa );
    endfunction: reverse
 
    //---------------------------------------------------------------------------

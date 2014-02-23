@@ -111,8 +111,8 @@ virtual class queue #( type T = bit, int SIZE = 1 );
 
    static function q_type from_unpacked_array( const ref ua_type ua,
 					       input bit reverse = 0 );
-      common_array#( T, SIZE, ua_type )::a_to_q( ua, from_unpacked_array,
-						 reverse );
+      common_array#( T, ua_type, q_type )::a_to_q( ua, from_unpacked_array,
+						   reverse );
    endfunction: from_unpacked_array
 
    //---------------------------------------------------------------------------
@@ -141,8 +141,8 @@ virtual class queue #( type T = bit, int SIZE = 1 );
 
    static function ua_type to_unpacked_array( const ref q_type q,
 					      input bit reverse = 0 );
-      common_array#( T, SIZE, ua_type )::q_to_a( q, to_unpacked_array, 
-						 reverse );
+      common_array#( T, q_type, ua_type )::a_to_a( q, to_unpacked_array, 
+						   reverse );
    endfunction: to_unpacked_array
 
    //---------------------------------------------------------------------------
@@ -175,8 +175,8 @@ virtual class queue #( type T = bit, int SIZE = 1 );
 
    static function q_type from_dynamic_array( const ref da_type da,
 					      input bit reverse = 0 );
-      common_array#( T, SIZE, da_type )::a_to_q( da, from_dynamic_array, 
-						 reverse );
+      common_array#( T, da_type, q_type )::a_to_q( da, from_dynamic_array, 
+						   reverse );
    endfunction: from_dynamic_array
    
    //---------------------------------------------------------------------------
@@ -211,8 +211,8 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    static function da_type to_dynamic_array( const ref q_type q,
 					     input bit reverse = 0 );
       to_dynamic_array = new[ q.size() ];
-      common_array#( T, SIZE, da_type )::q_to_a( q, to_dynamic_array, 
-						 reverse );
+      common_array#( T, q_type, da_type )::a_to_a( q, to_dynamic_array, 
+						   reverse );
    endfunction: to_dynamic_array
    
    //---------------------------------------------------------------------------
@@ -223,9 +223,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Arguments:
    //   ua - An unpacked array to be converted.
-   //   q - A queue to be populated.  This function does _not_ change the size
-   //       of *q*. Make sure that *q* has enough items to accommodate the
-   //       elements of *ua* before calling this function.
+   //   q - A queue to be populated.
    //   reverse - (OPTIONAL) If 0, the element at the index 0 of *ua* is
    //             positioned to the index 0 of *q*. If 1, the elements are
    //             positioned in the reverse order. The default is 0.
@@ -235,11 +233,12 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-   // | bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // | bit q[$];
    // |
    // | queue#(bit,8)::ua_to_q( ua, q );
    // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // |
+   // | q.delete();
    // | queue#(bit,8)::ua_to_q( ua, q, .reverse( 1 ) );
    // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
@@ -250,7 +249,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    static function void ua_to_q( const ref ua_type ua,
 				 ref q_type q,
 				 input bit reverse = 0 );
-      common_array#( T, SIZE, q_type )::ua_to_a( ua, q, reverse );
+      common_array#( T, ua_type, q_type )::a_to_q( ua, q, reverse );
    endfunction: ua_to_q
 
    //---------------------------------------------------------------------------
@@ -289,7 +288,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    static function void q_to_ua( const ref q_type q,
 				 ref ua_type ua,
 				 input bit reverse = 0 );
-      common_array#( T, SIZE, ua_type )::q_to_a( q, ua, reverse );
+      common_array#( T, q_type, ua_type )::a_to_a( q, ua, reverse );
    endfunction: q_to_ua
    
    //---------------------------------------------------------------------------
@@ -300,9 +299,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Arguments:
    //   da - A dynamic array to be converted.
-   //   q - A queue to be populated.  This function does _not_ change the size
-   //       of *q*. Make sure that *q* has enough items to accommodate the
-   //       elements of *da* before calling this function.
+   //   q - A queue to be populated.
    //   reverse - (OPTIONAL) If 0, the element at the index 0 of *da* is
    //             positioned to the index 0 of *q*. If 1, the elements are
    //             positioned in the reverse order. The default is 0.
@@ -312,11 +309,12 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-   // | bit q[$]  =  { 0, 0, 0, 0, 0, 0, 0, 0 }; // with 8 items
+   // | bit q[$];
    // |
    // | queue#(bit)::da_to_q( da, q );
    // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // |
+   // | q.delete();
    // | queue#(bit)::da_to_q( da, q, .reverse( 1 ) );
    // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // 
@@ -327,7 +325,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    static function void da_to_q( const ref da_type da,
 				 ref q_type q,
 				 input bit reverse = 0 );
-      common_array#( T, SIZE, q_type )::da_to_a( da, q, reverse );
+      common_array#( T, da_type, q_type )::a_to_q( da, q, reverse );
    endfunction: da_to_q
    
    //---------------------------------------------------------------------------
@@ -363,7 +361,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    static function void q_to_da( const ref q_type q,
 				 ref da_type da,
 				 input bit reverse = 0 );
-      common_array#( T, SIZE, da_type )::q_to_a( q, da, reverse );
+      common_array#( T, q_type, da_type )::a_to_a( q, da, reverse );
    endfunction: q_to_da
 
    //---------------------------------------------------------------------------
@@ -386,7 +384,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //---------------------------------------------------------------------------
 
    static function void init( ref q_type q, input T val );
-      common_array#( T, SIZE, q_type )::init( q, val );
+      common_array#( T, q_type )::init( q, val );
    endfunction: init
 
    //---------------------------------------------------------------------------
@@ -406,7 +404,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //---------------------------------------------------------------------------
 
    static function void reverse( ref q_type q );
-      common_array#( T, SIZE, q_type )::reverse( q );
+      common_array#( T, q_type )::reverse( q );
    endfunction: reverse
 
    //---------------------------------------------------------------------------
@@ -648,7 +646,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
 				int from_index2 = 0, 
 				int to_index2   = -1,
 				comparator#(T) cmp = null );
-      return common_array#( T, SIZE, q_type )::
+      return common_array#( T, q_type, q_type )::
 	compare( q1, q2, from_index1, to_index1, from_index2, to_index2, cmp );
    endfunction: compare
 
@@ -703,7 +701,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
 				     int from_index = 0,
 				     int to_index = -1,
 				     formatter#(T) fmtr = null );
-      return common_array#(T, SIZE, q_type )::
+      return common_array#(T, q_type )::
 	to_string( q, separator, from_index, to_index, fmtr );
    endfunction: to_string
 
