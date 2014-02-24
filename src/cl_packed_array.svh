@@ -125,8 +125,8 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
 
    static function ua_type to_unpacked_array( const ref pa_type pa,
 					      input bit reverse = 0 );
-      common_packed_array#( T, WIDTH, ua_type )::pa_to_a( pa, to_unpacked_array,
-							  reverse );
+      common_array#( T, pa_type, ua_type )::a_to_a( pa, to_unpacked_array,
+						    reverse );
    endfunction: to_unpacked_array
 
    //---------------------------------------------------------------------------
@@ -194,8 +194,8 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    static function da_type to_dynamic_array( const ref pa_type pa,
 					     input bit reverse = 0 );
       to_dynamic_array = new[WIDTH];
-      common_packed_array#( T, WIDTH, da_type )::pa_to_a( pa, to_dynamic_array,
-							  reverse );
+      common_array#( T, pa_type, da_type )::a_to_a( pa, to_dynamic_array,
+						    reverse );
    endfunction: to_dynamic_array
 
    //---------------------------------------------------------------------------
@@ -333,7 +333,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    static function void pa_to_ua( const ref pa_type pa,
 				  ref ua_type ua,
 				  input bit reverse = 0 );
-      common_packed_array#( T, WIDTH, ua_type )::pa_to_a( pa, ua, reverse );
+      common_array#( T, pa_type, ua_type )::a_to_a( pa, ua, reverse );
    endfunction: pa_to_ua
 
    //---------------------------------------------------------------------------
@@ -412,7 +412,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    static function void pa_to_da( const ref pa_type pa,
 				  ref da_type da,
 				  input bit reverse = 0 );
-      common_packed_array#( T, WIDTH, da_type )::pa_to_a( pa, da, reverse );
+      common_array#( T, pa_type, da_type )::a_to_a( pa, da, reverse );
    endfunction: pa_to_da
 
    //---------------------------------------------------------------------------

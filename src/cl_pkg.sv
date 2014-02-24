@@ -79,7 +79,6 @@ package cl;
    `include "cl_tuple.svh"
 
    `include "cl_common_array.svh"
-   `include "cl_common_packed_array.svh"
    `include "cl_packed_array.svh"
    `include "cl_unpacked_array.svh"
    `include "cl_dynamic_array.svh"
