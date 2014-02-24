@@ -8,7 +8,7 @@
 
 # constants
 
-incisive_compile_opts := +incdir+$(src_dir)+$(test_dir) +define+CL_USE_INCISIVE
+incisive_compile_opts := $(compile_opts) +define+CL_USE_INCISIVE
 incisive_run_opts     :=
 
 # targets
@@ -21,3 +21,4 @@ run_incisive:
 	irun $(incisive_compile_opts) $(incisive_run_opts) $(compile_files)
 
 clean_incisive:
+	rm -rf ./INCA_libs

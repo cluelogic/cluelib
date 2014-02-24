@@ -9,10 +9,9 @@ MODELSIM_LIB_NAME := work
 
 # constants
 
-modelsim_compile_opts := +incdir+$(src_dir)+$(test_dir) +define+CL_USE_MODELSIM
-modelsim_run_cmd_file := modelsim.cmd
+modelsim_compile_opts := $(compile_opts) +define+CL_USE_MODELSIM
 modelsim_run_opts     :=
-modelsim_top_module   := test_from_examples
+modelsim_run_cmd_file := modelsim.cmd
 
 # targets
 
