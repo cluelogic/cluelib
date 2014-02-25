@@ -43,7 +43,7 @@
 typedef struct { 
    int 	         min_val;
    int           max_val;
-   byte unsigned wt = 0;
+   byte unsigned wt /*= 0*/;
 } dist_bin;
 
 //------------------------------------------------------------------------------

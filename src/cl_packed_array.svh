@@ -116,8 +116,11 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | assert( packed_array#(bit,8)::to_unpacked_array( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( packed_array#(bit,8)::to_unpacked_array( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+   // |
+   // | assert( packed_array#(bit,8)::to_unpacked_array( pa                ) == ua0 );
+   // | assert( packed_array#(bit,8)::to_unpacked_array( pa, .reverse( 1 ) ) == ua1 );
    // 
    // See Also:
    //   <pa_to_ua>
@@ -179,13 +182,11 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | bit da[];
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // |
-   // | da = packed_array#(bit,8)::to_dynamic_array( pa );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | da = packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( packed_array#(bit,8)::to_dynamic_array( pa                ) == da0 );
+   // | assert( packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) ) == da1 );
    // 
    // See Also:
    //   <pa_to_da>
@@ -245,13 +246,11 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | bit q[$];
+   // | bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
    // |
-   // | q = packed_array#(bit,8)::to_queue( pa );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | q = packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( packed_array#(bit,8)::to_queue( pa                ) == q0 );
+   // | assert( packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) ) == q1 );
    // 
    // See Also:
    //   <pa_to_q>
@@ -319,12 +318,14 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Examples:
    // | bit[7:0] pa = 8'hD8;
    // | bit ua[8];
+   // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
    // |
    // | packed_array#(bit,8)::pa_to_ua( pa, ua );
-   // | assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( ua == ua0 );
    // |
    // | packed_array#(bit,8)::pa_to_ua( pa, ua, .reverse( 1 ) );
-   // | assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( ua == ua1 );
    // 
    // See Also:
    //   <to_unpacked_array>
@@ -397,13 +398,15 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | bit da[] = new[8]; // set the size of da[]
+   // | bit da [] = new[8]; // set the size of da[]
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // |
    // | packed_array#(bit,8)::pa_to_da( pa, da );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( da == da0 );
    // |
    // | packed_array#(bit,8)::pa_to_da( pa, da, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( da == da1 );
    // 
    // See Also:
    //   <to_dynamic_array>
@@ -472,14 +475,16 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    //
    // Examples:
    // | bit[7:0] pa = 8'hD8;
-   // | bit q[$];
+   // | bit q [$];
+   // | bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
    // |
    // | packed_array#(bit,8)::pa_to_q( pa, q );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( q == q0 );
    // |
    // | q.delete();
    // | packed_array#(bit,8)::pa_to_q( pa, q, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( q == q1 );
    // 
    // See Also:
    //   <to_queue>

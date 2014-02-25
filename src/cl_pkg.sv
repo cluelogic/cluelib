@@ -53,7 +53,7 @@ package cl;
    `include "cl_types.svh"
 
 `ifdef CL_USE_DPI_C
-   import "DPI-C" function int c_find( string, string, int );
+   import "DPI-C" function int c_find( string s, string sub, int start_pos );
 `endif
 
    `include "cl_util.svh"

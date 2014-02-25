@@ -34,7 +34,10 @@
 //   accessible function in this class.
 //------------------------------------------------------------------------------
 
-virtual class common_array #( type T = bit, type AT1 = bit, type AT2 = bit );
+virtual class common_array #( type T = bit, type AT1 = bit[0:0], type AT2 = bit[0:0] );
+
+   // The above bit[0:0] is required to make VCS and Incisive happy :)
+   //              ^^^^^
    
    //---------------------------------------------------------------------------
    // Typedef q_type

@@ -112,13 +112,11 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    //
    // Examples:
    // | bit[7:0] ds[] = new[2]( '{ 8'h0F, 8'hAA } );
-   // | bit bs[];
+   // | bit bs0[] = new[16]( '{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0 } );
+   // | bit bs1[] = new[16]( '{ 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1 } );
    // |
-   // | bs = data_stream#(bit,8)::to_bit_stream( ds );
-   // | assert( bs == '{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0 } );
-   // |
-   // | bs = data_stream#(bit,8)::to_bit_stream( ds, .msb_first( 0 ) );
-   // | assert( bs == '{ 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1 } );
+   // | assert( data_stream#(bit,8)::to_bit_stream( ds                  ) == bs0 );
+   // | assert( data_stream#(bit,8)::to_bit_stream( ds, .msb_first( 0 ) ) == bs1 );
    //---------------------------------------------------------------------------
 
    static function bs_type to_bit_stream( ds_type ds,
@@ -157,11 +155,10 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    //   A _new_ data stream made divisible by *divisible_by*.
    //
    // Example:
-   // | bit[7:0] ds[] = new[4]( '{ 8'h00, 8'h01, 8'h02, 8'h03 } );
-   // | bit[7:0] new_ds[];
+   // | bit[7:0] ds[]       = new[4]( '{ 8'h00, 8'h01, 8'h02, 8'h03               } );
+   // | bit[7:0] expected[] = new[6]( '{ 8'h00, 8'h01, 8'h02, 8'h03, 8'hFF, 8'hFF } );
    // |
-   // | new_ds = data_stream#(bit,8)::make_divisible( ds, .divisible_by( 3 ), .padding( 8'hFF ) );
-   // | assert( new_ds == '{ 8'h00, 8'h01, 8'h02, 8'h03, 8'hFF, 8'hFF } );
+   // | assert( data_stream#(bit,8)::make_divisible( ds, .divisible_by( 3 ), .padding( 8'hFF ) ) == expected );
    //---------------------------------------------------------------------------
 
    static function ds_type make_divisible( ds_type ds,
@@ -205,15 +202,13 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    //   sequential values.
    //
    // Examples:
-   // | bit[7:0] ds[];
-   // | ds = data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ) );
-   // | assert( ds == '{ 8'hFE, 8'hFF, 8'h00, 8'h01, 8'h02, 8'h03, 8'h04, 8'h05 } );
+   // | bit[7:0] ds0[] = new[8]( '{ 8'hFE, 8'hFF, 8'h00, 8'h01, 8'h02, 8'h03, 8'h04, 8'h05 } );
+   // | bit[7:0] ds1[] = new[8]( '{ 8'hFE, 8'h00, 8'h02, 8'h04, 8'h06, 8'h08, 8'h0A, 8'h0C } );
+   // | bit[7:0] ds2[] = new[8]( '{ 8'hFE, 8'hFD, 8'hFC, 8'hFB, 8'hFA, 8'hF9, 8'hF8, 8'hF7 } );
    // |
-   // | ds = data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step( 2 ) );
-   // | assert( ds == '{ 8'hFE, 8'h00, 8'h02, 8'h04, 8'h06, 8'h08, 8'h0A, 8'h0C } );
-   // |
-   // | ds = data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step( -1 ) );
-   // | assert( ds == '{ 8'hFE, 8'hFD, 8'hFC, 8'hFB, 8'hFA, 8'hF9, 8'hF8, 8'hF7 } );
+   // | assert( data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE )              ) == ds0 );
+   // | assert( data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step(  2 ) ) == ds1 );
+   // | assert( data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step( -1 ) ) == ds2 );
    //---------------------------------------------------------------------------
 
    static function ds_type sequential( int unsigned length,
@@ -255,9 +250,8 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    //   A _new_ data stream with the elements whose values are initialized with *value*.
    //
    // Example:
-   // | bit[7:0] ds[];
-   // | ds = data_stream#(bit,8)::constant( .length( 8 ), .value( 8'hAB ) );
-   // | assert( ds == '{ 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB } );
+   // | bit[7:0] expected[] = new[8]( '{ 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB } );
+   // | assert( data_stream#(bit,8)::constant( .length( 8 ), .value( 8'hAB ) ) == expected );
    //---------------------------------------------------------------------------
 
    static function ds_type constant( int unsigned length,
@@ -529,7 +523,8 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
       end else begin
 	 string s = "";
 
-	 repeat ( util::num_hex_digits( WIDTH ) ) s = { s, disabled_char };
+	 repeat ( util::num_hex_digits( WIDTH ) )
+	   s = { s, string'( disabled_char ) };
 	 return s;
       end
    endfunction: format_data

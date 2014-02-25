@@ -96,14 +96,12 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   A dynamic array converted from *ua*.
    //
    // Examples:
-   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
-   // | bit da[];
+   // | bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // |
-   // | da = dynamic_array#(bit,8)::from_unpacked_array( ua );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | da = dynamic_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( dynamic_array#(bit,8)::from_unpacked_array( ua                ) == da0 );
+   // | assert( dynamic_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == da1 );
    //
    // See Also:
    //   <ua_to_da>
@@ -133,8 +131,11 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit,8)::to_unpacked_array( da                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( dynamic_array#(bit,8)::to_unpacked_array( da, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit ua0[8] =       '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit ua1[8] =       '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+   // |
+   // | assert( dynamic_array#(bit,8)::to_unpacked_array( da                ) == ua0 );
+   // | assert( dynamic_array#(bit,8)::to_unpacked_array( da, .reverse( 1 ) ) == ua1 );
    // 
    // See Also:
    //   <da_to_ua>
@@ -162,14 +163,12 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   A dynamic array converted from *q*.
    //
    // Examples:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-   // | bit da[];
+   // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // |
-   // | da = dynamic_array#(bit)::from_queue( q );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | da = dynamic_array#(bit)::from_queue( q, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( dynamic_array#(bit)::from_queue( q                ) == da0 );
+   // | assert( dynamic_array#(bit)::from_queue( q, .reverse( 1 ) ) == da1 );
    //
    // See Also:
    //   <q_to_da>
@@ -196,14 +195,12 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   A queue converted from *da*.
    //
    // Examples:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | bit q[$];
+   // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
    // |
-   // | q = dynamic_array#(bit)::to_queue( da );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | q = dynamic_array#(bit)::to_queue( da, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( dynamic_array#(bit)::to_queue( da                ) == q0 );
+   // | assert( dynamic_array#(bit)::to_queue( da, .reverse( 1 ) ) == q1 );
    //
    // See Also:
    //   <da_to_q>
@@ -234,14 +231,16 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Examples:
-   // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-   // | bit da[] = new[8]; // set the size of da[]
+   // | bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da [] = new[8]; // set the size of da[]
    // |
    // | dynamic_array#(bit,8)::ua_to_da( ua, da );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( da == da0 );
    // |
    // | dynamic_array#(bit,8)::ua_to_da( ua, da, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( da == da1 );
    // 
    // See Also:
    //   <from_unpacked_array>
@@ -274,14 +273,16 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Examples:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-   // | bit ua[8];
+   // | bit da[]   = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit ua0[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit ua1[8] =         '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+   // | bit ua [8];
    // |
    // | dynamic_array#(bit,8)::da_to_ua( da, ua );
-   // | assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( ua == ua0 );
    // |
    // | dynamic_array#(bit,8)::da_to_ua( da, ua, .reverse( 1 ) );
-   // | assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( ua == ua1 );
    //
    // See Also:
    //   <to_unpacked_array>
@@ -310,14 +311,16 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Examples:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-   // | bit da[] = new[8]; // set the size of da[]
+   // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da [] = new[8]; // set the size of da[]
    // |
    // | dynamic_array#(bit)::q_to_da( q, da );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( da == da0 );
    // |
    // | dynamic_array#(bit)::q_to_da( q, da, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( da == da1 );
    //
    // See Also:
    //   <from_queue>
@@ -348,15 +351,17 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Examples:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-   // | bit q[$];
+   // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
+   // | bit q [$];
    // |
    // | dynamic_array#(bit)::da_to_q( da, q );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( q == q0 );
    // |
    // | q.delete();
    // | dynamic_array#(bit)::da_to_q( da, q, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( q == q1 );
    // 
    // See Also:
    //   <to_queue>
@@ -381,9 +386,11 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Example:
-   // | bit da[] = new[8];
+   // | bit da[]       = new[8];
+   // | bit expected[] = new[8]( '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
+   // |
    // | dynamic_array#(bit)::init( da, 1'b1 );
-   // | assert( da == '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
+   // | assert( da == expected );
    //---------------------------------------------------------------------------
 
    static function void init( ref da_type da, input T val );
@@ -401,9 +408,11 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Example:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 0, 1, 1, 1, 1 } ); // da[0] to da[7]
+   // | bit da[]       = new[8]( '{ 0, 0, 0, 0, 1, 1, 1, 1 } ); // da[0] to da[7]
+   // | bit expected[] = new[8]( '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
+   // |
    // | dynamic_array#(bit)::reverse( da );
-   // | assert( da == '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
+   // | assert( da == expected );
    //---------------------------------------------------------------------------
 
    static function void reverse( ref da_type da );
@@ -427,15 +436,19 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit da[] = new[7]( '{ 0, 0, 0, 1, 1, 0, 1 } ); // da[0] to da[6]
-   // | bit da0[], da1[];
+   // | bit da0[], da1[], expected_da0[], expected_da1[];
    // |
+   // | expected_da0 = new[4]( '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
+   // | expected_da1 = new[3]( '{ 0, 1, 0    } ); // da[1], da[3], da[5]
    // | dynamic_array#(bit)::split( da, da0, da1 );
-   // | assert( da0 == '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
-   // | assert( da1 == '{ 0, 1, 0 } );    // da[1], da[3], da[5]
+   // | assert( da0 == expected_da0 );
+   // | assert( da1 == expected_da1 );
    // |
+   // | expected_da0 = new[4]( '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
+   // | expected_da1 = new[4]( '{ 0, 1, 0, 0 } ); // the last element is padded with the default value of bit type
    // | dynamic_array#(bit)::split( da, da0, da1, .pad( 1 ) );
-   // | assert( da0 == '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
-   // | assert( da1 == '{ 0, 1, 0, 0 } ); // da[1], da[3], da[5], 0 (padded with the default value of bit type)
+   // | assert( da0 == expected_da0 );
+   // | assert( da1 == expected_da1 );
    //
    // See Also:
    //   <merge>
@@ -483,13 +496,13 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Examples:
    // | int da0[] = new[4]( '{ 0, 0, 0, 0 } );
    // | int da1[] = new[6]( '{ 1, 2, 3, 4, 5, 6 } );
-   // | int da[];
+   // | int expected[];
    // |
-   // | da = dynamic_array#(int)::merge( da0, da1 );
-   // | assert( da == '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+   // | expected = new[10]( '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+   // | assert( dynamic_array#(int)::merge( da0, da1 ) == expected );
    // |
-   // | da = dynamic_array#(int)::merge( da0, da1, .truncate( 1 ) );
-   // | assert( da == '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+   // | expected = new[8]( '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+   // | assert( dynamic_array#(int)::merge( da0, da1, .truncate( 1 ) ) == expected );
    //
    // See Also:
    //   <concat>, <split>
@@ -556,12 +569,11 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   A new dynamic array created by concatenating *da0* and *da1*.
    //
    // Example:
-   // | int da0[] = new[4]( '{ 0, 0, 0, 0 } );
-   // | int da1[] = new[6]( '{ 1, 2, 3, 4, 5, 6 } );
-   // | int da[];
+   // | int da0[]      = new[4] ( '{ 0, 0, 0, 0                   } );
+   // | int da1[]      = new[6] ( '{             1, 2, 3, 4, 5, 6 } );
+   // | int expected[] = new[10]( '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
    // |
-   // | da = dynamic_array#(int)::concat( da0, da1 );
-   // | assert( da == '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
+   // | assert( dynamic_array#(int)::concat( da0, da1 ) == expected );
    //
    // See Also:
    //   <merge>
@@ -594,14 +606,11 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   A new dynamic array extracted from *da*.
    //
    // Examples:
-   // | int da[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-   // | int extracted[];
+   // | int da[]       = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
+   // | int expected[] = new[5] ( '{          3, 4, 5, 6, 7       } );
    // |
-   // | extracted = dynamic_array#(int)::extract( da, 3, 7 );
-   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
-   // | 
-   // | extracted = dynamic_array#(int)::extract( da, 3, -3 );
-   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
+   // | assert( dynamic_array#(int)::extract( da, 3,  7 ) == expected );
+   // | assert( dynamic_array#(int)::extract( da, 3, -3 ) == expected );
    //---------------------------------------------------------------------------
 
    static function da_type extract( da_type da,
@@ -625,12 +634,12 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   A _copy_ of *da* appended with *e*. The input *da* is not modified.
    //
    // Example:
-   // | int da[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-   // | int appended[];
+   // | int da[]       = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     } );
+   // | int original[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     } );
+   // | int expected[] = new[11]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
    // |
-   // | appended = dynamic_array#(int)::append( da, 10 );
-   // | assert( appended == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
-   // | assert( da       == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } ); // not modified
+   // | assert( dynamic_array#(int)::append( da, 10 ) == expected );
+   // | assert( da == original ); // da is not modified
    //---------------------------------------------------------------------------
 
    static function da_type append( da_type da, T e );

@@ -173,11 +173,19 @@ module test_from_examples;
       assert( text::only( "abcXYZ", "abc" ) == 0 );
     end
     begin
-      assert( text::partition( "abc-XYZ", "-" ) == '{ "abc", "-", "XYZ" } );
-      assert( text::partition( "abcabc",  "a" ) == '{ "", "a", "bcabc" } );
-      assert( text::partition( "abcabc",  "b" ) == '{ "a", "b", "cabc" } );
-      assert( text::partition( "abcabc",  "c" ) == '{ "ab", "c", "abc" } );
-      assert( text::partition( "abcabc",  "X" ) == '{ "abcabc", "", "" } );
+      three_strings s, t1, t2, t3, t4;
+      
+      s = '{ "abc", "-", "XYZ" };
+      assert( text::partition( "abc-XYZ", "-" ) == s );
+      
+      t1 = '{ "", "a", "bcabc" };
+      t2 = '{ "a", "b", "cabc" };
+      t3 = '{ "ab", "c", "abc" };
+      t4 = '{ "abcabc", "", "" };
+      assert( text::partition( "abcabc", "a" ) == t1 );
+      assert( text::partition( "abcabc", "b" ) == t2 );
+      assert( text::partition( "abcabc", "c" ) == t3 );
+      assert( text::partition( "abcabc", "X" ) == t4 );
     end
     begin
       assert( text::replace( "abcabc", "abc", "XYZ"    ) == "XYZXYZ" );
@@ -218,23 +226,42 @@ module test_from_examples;
       assert( text::rjust( "rjust me", 7, .trim_left( 1 ) ) ==         "just me" ); // trimmed
     end
     begin
-      assert( text::rpartition( "abc-XYZ", "-" ) == '{ "abc", "-", "XYZ" } );
-      assert( text::rpartition( "abcabc",  "a" ) == '{ "abc", "a", "bc" } );
-      assert( text::rpartition( "abcabc",  "b" ) == '{ "abca", "b", "c" } );
-      assert( text::rpartition( "abcabc",  "c" ) == '{ "abcab", "c", "" } );
-      assert( text::rpartition( "abcabc",  "X" ) == '{ "abcabc", "", "" } );
+      three_strings s, t1, t2, t3, t4;
+      
+      s = '{ "abc", "-", "XYZ" };
+      assert( text::rpartition( "abc-XYZ", "-" ) == s );
+      
+      t1 = '{ "abc", "a", "bc" };
+      t2 = '{ "abca", "b", "c" };
+      t3 = '{ "abcab", "c", "" };
+      t4 = '{ "abcabc", "", "" };
+      assert( text::rpartition( "abcabc", "a" ) == t1 );
+      assert( text::rpartition( "abcabc", "b" ) == t2 );
+      assert( text::rpartition( "abcabc", "c" ) == t3 );
+      assert( text::rpartition( "abcabc", "X" ) == t4 );
     end
     begin
-      assert( text::rsplit( "  abc  pqr  xyz  "                  ) == '{ "abc", "pqr", "xyz" } );
-      assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 1 ) ) == '{ "  abc  pqr", "xyz" } );
-      assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 2 ) ) == '{ "  abc", "pqr", "xyz" } );
-      assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 3 ) ) == '{ "abc", "pqr", "xyz" } );
+      string_q s1, s2, s3, s4, t1, t2, t3, t4, t5;
       
-      assert( text::rsplit( "--abc--pqr--xyz--", "--"                  ) == '{ "", "abc", "pqr", "xyz", "" } );
-      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == '{ "--abc--pqr--xyz", "" } );
-      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == '{ "--abc--pqr", "xyz", "" } );
-      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == '{ "--abc", "pqr", "xyz", "" } );
-      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == '{ "", "abc", "pqr", "xyz", "" } );
+      s1 = '{ "abc", "pqr", "xyz" };
+      s2 = '{ "  abc  pqr", "xyz" };
+      s3 = '{ "  abc", "pqr", "xyz" };
+      s4 = '{ "abc", "pqr", "xyz" };
+      assert( text::rsplit( "  abc  pqr  xyz  "                  ) == s1 );
+      assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 1 ) ) == s2 );
+      assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 2 ) ) == s3 );
+      assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 3 ) ) == s4 );
+      
+      t1 = '{ "", "abc", "pqr", "xyz", "" };
+      t2 = '{ "--abc--pqr--xyz", "" };
+      t3 = '{ "--abc--pqr", "xyz", "" };
+      t4 = '{ "--abc", "pqr", "xyz", "" };
+      t5 = '{ "", "abc", "pqr", "xyz", "" };
+      assert( text::rsplit( "--abc--pqr--xyz--", "--"                  ) == t1 );
+      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == t2 );
+      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == t3 );
+      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == t4 );
+      assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == t5 );
     end
     begin
       assert( text::rstrip( "abc      " ) == "abc" );
@@ -252,16 +279,27 @@ module test_from_examples;
       assert( text::slice_len( "slice me", -6, 5 ) == "ice m" );
     end
     begin
-      assert( text::split( "  abc  pqr  xyz  "                  ) == '{ "abc", "pqr", "xyz" } );
-      assert( text::split( "  abc  pqr  xyz  ", .max_split( 1 ) ) == '{ "abc", "pqr  xyz  " } );
-      assert( text::split( "  abc  pqr  xyz  ", .max_split( 2 ) ) == '{ "abc", "pqr", "xyz  " } );
-      assert( text::split( "  abc  pqr  xyz  ", .max_split( 3 ) ) == '{ "abc", "pqr", "xyz" } );
+      string_q s1, s2, s3, s4, t1, t2, t3, t4, t5;
       
-      assert( text::split( "--abc--pqr--xyz--", "--"                  ) == '{ "", "abc", "pqr", "xyz", "" } );
-      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == '{ "", "abc--pqr--xyz--" } );
-      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == '{ "", "abc", "pqr--xyz--" } );
-      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == '{ "", "abc", "pqr", "xyz--" } );
-      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == '{ "", "abc", "pqr", "xyz", "" } );
+      s1 = '{ "abc", "pqr", "xyz" };
+      s2 = '{ "abc", "pqr  xyz  " };
+      s3 = '{ "abc", "pqr", "xyz  " };
+      s4 = '{ "abc", "pqr", "xyz" };
+      assert( text::split( "  abc  pqr  xyz  "                  ) == s1 );
+      assert( text::split( "  abc  pqr  xyz  ", .max_split( 1 ) ) == s2 );
+      assert( text::split( "  abc  pqr  xyz  ", .max_split( 2 ) ) == s3 );
+      assert( text::split( "  abc  pqr  xyz  ", .max_split( 3 ) ) == s4 );
+      
+      t1 = '{ "", "abc", "pqr", "xyz", "" };
+      t2 = '{ "", "abc--pqr--xyz--" };
+      t3 = '{ "", "abc", "pqr--xyz--" };
+      t4 = '{ "", "abc", "pqr", "xyz--" };
+      t5 = '{ "", "abc", "pqr", "xyz", "" };
+      assert( text::split( "--abc--pqr--xyz--", "--"                  ) == t1 );
+      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == t2 );
+      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == t3 );
+      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == t4 );
+      assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == t5 );
     end
     begin
       assert( text::starts_with( "a primary library", { "a primary", "library" } )                   == 1 );
@@ -458,8 +496,11 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      assert( packed_array#(bit,8)::to_unpacked_array( pa                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( packed_array#(bit,8)::to_unpacked_array( pa, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+      
+      assert( packed_array#(bit,8)::to_unpacked_array( pa                ) == ua0 );
+      assert( packed_array#(bit,8)::to_unpacked_array( pa, .reverse( 1 ) ) == ua1 );
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
@@ -468,13 +509,11 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      bit da[];
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
       
-      da = packed_array#(bit,8)::to_dynamic_array( pa );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      da = packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( packed_array#(bit,8)::to_dynamic_array( pa                ) == da0 );
+      assert( packed_array#(bit,8)::to_dynamic_array( pa, .reverse( 1 ) ) == da1 );
     end
     begin
       bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
@@ -483,13 +522,11 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      bit q[$];
+      bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
       
-      q = packed_array#(bit,8)::to_queue( pa );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      q = packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( packed_array#(bit,8)::to_queue( pa                ) == q0 );
+      assert( packed_array#(bit,8)::to_queue( pa, .reverse( 1 ) ) == q1 );
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
@@ -504,12 +541,14 @@ module test_from_examples;
     begin
       bit[7:0] pa = 8'hD8;
       bit ua[8];
+      bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
       
       packed_array#(bit,8)::pa_to_ua( pa, ua );
-      assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( ua == ua0 );
       
       packed_array#(bit,8)::pa_to_ua( pa, ua, .reverse( 1 ) );
-      assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( ua == ua1 );
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
@@ -523,13 +562,15 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      bit da[] = new[8]; // set the size of da[]
+      bit da [] = new[8]; // set the size of da[]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
       
       packed_array#(bit,8)::pa_to_da( pa, da );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( da == da0 );
       
       packed_array#(bit,8)::pa_to_da( pa, da, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( da == da1 );
     end
     begin
       bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
@@ -543,14 +584,16 @@ module test_from_examples;
     end
     begin
       bit[7:0] pa = 8'hD8;
-      bit q[$];
+      bit q [$];
+      bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
       
       packed_array#(bit,8)::pa_to_q( pa, q );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( q == q0 );
       
       q.delete();
       packed_array#(bit,8)::pa_to_q( pa, q, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( q == q1 );
     end
     begin
       bit[7:0] pa;
@@ -581,84 +624,98 @@ module test_from_examples;
     // test ../src/cl_unpacked_array.svh
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-      assert( unpacked_array#(bit,8)::from_dynamic_array( da                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( unpacked_array#(bit,8)::from_dynamic_array( da, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit ua0[8] =       '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] =       '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+      
+      assert( unpacked_array#(bit,8)::from_dynamic_array( da                ) == ua0 );
+      assert( unpacked_array#(bit,8)::from_dynamic_array( da, .reverse( 1 ) ) == ua1 );
+    end
+    begin
+      bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      
+      assert( unpacked_array#(bit,8)::to_dynamic_array( ua                ) == da0 );
+      assert( unpacked_array#(bit,8)::to_dynamic_array( ua, .reverse( 1 ) ) == da1 );
+    end
+    begin
+      bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+      
+      assert( unpacked_array#(bit,8)::from_queue( q                ) == ua0 );
+      assert( unpacked_array#(bit,8)::from_queue( q, .reverse( 1 ) ) == ua1 );
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      bit da[];
+      bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
       
-      da = unpacked_array#(bit,8)::to_dynamic_array( ua );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      da = unpacked_array#(bit,8)::to_dynamic_array( ua, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
-    end
-    begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-      assert( unpacked_array#(bit,8)::from_queue( q                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( unpacked_array#(bit,8)::from_queue( q, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
-    end
-    begin
-      bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      bit q[$];
-      
-      q = unpacked_array#(bit,8)::to_queue( ua );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      q = unpacked_array#(bit,8)::to_queue( ua, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( unpacked_array#(bit,8)::to_queue( ua                ) == q0 );
+      assert( unpacked_array#(bit,8)::to_queue( ua, .reverse( 1 ) ) == q1 );
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
       bit ua[8];
+      bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
       
       unpacked_array#(bit,8)::da_to_ua( da, ua );
-      assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( ua == ua0 );
       
       unpacked_array#(bit,8)::da_to_ua( da, ua, .reverse( 1 ) );
-      assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( ua == ua1 );
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      bit da[] = new[8]; // set the size of da[]
+      bit da [] = new[8]; // set the size of da[]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
       
       unpacked_array#(bit,8)::ua_to_da( ua, da );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( da == da0 );
       
       unpacked_array#(bit,8)::ua_to_da( ua, da, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( da == da1 );
     end
     begin
       bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-      bit ua[8];
+      bit ua [8];
+      bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
       
       unpacked_array#(bit,8)::q_to_ua( q, ua );
-      assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( ua == ua0 );
       
       unpacked_array#(bit,8)::q_to_ua( q, ua, .reverse( 1 ) );
-      assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( ua == ua1 );
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      bit q[$];
+      bit q [$];
+      bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
       
       unpacked_array#(bit,8)::ua_to_q( ua, q );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( q == q0 );
       
       q.delete();
       unpacked_array#(bit,8)::ua_to_q( ua, q, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( q == q1 );
     end
     begin
       bit ua[8];
+      bit expected[8] = '{ 1, 1, 1, 1, 1, 1, 1, 1 };
+      
       unpacked_array#(bit,8)::init( ua, 1'b1 );
-      assert( ua == '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
+      assert( ua == expected );
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 0, 1, 1, 1, 1 };
+      bit expected[8] = '{ 1, 1, 1, 1, 0, 0, 0, 0 };
+      
       unpacked_array#(bit,8)::reverse( ua );
-      assert( ua == '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
+      assert( ua == expected );
     end
     begin
       bit ua1[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -678,139 +735,148 @@ module test_from_examples;
     end
     // test ../src/cl_dynamic_array.svh
     begin
-      bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
-      bit da[];
+      bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
       
-      da = dynamic_array#(bit,8)::from_unpacked_array( ua );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      da = dynamic_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( dynamic_array#(bit,8)::from_unpacked_array( ua                ) == da0 );
+      assert( dynamic_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == da1 );
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( dynamic_array#(bit,8)::to_unpacked_array( da                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( dynamic_array#(bit,8)::to_unpacked_array( da, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit ua0[8] =       '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] =       '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+      
+      assert( dynamic_array#(bit,8)::to_unpacked_array( da                ) == ua0 );
+      assert( dynamic_array#(bit,8)::to_unpacked_array( da, .reverse( 1 ) ) == ua1 );
     end
     begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-      bit da[];
+      bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
       
-      da = dynamic_array#(bit)::from_queue( q );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      da = dynamic_array#(bit)::from_queue( q, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( dynamic_array#(bit)::from_queue( q                ) == da0 );
+      assert( dynamic_array#(bit)::from_queue( q, .reverse( 1 ) ) == da1 );
     end
     begin
-      bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      bit q[$];
+      bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
       
-      q = dynamic_array#(bit)::to_queue( da );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      q = dynamic_array#(bit)::to_queue( da, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( dynamic_array#(bit)::to_queue( da                ) == q0 );
+      assert( dynamic_array#(bit)::to_queue( da, .reverse( 1 ) ) == q1 );
     end
     begin
-      bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
-      bit da[] = new[8]; // set the size of da[]
+      bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit da [] = new[8]; // set the size of da[]
       
       dynamic_array#(bit,8)::ua_to_da( ua, da );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( da == da0 );
       
       dynamic_array#(bit,8)::ua_to_da( ua, da, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( da == da1 );
     end
     begin
-      bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-      bit ua[8];
+      bit da[]   = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+      bit ua0[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] =         '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+      bit ua [8];
       
       dynamic_array#(bit,8)::da_to_ua( da, ua );
-      assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( ua == ua0 );
       
       dynamic_array#(bit,8)::da_to_ua( da, ua, .reverse( 1 ) );
-      assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( ua == ua1 );
     end
     begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-      bit da[] = new[8]; // set the size of da[]
+      bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit da [] = new[8]; // set the size of da[]
       
       dynamic_array#(bit)::q_to_da( q, da );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( da == da0 );
       
       dynamic_array#(bit)::q_to_da( q, da, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( da == da1 );
     end
     begin
-      bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
-      bit q[$];
+      bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+      bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
+      bit q [$];
       
       dynamic_array#(bit)::da_to_q( da, q );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( q == q0 );
       
       q.delete();
       dynamic_array#(bit)::da_to_q( da, q, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( q == q1 );
     end
     begin
-      bit da[] = new[8];
+      bit da[]       = new[8];
+      bit expected[] = new[8]( '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
+      
       dynamic_array#(bit)::init( da, 1'b1 );
-      assert( da == '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
+      assert( da == expected );
     end
     begin
-      bit da[] = new[8]( '{ 0, 0, 0, 0, 1, 1, 1, 1 } ); // da[0] to da[7]
+      bit da[]       = new[8]( '{ 0, 0, 0, 0, 1, 1, 1, 1 } ); // da[0] to da[7]
+      bit expected[] = new[8]( '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
+      
       dynamic_array#(bit)::reverse( da );
-      assert( da == '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
+      assert( da == expected );
     end
     begin
       bit da[] = new[7]( '{ 0, 0, 0, 1, 1, 0, 1 } ); // da[0] to da[6]
-      bit da0[], da1[];
+      bit da0[], da1[], expected_da0[], expected_da1[];
       
+      expected_da0 = new[4]( '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
+      expected_da1 = new[3]( '{ 0, 1, 0    } ); // da[1], da[3], da[5]
       dynamic_array#(bit)::split( da, da0, da1 );
-      assert( da0 == '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
-      assert( da1 == '{ 0, 1, 0 } );    // da[1], da[3], da[5]
+      assert( da0 == expected_da0 );
+      assert( da1 == expected_da1 );
       
+      expected_da0 = new[4]( '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
+      expected_da1 = new[4]( '{ 0, 1, 0, 0 } ); // the last element is padded with the default value of bit type
       dynamic_array#(bit)::split( da, da0, da1, .pad( 1 ) );
-      assert( da0 == '{ 0, 0, 1, 1 } ); // da[0], da[2], da[4], da[6]
-      assert( da1 == '{ 0, 1, 0, 0 } ); // da[1], da[3], da[5], 0 (padded with the default value of bit type)
+      assert( da0 == expected_da0 );
+      assert( da1 == expected_da1 );
     end
     begin
       int da0[] = new[4]( '{ 0, 0, 0, 0 } );
       int da1[] = new[6]( '{ 1, 2, 3, 4, 5, 6 } );
-      int da[];
+      int expected[];
       
-      da = dynamic_array#(int)::merge( da0, da1 );
-      assert( da == '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+      expected = new[10]( '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+      assert( dynamic_array#(int)::merge( da0, da1 ) == expected );
       
-      da = dynamic_array#(int)::merge( da0, da1, .truncate( 1 ) );
-      assert( da == '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+      expected = new[8]( '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+      assert( dynamic_array#(int)::merge( da0, da1, .truncate( 1 ) ) == expected );
     end
     begin
-      int da0[] = new[4]( '{ 0, 0, 0, 0 } );
-      int da1[] = new[6]( '{ 1, 2, 3, 4, 5, 6 } );
-      int da[];
+      int da0[]      = new[4] ( '{ 0, 0, 0, 0                   } );
+      int da1[]      = new[6] ( '{             1, 2, 3, 4, 5, 6 } );
+      int expected[] = new[10]( '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
       
-      da = dynamic_array#(int)::concat( da0, da1 );
-      assert( da == '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
+      assert( dynamic_array#(int)::concat( da0, da1 ) == expected );
     end
     begin
-      int da[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-      int extracted[];
+      int da[]       = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
+      int expected[] = new[5] ( '{          3, 4, 5, 6, 7       } );
       
-      extracted = dynamic_array#(int)::extract( da, 3, 7 );
-      assert( extracted == '{ 3, 4, 5, 6, 7 } );
-      
-      extracted = dynamic_array#(int)::extract( da, 3, -3 );
-      assert( extracted == '{ 3, 4, 5, 6, 7 } );
+      assert( dynamic_array#(int)::extract( da, 3,  7 ) == expected );
+      assert( dynamic_array#(int)::extract( da, 3, -3 ) == expected );
     end
     begin
-      int da[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-      int appended[];
+      int da[]       = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     } );
+      int original[] = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     } );
+      int expected[] = new[11]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
       
-      appended = dynamic_array#(int)::append( da, 10 );
-      assert( appended == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
-      assert( da       == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } ); // not modified
+      assert( dynamic_array#(int)::append( da, 10 ) == expected );
+      assert( da == original ); // da is not modified
     end
     begin
       bit da1[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
@@ -836,141 +902,150 @@ module test_from_examples;
     // test ../src/cl_queue.svh
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
-      bit q[$];
+      bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
       
-      q = queue#(bit,8)::from_unpacked_array( ua );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      q = queue#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( queue#(bit,8)::from_unpacked_array( ua                ) == q0 );
+      assert( queue#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == q1 );
     end
     begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-      assert( queue#(bit,8)::to_unpacked_array( q                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      assert( queue#(bit,8)::to_unpacked_array( q, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+      
+      assert( queue#(bit,8)::to_unpacked_array( q                ) == ua0 );
+      assert( queue#(bit,8)::to_unpacked_array( q, .reverse( 1 ) ) == ua1 );
     end
     begin
-      bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      bit q[$];
+      bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
       
-      q = queue#(bit)::from_dynamic_array( da );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      q = queue#(bit)::from_dynamic_array( da, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( queue#(bit)::from_dynamic_array( da                ) == q0 );
+      assert( queue#(bit)::from_dynamic_array( da, .reverse( 1 ) ) == q1 );
     end
     begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-      bit da[];
+      bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
       
-      da = queue#(bit)::to_dynamic_array( q );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      
-      da = queue#(bit)::to_dynamic_array( q, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( queue#(bit)::to_dynamic_array( q                ) == da0 );
+      assert( queue#(bit)::to_dynamic_array( q, .reverse( 1 ) ) == da1 );
     end
     begin
       bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+      bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
       bit q[$];
       
       queue#(bit,8)::ua_to_q( ua, q );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( q == q0 );
       
       q.delete();
       queue#(bit,8)::ua_to_q( ua, q, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( q == q1 );
     end
     begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
       bit ua[8];
       
       queue#(bit,8)::q_to_ua( q, ua );
-      assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( ua == ua0 );
       
       queue#(bit,8)::q_to_ua( q, ua, .reverse( 1 ) );
-      assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( ua == ua1 );
     end
     begin
-      bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+      bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+      bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
       bit q[$];
       
       queue#(bit)::da_to_q( da, q );
-      assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( q == q0 );
       
       q.delete();
       queue#(bit)::da_to_q( da, q, .reverse( 1 ) );
-      assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( q == q1 );
     end
     begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-      bit da[] = new[8]; // set the size of da[]
+      bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+      bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      bit da [] = new[8]; // set the size of da[]
       
       queue#(bit)::q_to_da( q, da );
-      assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( da == da0 );
       
       queue#(bit)::q_to_da( q, da, .reverse( 1 ) );
-      assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+      assert( da == da1 );
     end
     begin
       bit q[$] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+      bit expected[$] = { 1, 1, 1, 1, 1, 1, 1, 1 };
+      
       queue#(bit)::init( q, 1'b1 );
-      assert( q == '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
+      assert( q == expected );
     end
     begin
       bit q[$] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+      bit expected[$] = { 1, 1, 1, 1, 0, 0, 0, 0 };
+      
       queue#(bit)::reverse( q );
-      assert( q == '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
+      assert( q == expected );
     end
     begin
       bit q[$] = { 0, 0, 0, 1, 1, 0, 1 }; // q[0] to q[6]
-      bit q0[$], q1[$];
+      bit q0[$], q1[$], expected_q0[$], expected_q1[$];
       
+      expected_q0 = { 0, 0, 1, 1 }; // q[0], q[2], q[4], q[6]
+      expected_q1 = { 0, 1, 0    }; // q[1], q[3], q[5]
       queue#(bit)::split( q, q0, q1 );
-      assert( q0 == '{ 0, 0, 1, 1 } ); // q[0], q[2], q[4], q[6]
-      assert( q1 == '{ 0, 1, 0 } );    // q[1], q[3], q[5]
+      assert( q0 == expected_q0 );
+      assert( q1 == expected_q1 );
       
       q0.delete();
       q1.delete();
+      expected_q0 = { 0, 0, 1, 1 }; // q[0], q[2], q[4], q[6]
+      expected_q1 = { 0, 1, 0, 0 }; // q[1], q[3], q[5], 0 (padded with the default value of bit type)
       queue#(bit)::split( q, q0, q1, .pad( 1 ) );
-      assert( q0 == '{ 0, 0, 1, 1 } ); // q[0], q[2], q[4], q[6]
-      assert( q1 == '{ 0, 1, 0, 0 } ); // q[1], q[3], q[5], 0 (padded with the default value of bit type)
+      assert( q0 == expected_q0 );
+      assert( q1 == expected_q1 );
     end
     begin
       int q0[$] = { 0, 0, 0, 0 };
       int q1[$] = { 1, 2, 3, 4, 5, 6 };
-      int q[$];
+      int expected[$];
       
-      q = queue#(int)::merge( q0, q1 );
-      assert( q == '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+      expected = { 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 };
+      assert( queue#(int)::merge( q0, q1 ) == expected );
       
-      q = queue#(int)::merge( q0, q1, .truncate( 1 ) );
-      assert( q == '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+      expected = { 0, 1, 0, 2, 0, 3, 0, 4 };
+      assert( queue#(int)::merge( q0, q1, .truncate( 1 ) ) == expected );
     end
     begin
-      int q0[$] = { 0, 0, 0, 0 };
-      int q1[$] = { 1, 2, 3, 4, 5, 6 };
-      int q[$];
+      int q0[$]       = { 0, 0, 0, 0                   };
+      int q1[$]       = {             1, 2, 3, 4, 5, 6 };
+      int expected[$] = { 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 };
       
-      q = queue#(int)::concat( q0, q1 );
-      assert( q == '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
+      assert( queue#(int)::concat( q0, q1 ) == expected );
     end
     begin
-      int q[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-      int extracted[$];
+      int q[$]        = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+      int expected[$] = {          3, 4, 5, 6, 7       };
       
-      extracted = queue#(int)::extract( q, 3, 7 );
-      assert( extracted == '{ 3, 4, 5, 6, 7 } );
-      
-      extracted = queue#(int)::extract( q, 3, -3 );
-      assert( extracted == '{ 3, 4, 5, 6, 7 } );
+      assert( queue#(int)::extract( q, 3,  7 ) == expected );
+      assert( queue#(int)::extract( q, 3, -3 ) == expected );
     end
     begin
-      int q[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-      int appended[$];
+      int q[$]        = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     };
+      int original[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     };
+      int expected[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
       
-      appended = queue#(int)::append( q, 10 );
-      assert( appended == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
-      assert( q        == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } ); // not modified
+      assert( queue#(int)::append( q, 10 ) == expected );
+      assert( q == original ); // not modified
     end
     begin
       bit q1[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -996,36 +1071,30 @@ module test_from_examples;
     // test ../src/cl_data_stream.svh
     begin
       bit[7:0] ds[] = new[2]( '{ 8'h0F, 8'hAA } );
-      bit bs[];
+      bit bs0[] = new[16]( '{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0 } );
+      bit bs1[] = new[16]( '{ 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1 } );
       
-      bs = data_stream#(bit,8)::to_bit_stream( ds );
-      assert( bs == '{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0 } );
-      
-      bs = data_stream#(bit,8)::to_bit_stream( ds, .msb_first( 0 ) );
-      assert( bs == '{ 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1 } );
+      assert( data_stream#(bit,8)::to_bit_stream( ds                  ) == bs0 );
+      assert( data_stream#(bit,8)::to_bit_stream( ds, .msb_first( 0 ) ) == bs1 );
     end
     begin
-      bit[7:0] ds[] = new[4]( '{ 8'h00, 8'h01, 8'h02, 8'h03 } );
-      bit[7:0] new_ds[];
+      bit[7:0] ds[]       = new[4]( '{ 8'h00, 8'h01, 8'h02, 8'h03               } );
+      bit[7:0] expected[] = new[6]( '{ 8'h00, 8'h01, 8'h02, 8'h03, 8'hFF, 8'hFF } );
       
-      new_ds = data_stream#(bit,8)::make_divisible( ds, .divisible_by( 3 ), .padding( 8'hFF ) );
-      assert( new_ds == '{ 8'h00, 8'h01, 8'h02, 8'h03, 8'hFF, 8'hFF } );
+      assert( data_stream#(bit,8)::make_divisible( ds, .divisible_by( 3 ), .padding( 8'hFF ) ) == expected );
     end
     begin
-      bit[7:0] ds[];
-      ds = data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ) );
-      assert( ds == '{ 8'hFE, 8'hFF, 8'h00, 8'h01, 8'h02, 8'h03, 8'h04, 8'h05 } );
+      bit[7:0] ds0[] = new[8]( '{ 8'hFE, 8'hFF, 8'h00, 8'h01, 8'h02, 8'h03, 8'h04, 8'h05 } );
+      bit[7:0] ds1[] = new[8]( '{ 8'hFE, 8'h00, 8'h02, 8'h04, 8'h06, 8'h08, 8'h0A, 8'h0C } );
+      bit[7:0] ds2[] = new[8]( '{ 8'hFE, 8'hFD, 8'hFC, 8'hFB, 8'hFA, 8'hF9, 8'hF8, 8'hF7 } );
       
-      ds = data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step( 2 ) );
-      assert( ds == '{ 8'hFE, 8'h00, 8'h02, 8'h04, 8'h06, 8'h08, 8'h0A, 8'h0C } );
-      
-      ds = data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step( -1 ) );
-      assert( ds == '{ 8'hFE, 8'hFD, 8'hFC, 8'hFB, 8'hFA, 8'hF9, 8'hF8, 8'hF7 } );
+      assert( data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE )              ) == ds0 );
+      assert( data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step(  2 ) ) == ds1 );
+      assert( data_stream#(bit,8)::sequential( .length( 8 ), .init_value( 8'hFE ), .step( -1 ) ) == ds2 );
     end
     begin
-      bit[7:0] ds[];
-      ds = data_stream#(bit,8)::constant( .length( 8 ), .value( 8'hAB ) );
-      assert( ds == '{ 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB } );
+      bit[7:0] expected[] = new[8]( '{ 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB, 8'hAB } );
+      assert( data_stream#(bit,8)::constant( .length( 8 ), .value( 8'hAB ) ) == expected );
     end
     begin
       bit[7:0] ds[];
@@ -1072,9 +1141,8 @@ module test_from_examples;
     end
     // test ../src/cl_bit_stream.svh
     begin
-      bit bs[];
-      bs = bit_stream#(bit)::alternate( 8, .init_value( 1 ) );
-      assert( bs == '{ 1, 0, 1, 0, 1, 0, 1, 0 } );
+      bit expected[] = new[8]( '{ 1, 0, 1, 0, 1, 0, 1, 0 } );
+      assert( bit_stream#(bit)::alternate( 8, .init_value( 1 ) ) == expected );
     end
     begin
       bit bs[] = new[16]( '{ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1 } );

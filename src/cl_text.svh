@@ -141,12 +141,12 @@ virtual class text;
 
       center = s;
       if ( left_padding >= 0 ) 
-	repeat( left_padding ) center = { fill_char, center };
+	repeat( left_padding ) center = { string'( fill_char ), center };
       else
 	center = trim( center, .left( -left_padding ) );
 	
       if ( right_padding >= 0 )
-	repeat( right_padding ) center = { center, fill_char };
+	repeat( right_padding ) center = { center, string'( fill_char ) };
       else
 	center = trim( center, .right( -right_padding ) );
    endfunction: center
@@ -970,7 +970,7 @@ virtual class text;
 
       ljust = s;
       if ( padding >= 0 )
-	repeat( padding ) ljust = { ljust, fill_char };
+	repeat( padding ) ljust = { ljust, string'( fill_char ) };
       else
 	ljust = trim( ljust, .right( -padding ) );
    endfunction: ljust
@@ -1068,11 +1068,19 @@ virtual class text;
    //   after *sep*. If *sep* is not found, returns *s* and two empty strings.
    //
    // Examples:
-   // | assert( text::partition( "abc-XYZ", "-" ) == '{ "abc", "-", "XYZ" } );
-   // | assert( text::partition( "abcabc",  "a" ) == '{ "", "a", "bcabc" } );
-   // | assert( text::partition( "abcabc",  "b" ) == '{ "a", "b", "cabc" } );
-   // | assert( text::partition( "abcabc",  "c" ) == '{ "ab", "c", "abc" } );
-   // | assert( text::partition( "abcabc",  "X" ) == '{ "abcabc", "", "" } );
+   // | three_strings s, t1, t2, t3, t4;
+   // |
+   // | s = '{ "abc", "-", "XYZ" };
+   // | assert( text::partition( "abc-XYZ", "-" ) == s );
+   // | 
+   // | t1 = '{ "", "a", "bcabc" };
+   // | t2 = '{ "a", "b", "cabc" };
+   // | t3 = '{ "ab", "c", "abc" };
+   // | t4 = '{ "abcabc", "", "" };
+   // | assert( text::partition( "abcabc", "a" ) == t1 );
+   // | assert( text::partition( "abcabc", "b" ) == t2 );
+   // | assert( text::partition( "abcabc", "c" ) == t3 );
+   // | assert( text::partition( "abcabc", "X" ) == t4 );
    //
    // See Also:
    //   <rpartition>, <rsplit>, <split>
@@ -1084,11 +1092,11 @@ virtual class text;
       int j = i + sep.len();
 	  
       if ( i == -1 )
-	partition = { s, "", "" };
+	partition = '{ s, "", "" };
       else
-	partition = { s.substr( 0, i - 1 ), // if i == 0, returns ""
-		      sep, 
-		      s.substr( j, s.len() - 1 ) };
+	partition = '{ s.substr( 0, i - 1 ), // if i == 0, returns ""
+		       sep, 
+		       s.substr( j, s.len() - 1 ) };
    endfunction: partition
 
    //---------------------------------------------------------------------------
@@ -1307,7 +1315,7 @@ virtual class text;
 
       rjust = s;
       if ( padding >= 0 ) 
-	repeat( padding ) rjust = { fill_char, rjust };
+	repeat( padding ) rjust = { string'( fill_char ), rjust };
       else
 	rjust = trim( rjust, .left( -padding ) );
    endfunction: rjust
@@ -1329,11 +1337,19 @@ virtual class text;
    //   after *sep*. If *sep* is not found, returns *s* and two empty strings.
    //
    // Examples:
-   // | assert( text::rpartition( "abc-XYZ", "-" ) == '{ "abc", "-", "XYZ" } );
-   // | assert( text::rpartition( "abcabc",  "a" ) == '{ "abc", "a", "bc" } );
-   // | assert( text::rpartition( "abcabc",  "b" ) == '{ "abca", "b", "c" } );
-   // | assert( text::rpartition( "abcabc",  "c" ) == '{ "abcab", "c", "" } );
-   // | assert( text::rpartition( "abcabc",  "X" ) == '{ "abcabc", "", "" } );
+   // | three_strings s, t1, t2, t3, t4;
+   // |
+   // | s = '{ "abc", "-", "XYZ" };
+   // | assert( text::rpartition( "abc-XYZ", "-" ) == s );
+   // |
+   // | t1 = '{ "abc", "a", "bc" };
+   // | t2 = '{ "abca", "b", "c" };
+   // | t3 = '{ "abcab", "c", "" };
+   // | t4 = '{ "abcabc", "", "" };
+   // | assert( text::rpartition( "abcabc", "a" ) == t1 );
+   // | assert( text::rpartition( "abcabc", "b" ) == t2 );
+   // | assert( text::rpartition( "abcabc", "c" ) == t3 );
+   // | assert( text::rpartition( "abcabc", "X" ) == t4 );
    //
    // See Also:
    //   <partition>, <rsplit>, <split>
@@ -1345,11 +1361,11 @@ virtual class text;
       int j = i + sep.len();
 	  
       if ( i == -1 )
-	rpartition = { s, "", "" };
+	rpartition = '{ s, "", "" };
       else
-	rpartition = { s.substr( 0, i - 1 ), // if i == 0, returns ""
-		       sep, 
-		       s.substr( j, s.len() - 1 ) };
+	rpartition = '{ s.substr( 0, i - 1 ), // if i == 0, returns ""
+			sep, 
+			s.substr( j, s.len() - 1 ) };
    endfunction: rpartition
 
    //---------------------------------------------------------------------------
@@ -1375,16 +1391,27 @@ virtual class text;
    //   A queue of substrings (<string_q>).
    //
    // Examples:
-   // | assert( text::rsplit( "  abc  pqr  xyz  "                  ) == '{ "abc", "pqr", "xyz" } );
-   // | assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 1 ) ) == '{ "  abc  pqr", "xyz" } );
-   // | assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 2 ) ) == '{ "  abc", "pqr", "xyz" } );
-   // | assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 3 ) ) == '{ "abc", "pqr", "xyz" } );
+   // | string_q s1, s2, s3, s4, t1, t2, t3, t4, t5;
    // |
-   // | assert( text::rsplit( "--abc--pqr--xyz--", "--"                  ) == '{ "", "abc", "pqr", "xyz", "" } );
-   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == '{ "--abc--pqr--xyz", "" } );
-   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == '{ "--abc--pqr", "xyz", "" } );
-   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == '{ "--abc", "pqr", "xyz", "" } );
-   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == '{ "", "abc", "pqr", "xyz", "" } );
+   // | s1 = '{ "abc", "pqr", "xyz" };
+   // | s2 = '{ "  abc  pqr", "xyz" };
+   // | s3 = '{ "  abc", "pqr", "xyz" };
+   // | s4 = '{ "abc", "pqr", "xyz" };
+   // | assert( text::rsplit( "  abc  pqr  xyz  "                  ) == s1 );
+   // | assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 1 ) ) == s2 );
+   // | assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 2 ) ) == s3 );
+   // | assert( text::rsplit( "  abc  pqr  xyz  ", .max_split( 3 ) ) == s4 );
+   // |
+   // | t1 = '{ "", "abc", "pqr", "xyz", "" };
+   // | t2 = '{ "--abc--pqr--xyz", "" };
+   // | t3 = '{ "--abc--pqr", "xyz", "" };
+   // | t4 = '{ "--abc", "pqr", "xyz", "" };
+   // | t5 = '{ "", "abc", "pqr", "xyz", "" };
+   // | assert( text::rsplit( "--abc--pqr--xyz--", "--"                  ) == t1 );
+   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == t2 );
+   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == t3 );
+   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == t4 );
+   // | assert( text::rsplit( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == t5 );
    //
    // See Also:
    //   <partition>, <rpartition>, <split>
@@ -1550,16 +1577,27 @@ virtual class text;
    //   A queue of substrings (<string_q>).
    //
    // Examples:
-   // | assert( text::split( "  abc  pqr  xyz  "                  ) == '{ "abc", "pqr", "xyz" } );
-   // | assert( text::split( "  abc  pqr  xyz  ", .max_split( 1 ) ) == '{ "abc", "pqr  xyz  " } );
-   // | assert( text::split( "  abc  pqr  xyz  ", .max_split( 2 ) ) == '{ "abc", "pqr", "xyz  " } );
-   // | assert( text::split( "  abc  pqr  xyz  ", .max_split( 3 ) ) == '{ "abc", "pqr", "xyz" } );
+   // | string_q s1, s2, s3, s4, t1, t2, t3, t4, t5;
+   // |
+   // | s1 = '{ "abc", "pqr", "xyz" };
+   // | s2 = '{ "abc", "pqr  xyz  " };
+   // | s3 = '{ "abc", "pqr", "xyz  " };
+   // | s4 = '{ "abc", "pqr", "xyz" };
+   // | assert( text::split( "  abc  pqr  xyz  "                  ) == s1 );
+   // | assert( text::split( "  abc  pqr  xyz  ", .max_split( 1 ) ) == s2 );
+   // | assert( text::split( "  abc  pqr  xyz  ", .max_split( 2 ) ) == s3 );
+   // | assert( text::split( "  abc  pqr  xyz  ", .max_split( 3 ) ) == s4 );
    // | 
-   // | assert( text::split( "--abc--pqr--xyz--", "--"                  ) == '{ "", "abc", "pqr", "xyz", "" } );
-   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == '{ "", "abc--pqr--xyz--" } );
-   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == '{ "", "abc", "pqr--xyz--" } );
-   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == '{ "", "abc", "pqr", "xyz--" } );
-   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == '{ "", "abc", "pqr", "xyz", "" } );
+   // | t1 = '{ "", "abc", "pqr", "xyz", "" };
+   // | t2 = '{ "", "abc--pqr--xyz--" };
+   // | t3 = '{ "", "abc", "pqr--xyz--" };
+   // | t4 = '{ "", "abc", "pqr", "xyz--" };
+   // | t5 = '{ "", "abc", "pqr", "xyz", "" };
+   // | assert( text::split( "--abc--pqr--xyz--", "--"                  ) == t1 );
+   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 1 ) ) == t2 );
+   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 2 ) ) == t3 );
+   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 3 ) ) == t4 );
+   // | assert( text::split( "--abc--pqr--xyz--", "--", .max_split( 4 ) ) == t5 );
    //
    // See Also:
    //   <partition>, <rpartition>, <rsplit>

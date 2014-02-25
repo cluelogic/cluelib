@@ -97,13 +97,11 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
-   // | bit q[$];
+   // | bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
    // |
-   // | q = queue#(bit,8)::from_unpacked_array( ua );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | q = queue#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( queue#(bit,8)::from_unpacked_array( ua                ) == q0 );
+   // | assert( queue#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == q1 );
    //
    // See Also:
    //   <ua_to_q>
@@ -131,9 +129,12 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   An unpacked array converted from *q*.
    //
    // Examples:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-   // | assert( queue#(bit,8)::to_unpacked_array( q                ) == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | assert( queue#(bit,8)::to_unpacked_array( q, .reverse( 1 ) ) == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
+   // |
+   // | assert( queue#(bit,8)::to_unpacked_array( q                ) == ua0 );
+   // | assert( queue#(bit,8)::to_unpacked_array( q, .reverse( 1 ) ) == ua1 );
    // 
    // See Also:
    //   <q_to_ua>
@@ -160,14 +161,12 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   A queue converted from *da*.
    //
    // Examples:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | bit q[$];
+   // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
    // |
-   // | q = queue#(bit)::from_dynamic_array( da );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | q = queue#(bit)::from_dynamic_array( da, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( queue#(bit)::from_dynamic_array( da                ) == q0 );
+   // | assert( queue#(bit)::from_dynamic_array( da, .reverse( 1 ) ) == q1 );
    //
    // See Also:
    //   <da_to_q>
@@ -195,14 +194,12 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   A dynamic array converted from *q*.
    //
    // Examples:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-   // | bit da[];
+   // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // |
-   // | da = queue#(bit)::to_dynamic_array( q );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // |
-   // | da = queue#(bit)::to_dynamic_array( q, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( queue#(bit)::to_dynamic_array( q                ) == da0 );
+   // | assert( queue#(bit)::to_dynamic_array( q, .reverse( 1 ) ) == da1 );
    //
    // See Also:
    //   <q_to_da>
@@ -233,14 +230,16 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
+   // | bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
    // | bit q[$];
    // |
    // | queue#(bit,8)::ua_to_q( ua, q );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( q == q0 );
    // |
    // | q.delete();
    // | queue#(bit,8)::ua_to_q( ua, q, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( q == q1 );
    // 
    // See Also:
    //   <from_unpacked_array>
@@ -272,14 +271,16 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Examples:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
    // | bit ua[8];
    // |
    // | queue#(bit,8)::q_to_ua( q, ua );
-   // | assert( ua == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( ua == ua0 );
    // |
    // | queue#(bit,8)::q_to_ua( q, ua, .reverse( 1 ) );
-   // | assert( ua == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( ua == ua1 );
    //
    // See Also:
    //   <to_unpacked_array>
@@ -308,15 +309,17 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Examples:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
+   // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
    // | bit q[$];
    // |
    // | queue#(bit)::da_to_q( da, q );
-   // | assert( q == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( q == q0 );
    // |
    // | q.delete();
    // | queue#(bit)::da_to_q( da, q, .reverse( 1 ) );
-   // | assert( q == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( q == q1 );
    // 
    // See Also:
    //   <from_dynamic_array>
@@ -345,14 +348,16 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   None.
    //
    // Examples:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
-   // | bit da[] = new[8]; // set the size of da[]
+   // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
+   // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | bit da [] = new[8]; // set the size of da[]
    // |
    // | queue#(bit)::q_to_da( q, da );
-   // | assert( da == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( da == da0 );
    // |
    // | queue#(bit)::q_to_da( q, da, .reverse( 1 ) );
-   // | assert( da == '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
+   // | assert( da == da1 );
    //
    // See Also:
    //   <to_dynamic_array>
@@ -379,8 +384,10 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Example:
    // | bit q[$] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+   // | bit expected[$] = { 1, 1, 1, 1, 1, 1, 1, 1 };
+   // |
    // | queue#(bit)::init( q, 1'b1 );
-   // | assert( q == '{ 1, 1, 1, 1, 1, 1, 1, 1 } );
+   // | assert( q == expected );
    //---------------------------------------------------------------------------
 
    static function void init( ref q_type q, input T val );
@@ -399,8 +406,10 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Example:
    // | bit q[$] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+   // | bit expected[$] = { 1, 1, 1, 1, 0, 0, 0, 0 };
+   // |
    // | queue#(bit)::reverse( q );
-   // | assert( q == '{ 1, 1, 1, 1, 0, 0, 0, 0 } );
+   // | assert( q == expected );
    //---------------------------------------------------------------------------
 
    static function void reverse( ref q_type q );
@@ -422,17 +431,21 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //
    // Examples:
    // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1 }; // q[0] to q[6]
-   // | bit q0[$], q1[$];
+   // | bit q0[$], q1[$], expected_q0[$], expected_q1[$];
    // |
+   // | expected_q0 = { 0, 0, 1, 1 }; // q[0], q[2], q[4], q[6]
+   // | expected_q1 = { 0, 1, 0    }; // q[1], q[3], q[5]
    // | queue#(bit)::split( q, q0, q1 );
-   // | assert( q0 == '{ 0, 0, 1, 1 } ); // q[0], q[2], q[4], q[6]
-   // | assert( q1 == '{ 0, 1, 0 } );    // q[1], q[3], q[5]
+   // | assert( q0 == expected_q0 );
+   // | assert( q1 == expected_q1 );
    // |
    // | q0.delete();
    // | q1.delete();
+   // | expected_q0 = { 0, 0, 1, 1 }; // q[0], q[2], q[4], q[6]
+   // | expected_q1 = { 0, 1, 0, 0 }; // q[1], q[3], q[5], 0 (padded with the default value of bit type)
    // | queue#(bit)::split( q, q0, q1, .pad( 1 ) );
-   // | assert( q0 == '{ 0, 0, 1, 1 } ); // q[0], q[2], q[4], q[6]
-   // | assert( q1 == '{ 0, 1, 0, 0 } ); // q[1], q[3], q[5], 0 (padded with the default value of bit type)
+   // | assert( q0 == expected_q0 );
+   // | assert( q1 == expected_q1 );
    //
    // See Also:
    //   <merge>
@@ -472,48 +485,50 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Examples:
    // | int q0[$] = { 0, 0, 0, 0 };
    // | int q1[$] = { 1, 2, 3, 4, 5, 6 };
-   // | int q[$];
+   // | int expected[$];
    // |
-   // | q = queue#(int)::merge( q0, q1 );
-   // | assert( q == '{ 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 } );
+   // | expected = { 0, 1, 0, 2, 0, 3, 0, 4, 5, 6 };
+   // | assert( queue#(int)::merge( q0, q1 ) == expected );
    // |
-   // | q = queue#(int)::merge( q0, q1, .truncate( 1 ) );
-   // | assert( q == '{ 0, 1, 0, 2, 0, 3, 0, 4 } );
+   // | expected = { 0, 1, 0, 2, 0, 3, 0, 4 };
+   // | assert( queue#(int)::merge( q0, q1, .truncate( 1 ) ) == expected );
    //
    // See Also:
    //   <concat>, <split>
    //---------------------------------------------------------------------------
 
    static function q_type merge( q_type q0,
-				  q_type q1,
-				  bit truncate = 0 );
+				 q_type q1,
+				 bit truncate = 0 );
       int q0_size = q0.size();
       int q1_size = q1.size();
+      q_type q;
 
       if ( q0_size == q1_size ) begin
 	 for ( int i = 0; i < q0_size; i++ ) begin
-	    merge.push_back( q0[i] );
-	    merge.push_back( q1[i] );
+	    q.push_back( q0[i] );
+	    q.push_back( q1[i] );
 	 end
       end else if ( q0_size < q1_size ) begin
 	 for ( int i = 0; i < q0_size; i++ ) begin
-	    merge.push_back( q0[i] );
-	    merge.push_back( q1[i] );
+	    q.push_back( q0[i] );
+	    q.push_back( q1[i] );
 	 end
 	 if ( ! truncate ) begin
 	    for ( int i = q0_size; i < q1_size; i++ )
-	      merge.push_back( q1[i] );
+	      q.push_back( q1[i] );
 	 end
       end else begin // q0_size > q1_size
 	 for ( int i = 0; i < q1_size; i++ ) begin
-	    merge.push_back( q0[i] );
-	    merge.push_back( q1[i] );
+	    q.push_back( q0[i] );
+	    q.push_back( q1[i] );
 	 end
 	 if ( ! truncate ) begin
 	    for ( int i = q1_size; i < q0_size; i++ )
-	      merge.push_back( q0[i] );
+	      q.push_back( q0[i] );
 	 end
       end // else: !if( q0_size < q1_size )
+      return q;
    endfunction: merge
 
    //---------------------------------------------------------------------------
@@ -529,12 +544,11 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   A new queue created by concatenating *q0* and *q1*.
    //
    // Example:
-   // | int q0[$] = { 0, 0, 0, 0 };
-   // | int q1[$] = { 1, 2, 3, 4, 5, 6 };
-   // | int q[$];
+   // | int q0[$]       = { 0, 0, 0, 0                   };
+   // | int q1[$]       = {             1, 2, 3, 4, 5, 6 };
+   // | int expected[$] = { 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 };
    // |
-   // | q = queue#(int)::concat( q0, q1 );
-   // | assert( q == '{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 6 } );
+   // | assert( queue#(int)::concat( q0, q1 ) == expected );
    //
    // See Also:
    //   <merge>
@@ -562,14 +576,11 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   A new queue extracted from *q*.
    //
    // Examples:
-   // | int q[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-   // | int extracted[$];
+   // | int q[$]        = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+   // | int expected[$] = {          3, 4, 5, 6, 7       };
    // |
-   // | extracted = queue#(int)::extract( q, 3, 7 );
-   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
-   // | 
-   // | extracted = queue#(int)::extract( q, 3, -3 );
-   // | assert( extracted == '{ 3, 4, 5, 6, 7 } );
+   // | assert( queue#(int)::extract( q, 3,  7 ) == expected );
+   // | assert( queue#(int)::extract( q, 3, -3 ) == expected );
    //---------------------------------------------------------------------------
 
    static function q_type extract( q_type q,
@@ -591,12 +602,12 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   A _copy_ of *q* appended with *e*. The input *q* is not modified.
    //
    // Example:
-   // | int q[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-   // | int appended[$];
+   // | int q[$]        = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     };
+   // | int original[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     };
+   // | int expected[$] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
    // |
-   // | appended = queue#(int)::append( q, 10 );
-   // | assert( appended == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } );
-   // | assert( q        == '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } ); // not modified
+   // | assert( queue#(int)::append( q, 10 ) == expected );
+   // | assert( q == original ); // not modified
    //---------------------------------------------------------------------------
 
    static function q_type append( q_type q, T e );

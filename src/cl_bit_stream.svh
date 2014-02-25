@@ -64,9 +64,8 @@ virtual class bit_stream #( type T = bit ) extends data_stream #( T, 1 );
    //   and 1.
    //
    // Example:
-   // | bit bs[];
-   // | bs = bit_stream#(bit)::alternate( 8, .init_value( 1 ) );
-   // | assert( bs == '{ 1, 0, 1, 0, 1, 0, 1, 0 } );
+   // | bit expected[] = new[8]( '{ 1, 0, 1, 0, 1, 0, 1, 0 } );
+   // | assert( bit_stream#(bit)::alternate( 8, .init_value( 1 ) ) == expected );
    //---------------------------------------------------------------------------
 
    static function bs_type alternate( int unsigned length,
