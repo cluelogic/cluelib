@@ -13,7 +13,16 @@ provided under MIT license and is available on GitHub for forking.
 4. Check makefile options: `make help`
 5. Run a satity check. Use one of the simulators listed in the previous step: 
    Do `make modelsim` for example.
-6. If you see no errors, the library is in good shape.
+6. If you see no errors, the library is in good shape. See the list of
+   compatible simulators below.
+
+####Compatible Simulators
+The library has been tested with the following simulators:
+- ModelSim Version 10.1d of Mentor Graphics Corporation (see NOTE)
+- Questa Sim Version 10.2c of Mentor Graphics Corporation
+- VCS Version G-2012.09-SP1 of Synopsys, Inc.
+
+NOTE: `make modelsim` shows one known false assertion failure.
 
 ###How to Use
 Compile `src/cl_pkg.sv` and `src/cl_dpi.cc` with your files.
@@ -35,5 +44,14 @@ the library to extend it by themselves.  Although we will not accept the source
 code in itself, we will accept a request for developing a new class or a
 function. Because the new function might immediately benefit other users, we
 will try to add it on a regular basis to make the library more useful.
+
+####Trademarks
+  - **Cadence** is a registered trademark (#3474136) of Cadence Design Systems, Inc.
+  - **Incisive** is a registered trademark (#2890264) of Cadence Design Systems, Inc.
+  - **Mentor** is a registered trademark (#2388156) of Mentor Graphics Corporation.
+  - **ModelSim** is a registered trademark (#2317058) of Mentor Graphics Corporation.
+  - **Questa** is a registered trademark (#3308638) of Mentor Graphics Corporation.
+  - **Synopsys** is a registered trademark (#1618482) of Synopsys, Inc.
+  - **VCS** is a registered trademark (#2777162) of Synopsys, Inc.
 
 

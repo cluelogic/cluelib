@@ -672,9 +672,9 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   A copy of *q*.
    //
    // Example:
-   // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
-   // | bit cloned[] = queue#(bit)::clone( q );
-   // | assert( cloned == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit q[$]        = { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | bit expected[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+   // | assert( queue#(bit)::clone( q ) == expected );
    //---------------------------------------------------------------------------
 
    static function q_type clone( q_type q );

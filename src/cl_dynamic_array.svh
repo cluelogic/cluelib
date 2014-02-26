@@ -707,9 +707,9 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   A copy of *da*.
    //
    // Example:
-   // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-   // | bit cloned[] = dynamic_array#(bit)::clone( da );
-   // | assert( cloned == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit da[]       = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | bit expected[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+   // | assert( dynamic_array#(bit)::clone( da ) == expected );
    //---------------------------------------------------------------------------
 
    static function da_type clone( da_type da );
