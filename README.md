@@ -18,9 +18,9 @@ provided under MIT license and is available on GitHub for forking.
 
 ####Compatible Simulators
 The library has been tested on the following simulators:
-- *Incisive* (Version 12.20-s031) of Cadence Design Systems, Inc.
+- *Incisive Enterprise Simulator* (Version 12.20-s031) of Cadence Design Systems, Inc.
 - *ModelSim* (Version 10.1d) of Mentor Graphics Corporation (see NOTE)
-- *Questa Sim* (Version 10.2c) of Mentor Graphics Corporation
+- *Questa Advanced Simulator* (Version 10.2c) of Mentor Graphics Corporation
 - *VCS* (Version G-2012.09-SP1) of Synopsys, Inc.
 
 NOTE: `make modelsim` reports one false assertion failure.
@@ -47,12 +47,12 @@ function. Because the new function might immediately benefit other users, we
 will try to add it on a regular basis to make the library more useful.
 
 ####Trademarks
-  - **Cadence** is a registered trademark (#3474136) of Cadence Design Systems, Inc.
-  - **Incisive** is a registered trademark (#2890264) of Cadence Design Systems, Inc.
-  - **Mentor** is a registered trademark (#2388156) of Mentor Graphics Corporation.
-  - **ModelSim** is a registered trademark (#2317058) of Mentor Graphics Corporation.
-  - **Questa** is a registered trademark (#3308638) of Mentor Graphics Corporation.
-  - **Synopsys** is a registered trademark (#1618482) of Synopsys, Inc.
-  - **VCS** is a registered trademark (#2777162) of Synopsys, Inc.
+  - *Cadence* is a registered trademark (#3474136) of Cadence Design Systems, Inc.
+  - *Incisive* is a registered trademark (#2890264) of Cadence Design Systems, Inc.
+  - *Mentor* is a registered trademark (#2388156) of Mentor Graphics Corporation.
+  - *ModelSim* is a registered trademark (#2317058) of Mentor Graphics Corporation.
+  - *Questa* is a registered trademark (#3308638) of Mentor Graphics Corporation.
+  - *Synopsys* is a registered trademark (#1618482) of Synopsys, Inc.
+  - *VCS* is a registered trademark (#2777162) of Synopsys, Inc.
 
 
