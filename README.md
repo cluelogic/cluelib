@@ -17,12 +17,13 @@ provided under MIT license and is available on GitHub for forking.
    compatible simulators below.
 
 ####Compatible Simulators
-The library has been tested with the following simulators:
-- ModelSim Version 10.1d of Mentor Graphics Corporation (see NOTE)
-- Questa Sim Version 10.2c of Mentor Graphics Corporation
-- VCS Version G-2012.09-SP1 of Synopsys, Inc.
+The library has been tested on the following simulators:
+- *Incisive* (Version 12.20-s031) of Cadence Design Systems, Inc.
+- *ModelSim* (Version 10.1d) of Mentor Graphics Corporation (see NOTE)
+- *Questa Sim* (Version 10.2c) of Mentor Graphics Corporation
+- *VCS* (Version G-2012.09-SP1) of Synopsys, Inc.
 
-NOTE: `make modelsim` shows one known false assertion failure.
+NOTE: `make modelsim` reports one false assertion failure.
 
 ###How to Use
 Compile `src/cl_pkg.sv` and `src/cl_dpi.cc` with your files.
