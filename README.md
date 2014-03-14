@@ -7,10 +7,10 @@ provided under MIT license and is available on GitHub for forking.
 - Offline Documentation is available at `api/framed_html/index.html` after installation.
 
 ###You can try ClueLib without installing it!
-- ClueLib is now on [EDA Playground](http://www.edaplayground.com/x/ua). Check it out!
+- ClueLib is now on [EDA Playground](http://www.edaplayground.com/x/ua) (Thanks, Victor!). Check it out!
 
 ###How to install
-1. Visit https://github.com/cluelogic/cluelib and click the **Download ZIP** button.
+1. Visit https://github.com/cluelogic/cluelib (this page) and click the **Download ZIP** button.
 2. Unzip the source code: `unzip cluelib-master.zip`
 3. Go to the **run** directory: `cd cluelib-master/run`
 4. Check makefile options: `make help`
