@@ -46,6 +46,22 @@
 `define CL_NAME_OF_JOURNAL "journal.log"
 
 //------------------------------------------------------------------------------
+// Defines: Simulator Selection
+//   These macros enable the set of <Supported Features> based on the selected
+//   simulator. Only one simulator should be enabled at one time.
+//
+//   CL_USE_INCISIVE - Use Incisive Enterpirse Simulator from Cadence Design Systems.
+//   CL_USE_MODELSIM - Use ModelSim from Mentor Graphics.
+//   CL_USE_QUESTA   - Use Questa from Mentor Graphics.
+//   CL_USE_VCS      - Use VCS from Synopsys.
+//------------------------------------------------------------------------------
+
+//`define CL_USE_INCISIVE
+//`define CL_USE_MODELSIM
+//`define CL_USE_QUESTA
+//`define CL_USE_VCS
+
+//------------------------------------------------------------------------------
 // Defines: Supported Features
 //   These macros enable an individual feature of a simulator.
 //
@@ -86,22 +102,6 @@
 
 `ifdef CL_USE_VCS
 `endif
-
-//------------------------------------------------------------------------------
-// Defines: Simulator Selection
-//   These macros enable the set of <Supported Features> based on the selected
-//   simulator. Only one simulator should be enabled at one time.
-//
-//   CL_USE_INCISIVE - Use Incisive Enterpirse Simulator from Cadence Design Systems.
-//   CL_USE_MODELSIM - Use ModelSim from Mentor Graphics.
-//   CL_USE_QUESTA   - Use Questa from Mentor Graphics.
-//   CL_USE_VCS      - Use VCS from Synopsys.
-//------------------------------------------------------------------------------
-
-//`define CL_USE_INCISIVE
-//`define CL_USE_MODELSIM
-//`define CL_USE_QUESTA
-//`define CL_USE_VCS
 
 `endif //  `ifndef CL_DEFINE_SVH
 

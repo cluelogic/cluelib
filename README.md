@@ -6,7 +6,10 @@ provided under MIT license and is available on GitHub for forking.
 - [Online Documentation](http://cluelogic.com/tools/cluelib/api/framed_html/index.html)
 - Offline Documentation is available at `api/framed_html/index.html` after installation.
 
-###How to Install
+###You can try ClueLib without installing it!
+- ClueLib is now on [EDA Playground](http://www.edaplayground.com/x/ua). Check it out!
+
+###How to install
 1. Visit https://github.com/cluelogic/cluelib and click the **Download ZIP** button.
 2. Unzip the source code: `unzip cluelib-master.zip`
 3. Go to the **run** directory: `cd cluelib-master/run`
@@ -16,13 +19,13 @@ provided under MIT license and is available on GitHub for forking.
 6. If you see no errors, the library is in good shape. See the list of
    compatible simulators below.
 
-####Compatible Simulators
+####Compatible simulators
 The library has been tested on the following simulators:
 - *Incisive Enterprise Simulator* (Version 12.20-s031) of Cadence Design Systems, Inc.
 - *Questa Advanced Simulator* (Version 10.2c) of Mentor Graphics Corporation
 - *VCS* (Version G-2012.09-SP1) of Synopsys, Inc.
 
-###How to Use
+###How to use
 Compile `src/cl_pkg.sv` and `src/cl_dpi.cc` with your files.
 - The `src/cl_pkg.sv` includes all library files.  Make sure your `+incdir`
   option points to the **src** directory when you compile.
@@ -31,7 +34,7 @@ Compile `src/cl_pkg.sv` and `src/cl_dpi.cc` with your files.
   is not necessary).
 - Sample makefiles are available under the **run** directory.
 
-###Pull Requests Policy
+###Pull requests policy
 Unlike other open-source projects, in which contributors use their own time and
 software, the verification libraries are usually developed using their
 employer’s resources. Typically, the copyright of such libraries belong to
