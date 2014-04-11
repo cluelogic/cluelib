@@ -4,20 +4,25 @@ provided under MIT license and is available on GitHub for forking.
 
 ###Documents
 - [Online Documentation](http://cluelogic.com/tools/cluelib/api/framed_html/index.html)
-- Offline Documentation is available at `api/framed_html/index.html` after installation.
+- Offline Documentation (same as the Online Documentation) is available at `api/framed_html/index.html` after installation.
 
 ###You can try ClueLib without installing it!
 - ClueLib is now on [EDA Playground](http://www.edaplayground.com/x/ua). Check it out!
 
-###How to install
-1. Visit https://github.com/cluelogic/cluelib (this page) and click the **Download ZIP** button.
+###How to install (using git)
+1. `git clone https://github.com/cluelogic/cluelib`
+2. Go to the **run** directory: `cd cluelib/run`
+3. Check makefile options: `make help`
+4. Run a satity check. Use one of the simulators listed in the previous step: 
+   Do `make vcs` for example.
+5. If you see no errors, the library is in good shape. See the list of
+   compatible simulators below.
+
+###How to install (traditional way)
+1. Click the **Download ZIP** button on the right.
 2. Unzip the source code: `unzip cluelib-master.zip`
 3. Go to the **run** directory: `cd cluelib-master/run`
-4. Check makefile options: `make help`
-5. Run a satity check. Use one of the simulators listed in the previous step: 
-   Do `make vcs` for example.
-6. If you see no errors, the library is in good shape. See the list of
-   compatible simulators below.
+4. Continue the steps from #3 of **How to install (using git)** above.
 
 ####Compatible simulators
 The library has been tested on the following simulators:
