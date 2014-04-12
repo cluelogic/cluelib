@@ -13,7 +13,7 @@ provided under MIT license and is available on GitHub for forking.
 ####Using git
 1. `git clone https://github.com/cluelogic/cluelib`
 2. Go to the **run** directory: `cd cluelib/run`
-3. Check makefile options: `make help`
+3. Check **make** options: `make help`
 4. Run a satity check. Use one of the simulators listed in the previous step: 
    Do `make vcs` for example.
 5. If you see no errors, the library is in good shape. See the list of
@@ -23,7 +23,7 @@ provided under MIT license and is available on GitHub for forking.
 1. Click the **Download ZIP** button on the right.
 2. Unzip the source code: `unzip cluelib-master.zip`
 3. Go to the **run** directory: `cd cluelib-master/run`
-4. Check makefile options: `make help`
+4. Check **make** options: `make help`
 5. Run a satity check. Use one of the simulators listed in the previous step: 
    Do `make vcs` for example.
 6. If you see no errors, the library is in good shape. See the list of
