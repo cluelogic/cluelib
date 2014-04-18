@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_journal.svh (v0.1.0)
+// cl_journal.svh (v0.2.0)
 //
 // The MIT License (MIT)
 //
@@ -37,13 +37,14 @@
 
 virtual class journal;
 
-   local static integer fid = $fopen( `CL_NAME_OF_JOURNAL, "w" );
+   local static integer log_fid = $fopen( `CL_NAME_OF_LOG, "w" );
+   local static integer csv_fid = $fopen( `CL_NAME_OF_CSV, "w" );
 
    //---------------------------------------------------------------------------
    // Function: log
-   //   (STATIC) Logs a transaction to the journal file specified by the
-   //   <CL_NAME_OF_JOURNAL> macro. The journal file stores the transaction
-   //   using the following format: *from_unit->to_unit: @timestamp desc*.
+   //   (STATIC) Stores a transaction to the file specified by the
+   //   <CL_NAME_OF_LOG> macro using the following sequence format:
+   //   *from_unit->to_unit:@timestamp desc*.
    //
    // Arguments:
    //   desc - The description of a transaction.
@@ -57,7 +58,7 @@ virtual class journal;
    // | #100;
    // | journal::log( "response", "slave", "master" );
    // |
-   // | /* the journal file */
+   // | /* the log file */
    // | // master->slave: @0 request
    // | // slave->master: @100 response
    //---------------------------------------------------------------------------
@@ -65,9 +66,39 @@ virtual class journal;
    static function void log( string desc,
 			     string from_unit = "journal",
 			     string to_unit = from_unit );
-      $fwrite( fid, "%s->%s: @%s %s\n",
+      $fwrite( log_fid, "%s->%s: @%s %s\n",
 	       from_unit, to_unit, com_fmtr.to_string( $time ), desc );
    endfunction: log
+
+   //---------------------------------------------------------------------------
+   // Function: csv
+   //   (STATIC) Stores a transaction to the file specified by the
+   //   <CL_NAME_OF_CSV> macro using the following CSV (comma separated value)
+   //   format: *"from_unit","to_unit","@timestamp desc"*.
+   //
+   // Arguments:
+   //   desc - The description of a transaction.
+   //   from_unit - (OPTIONAL) The name of the unit a transaction comes
+   //               from. The default name is "*journal*".
+   //   to_unit - (OPTIONAL) The name of the unit a transaction goes to. The
+   //             default name is the value of *from_unit*.
+   //
+   // Examples:
+   // | journal::csv( "request", "master", "slave" );
+   // | #100;
+   // | journal::csv( "response", "slave", "master" );
+   // |
+   // | /* the CSV file */
+   // | // "master","slave","@0 request"
+   // | // "slave","master","@100 response"
+   //---------------------------------------------------------------------------
+
+   static function void csv( string desc,
+			     string from_unit = "journal",
+			     string to_unit = from_unit );
+      $fwrite( csv_fid, "\"%s\",\"%s\",\"@%s %s\"\n",
+	       from_unit, to_unit, com_fmtr.to_string( $time ), desc );
+   endfunction: csv
 
 endclass: journal
 

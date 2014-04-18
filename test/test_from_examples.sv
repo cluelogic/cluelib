@@ -889,9 +889,9 @@ module test_from_examples;
       .from_index2( 2 ), .to_index2( 5 ) ) == 1 );
     end
     begin
-      bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
-      bit cloned[] = dynamic_array#(bit)::clone( da );
-      assert( cloned == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit da[]       = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit expected[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      assert( dynamic_array#(bit)::clone( da ) == expected );
     end
     begin
       bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
@@ -1058,9 +1058,9 @@ module test_from_examples;
       .from_index2( 2 ), .to_index2( 5 ) ) == 1 );
     end
     begin
-      bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
-      bit cloned[] = queue#(bit)::clone( q );
-      assert( cloned == '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
+      bit q[$]        = { 0, 0, 0, 1, 1, 0, 1, 1 };
+      bit expected[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+      assert( queue#(bit)::clone( q ) == expected );
     end
     begin
       bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -1503,9 +1503,18 @@ module test_from_examples;
       #100;
       journal::log( "response", "slave", "master" );
       
-      /* the journal file */
+      /* the log file */
       // master->slave: @0 request
       // slave->master: @100 response
+    end
+    begin
+      journal::csv( "request", "master", "slave" );
+      #100;
+      journal::csv( "response", "slave", "master" );
+      
+      /* the CSV file */
+      // "master","slave","@0 request"
+      // "slave","master","@100 response"
     end
     // test ../src/cl_choice.svh
     begin

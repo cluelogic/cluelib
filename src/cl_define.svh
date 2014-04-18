@@ -1,5 +1,5 @@
 //==============================================================================
-// cl_define.svh (v0.1.0)
+// cl_define.svh (v0.2.0)
 //
 // The MIT License (MIT)
 //
@@ -39,11 +39,19 @@
 `define CL_USE_DPI_C
 
 //------------------------------------------------------------------------------
-// Define: CL_NAME_OF_JOURNAL
-//   Defines the name of a journal file used by the <journal> class.
+// Define: CL_NAME_OF_LOG
+//   Defines the name of a log file used by the <journal> class.
 //------------------------------------------------------------------------------
 
-`define CL_NAME_OF_JOURNAL "journal.log"
+`define CL_NAME_OF_LOG "journal.log"
+
+//------------------------------------------------------------------------------
+// Define: CL_NAME_OF_CSV
+//   Defines the name of a CSV (comma separated value) file used by the
+//   <journal> class.
+//------------------------------------------------------------------------------
+
+`define CL_NAME_OF_CSV "journal.csv"
 
 //------------------------------------------------------------------------------
 // Defines: Simulator Selection

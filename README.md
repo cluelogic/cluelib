@@ -4,29 +4,30 @@ provided under MIT license and is available on GitHub for forking.
 
 ###Documents
 - [Online Documentation](http://cluelogic.com/tools/cluelib/api/framed_html/index.html)
-- Offline Documentation (same as the Online Documentation) is available at `api/framed_html/index.html` after installation.
+- Offline Documentation (same contents as the Online Documentation) is available at
+  `api/framed_html/index.html` after installation.
 
 ###You can try ClueLib without installing it!
 - ClueLib is now on [EDA Playground](http://www.edaplayground.com/x/ua). Check it out!
 
 ###How to install
-####Using git
+####Using Git
 1. `git clone https://github.com/cluelogic/cluelib`
-2. Go to the **run** directory: `cd cluelib/run`
-3. Check makefile options: `make help`
-4. Run a satity check. Use one of the simulators listed in the previous step: 
+1. Go to the **run** directory: `cd cluelib/run`
+1. Check makefile options: `make help`
+1. Run a satity check. Use one of the simulators listed in the previous step: 
    Do `make vcs` for example.
-5. If you see no errors, the library is in good shape. See the list of
+1. If you see no errors, the library is in good shape. See the list of
    compatible simulators below.
 
-####Traditional way
+####In a traditional way
 1. Click the **Download ZIP** button on the right.
-2. Unzip the source code: `unzip cluelib-master.zip`
-3. Go to the **run** directory: `cd cluelib-master/run`
-4. Check makefile options: `make help`
-5. Run a satity check. Use one of the simulators listed in the previous step: 
+1. Unzip the source code: `unzip cluelib-master.zip`
+1. Go to the **run** directory: `cd cluelib-master/run`
+1. Check makefile options: `make help`
+1. Run a satity check. Use one of the simulators listed in the previous step: 
    Do `make vcs` for example.
-6. If you see no errors, the library is in good shape. See the list of
+1. If you see no errors, the library is in good shape. See the list of
    compatible simulators below.
 
 ####Compatible simulators
@@ -57,11 +58,11 @@ function. Because the new function might immediately benefit other users, we
 will try to add it on a regular basis to make the library more useful.
 
 ####Trademarks
-  - *Cadence* is a registered trademark (#3474136) of Cadence Design Systems, Inc.
-  - *Incisive* is a registered trademark (#2890264) of Cadence Design Systems, Inc.
-  - *Mentor* is a registered trademark (#2388156) of Mentor Graphics Corporation.
-  - *Questa* is a registered trademark (#3308638) of Mentor Graphics Corporation.
-  - *Synopsys* is a registered trademark (#1618482) of Synopsys, Inc.
-  - *VCS* is a registered trademark (#2777162) of Synopsys, Inc.
+- *Cadence* is a registered trademark (#3474136) of Cadence Design Systems, Inc.
+- *Incisive* is a registered trademark (#2890264) of Cadence Design Systems, Inc.
+- *Mentor* is a registered trademark (#2388156) of Mentor Graphics Corporation.
+- *Questa* is a registered trademark (#3308638) of Mentor Graphics Corporation.
+- *Synopsys* is a registered trademark (#1618482) of Synopsys, Inc.
+- *VCS* is a registered trademark (#2777162) of Synopsys, Inc.
 
 
