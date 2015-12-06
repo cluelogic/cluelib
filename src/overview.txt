@@ -51,6 +51,9 @@ Title: Overview
 - ... \___ <putil>
 - ... \___ <util>
 
+Revision:
+v0.3.0
+
 License:
 The MIT License (MIT)
 

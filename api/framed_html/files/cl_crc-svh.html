@@ -17,91 +17,565 @@ if (browserType) {document.write("<div class=" + browserType + ">");if (browserV
 
 <div class="CGroup"><div class=CTopic><h3 class=CTitle><a name="crc.Functions"></a>Functions</h3></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc"></a>crc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[63:0] crc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs,</td></tr><tr><td></td><td class="PType  prettyprint " nowrap>T[63:0]&nbsp;</td><td class="PParameter  prettyprint " nowrap>tap,</td></tr><tr><td></td><td class="PType  prettyprint " nowrap>int&nbsp;</td><td class="PParameter  prettyprint " nowrap>degree</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC value using the specified taps.&nbsp; The function supports up to 64-bit tap.</p><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr><tr><td class=CDLEntry>tap</td><td class=CDLDescription>The bit vector representaion of a CRC polynomial.</td></tr><tr><td class=CDLEntry>degree</td><td class=CDLDescription>The degree of a CRC polynomial.</td></tr></table><h4 class=CHeading>Returns</h4><p>A calculated CRC value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc"></a>crc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[63:0] crc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs,</td></tr><tr><td></td><td class="PType  prettyprint " nowrap>T[63:0]&nbsp;</td><td class="PParameter  prettyprint " nowrap>tap,</td></tr><tr><td></td><td class="PType  prettyprint " nowrap>int&nbsp;</td><td class="PParameter  prettyprint " nowrap>degree</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC value using the specified taps.&nbsp; The function supports up to 64-bit tap.&nbsp; See <a href="https://ghsi.de/CRC" class=LURL target=_top>this site</a> for how this function calculates the CRC.</p><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr><tr><td class=CDLEntry>tap</td><td class=CDLDescription>The bit vector representaion of a CRC polynomial.</td></tr><tr><td class=CDLEntry>degree</td><td class=CDLDescription>The degree of a CRC polynomial.</td></tr></table><h4 class=CHeading>Returns</h4><p>A calculated CRC value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit[15:0] crc16_ccitt_tap = 16'h1021;
+bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc( bs, crc16_ccitt_tap, .degree( 16 ) ) == 16'hFEC5 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc1"></a>crc1</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T crc1(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-1 value; also known as a parity bit.&nbsp; The CRC polynomial is:</p><img src="../images/crc1.png" width="37" height="13"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-1 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc1"></a>crc1</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T crc1(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-1 value; also known as a parity bit.&nbsp; The CRC polynomial is:</p><img src="../images/crc1.png" width="37" height="14"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-1 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc1( bs ) == 1'h1 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc4_itu"></a>crc4_itu</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[3:0] crc4_itu(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-4-ITU value.&nbsp; The CRC polynomial is:</p><img src="../images/crc4_itu.png" width="74" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-4-ITU value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc4_itu"></a>crc4_itu</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[3:0] crc4_itu(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-4-ITU value.&nbsp; The CRC polynomial is:</p><img src="../images/crc4_itu.png" width="74" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-4-ITU value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc4_itu( bs ) == 4'h7 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc5_epc"></a>crc5_epc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[4:0] crc5_epc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-5-EPC value.&nbsp; The CRC polynomial is:</p><img src="../images/crc5_epc.png" width="81" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-5-EPC value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc5_epc"></a>crc5_epc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[4:0] crc5_epc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-5-EPC value.&nbsp; The CRC polynomial is:</p><img src="../images/crc5_epc.png" width="81" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-5-EPC value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc5_epc( bs ) == 5'h0 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc5_itu"></a>crc5_itu</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[4:0] crc5_itu(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-5-ITU value.&nbsp; The CRC polynomial is:</p><img src="../images/crc5_itu.png" width="119" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-5-ITU value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc5_itu"></a>crc5_itu</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[4:0] crc5_itu(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-5-ITU value.&nbsp; The CRC polynomial is:</p><img src="../images/crc5_itu.png" width="119" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-5-ITU value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc5_itu( bs ) == 5'hE );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc5_usb"></a>crc5_usb</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[4:0] crc5_usb(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-5-USB value.&nbsp; The CRC polynomial is:</p><img src="../images/crc5_usb.png" width="81" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-5-USB value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc5_usb"></a>crc5_usb</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[4:0] crc5_usb(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-5-USB value.&nbsp; The CRC polynomial is:</p><img src="../images/crc5_usb.png" width="81" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-5-USB value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc5_usb( bs ) == 5'hF );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc6_cdma2000_a"></a>crc6_cdma2000_a</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[5:0] crc6_cdma2000_a(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-6-CDMA2000-A value.&nbsp; The CRC polynomial is:</p><img src="../images/crc6_cdma2000_a.png" width="148" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-6-CDMA2000-A value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc6_cdma2000_a"></a>crc6_cdma2000_a</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[5:0] crc6_cdma2000_a(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-6-CDMA2000-A value.&nbsp; The CRC polynomial is:</p><img src="../images/crc6_cdma2000_a.png" width="148" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-6-CDMA2000-A value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc6_cdma2000_a( bs ) == 6'h24 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc6_cdma2000_b"></a>crc6_cdma2000_b</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[5:0] crc6_cdma2000_b(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-6-CDMA2000-B value.&nbsp; The CRC polynomial is:</p><img src="../images/crc6_cdma2000_b.png" width="111" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-6-CDMA2000-B value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc6_cdma2000_b"></a>crc6_cdma2000_b</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[5:0] crc6_cdma2000_b(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-6-CDMA2000-B value.&nbsp; The CRC polynomial is:</p><img src="../images/crc6_cdma2000_b.png" width="111" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-6-CDMA2000-B value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc6_cdma2000_b( bs ) == 6'h20 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc6_itu"></a>crc6_itu</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[5:0] crc6_itu(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-6-ITU value.&nbsp; The CRC polynomial is:</p><img src="../images/crc6_itu.png" width="74" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-6-ITU value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc6_itu"></a>crc6_itu</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[5:0] crc6_itu(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-6-ITU value.&nbsp; The CRC polynomial is:</p><img src="../images/crc6_itu.png" width="74" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-6-ITU value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc6_itu( bs ) == 6'h9 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc7"></a>crc7</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[6:0] crc7(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-7 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc7.png" width="81" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-7 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc7"></a>crc7</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[6:0] crc7(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-7 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc7.png" width="81" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-7 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc7( bs ) == 7'h3F );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc7_mvb"></a>crc7_mvb</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[6:0] crc7_mvb(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-7-MVB value.&nbsp; The CRC polynomial is:</p><img src="../images/crc7_mvb.png" width="156" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-7-MVB value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc7_mvb"></a>crc7_mvb</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[6:0] crc7_mvb(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-7-MVB value.&nbsp; The CRC polynomial is:</p><img src="../images/crc7_mvb.png" width="156" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-7-MVB value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc7_mvb( bs ) == 7'h4C );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8"></a>crc8</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8.png" width="193" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8"></a>crc8</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8.png" width="193" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc8( bs ) == 8'hC7 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_ccitt"></a>crc8_ccitt</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_ccitt(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-CCITT value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_ccitt.png" width="111" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-CCITT value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_ccitt"></a>crc8_ccitt</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_ccitt(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-CCITT value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_ccitt.png" width="111" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-CCITT value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc8_ccitt( bs ) == 8'hF8 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_dallas_maxim"></a>crc8_dallas_maxim</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_dallas_maxim(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-Dallas/Maxim value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_dallas_maxim.png" width="128" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-Dallas/Maxim value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_dallas_maxim"></a>crc8_dallas_maxim</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_dallas_maxim(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-Dallas/Maxim value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_dallas_maxim.png" width="128" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-Dallas/Maxim value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc8_dallas_maxim( bs ) == 8'h85 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_sae_j1850"></a>crc8_sae_j1850</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_sae_j1850(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-SAE-J1850 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_sae_j1850.png" width="156" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-SAE-J1850 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_sae_j1850"></a>crc8_sae_j1850</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_sae_j1850(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-SAE-J1850 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_sae_j1850.png" width="156" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-SAE-J1850 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc8_sae_j1850( bs ) == 8'h7F );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_wcdma"></a>crc8_wcdma</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_wcdma(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-WCDMA value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_wcdma.png" width="186" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-WCDMA value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc8_wcdma"></a>crc8_wcdma</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[7:0] crc8_wcdma(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-8-WCDMA value.&nbsp; The CRC polynomial is:</p><img src="../images/crc8_wcdma.png" width="186" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-8-WCDMA value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc8_wcdma( bs ) == 8'hF7 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc10"></a>crc10</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[9:0] crc10(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-10 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc10.png" width="192" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-10 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc10"></a>crc10</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[9:0] crc10(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-10 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc10.png" width="192" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-10 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc10( bs ) == 10'hB3 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc10_cdma2000"></a>crc10_cdma2000</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[9:0] crc10_cdma2000(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-10-CDMA2000 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc10_cdma2000.png" width="274" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-10-CDMA2000 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc10_cdma2000"></a>crc10_cdma2000</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[9:0] crc10_cdma2000(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-10-CDMA2000 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc10_cdma2000.png" width="274" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-10-CDMA2000 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc10_cdma2000( bs ) == 10'h2A );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc11"></a>crc11</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[10:0] crc11(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-11 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc11.png" width="200" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-11 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc11"></a>crc11</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[10:0] crc11(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-11 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc11.png" width="200" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-11 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc11( bs ) == 11'h43A );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc12"></a>crc12</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[11:0] crc12(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-12 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc12.png" width="199" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-12 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc12"></a>crc12</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[11:0] crc12(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-12 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc12.png" width="199" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-12 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc12( bs ) == 12'hBF9 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc12_cdma2000"></a>crc12_cdma2000</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[11:0] crc12_cdma2000(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-12-CDMA2000 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc12_cdma2000.png" width="280" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-12-CDMA2000 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc12_cdma2000"></a>crc12_cdma2000</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[11:0] crc12_cdma2000(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-12-CDMA2000 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc12_cdma2000.png" width="280" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-12-CDMA2000 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc12_cdma2000( bs ) == 12'h7C3 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc13_bbc"></a>crc13_bbc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[12:0] crc13_bbc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-13-BBC value.&nbsp; The CRC polynomial is:</p><img src="../images/crc13_bbc.png" width="368" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-13-BBC value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc13_bbc"></a>crc13_bbc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[12:0] crc13_bbc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-13-BBC value.&nbsp; The CRC polynomial is:</p><img src="../images/crc13_bbc.png" width="368" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-13-BBC value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc13_bbc( bs ) == 13'hAEA );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc15_can"></a>crc15_can</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[14:0] crc15_can(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-15-CAN value.&nbsp; The CRC polynomial is:</p><img src="../images/crc15_can.png" width="287" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-15-CAN value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc15_can"></a>crc15_can</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[14:0] crc15_can(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-15-CAN value.&nbsp; The CRC polynomial is:</p><img src="../images/crc15_can.png" width="287" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-15-CAN value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc15_can( bs ) == 15'h6DDE );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc15_mpt1327"></a>crc15_mpt1327</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[14:0] crc15_mpt1327(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-15-MPT1327 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc15_mpt1327.png" width="257" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-15-MPT1327 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc15_mpt1327"></a>crc15_mpt1327</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[14:0] crc15_mpt1327(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-15-MPT1327 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc15_mpt1327.png" width="257" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-15-MPT1327 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc15_mpt1327( bs ) == 15'h7E4E );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_arinc"></a>crc16_arinc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_arinc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-ARINC value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_arinc.png" width="243" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-ARINC value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_arinc"></a>crc16_arinc</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_arinc(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-ARINC value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_arinc.png" width="243" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-ARINC value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc16_arinc( bs ) == 16'h18FB );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_ccitt"></a>crc16_ccitt</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_ccitt(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-CCITT value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_ccitt.png" width="132" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-CCITT value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_ccitt"></a>crc16_ccitt</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_ccitt(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-CCITT value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_ccitt.png" width="132" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-CCITT value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc16_ccitt( bs ) == 16'hFEC5 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_cdma2000"></a>crc16_cdma2000</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_cdma2000(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-CDMA2000 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_cdma2000.png" width="324" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-CDMA2000 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_cdma2000"></a>crc16_cdma2000</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_cdma2000(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-CDMA2000 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_cdma2000.png" width="324" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-CDMA2000 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc16_cdma2000( bs ) == 16'hCEEA );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_dect"></a>crc16_dect</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_dect(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-CECT value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_dect.png" width="206" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-DECT value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_dect"></a>crc16_dect</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_dect(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-CECT value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_dect.png" width="206" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-DECT value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc16_dect( bs ) == 16'h7511 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_t10_dif"></a>crc16_t10_dif</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_t10_dif(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-T10-DIF value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_t10_dif.png" width="392" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-T10-DIF value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_t10_dif"></a>crc16_t10_dif</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_t10_dif(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-T10-DIF value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_t10_dif.png" width="392" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-T10-DIF value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc16_t10_dif( bs ) == 16'h5213 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_dnp"></a>crc16_dnp</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_dnp(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-DNP value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_dnp.png" width="375" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-DNP value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_dnp"></a>crc16_dnp</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_dnp(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-DNP value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_dnp.png" width="375" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-DNP value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc16_dnp( bs ) == 16'hF0AD );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_ibm"></a>crc16_ibm</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_ibm(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-IBM value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_ibm.png" width="132" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-IBM value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc16_ibm"></a>crc16_ibm</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[15:0] crc16_ibm(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-16-IBM value.&nbsp; The CRC polynomial is:</p><img src="../images/crc16_ibm.png" width="132" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-16-IBM value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc16_ibm( bs ) == 16'hB17F );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc17_can"></a>crc17_can</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[16:0] crc17_can(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-17-CAN value.&nbsp; The CRC polynomial is:</p><img src="../images/crc17_can.png" width="368" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-17-CAN value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc17_can"></a>crc17_can</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[16:0] crc17_can(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-17-CAN value.&nbsp; The CRC polynomial is:</p><img src="../images/crc17_can.png" width="368" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-17-CAN value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc17_can( bs ) == 17'h42B0 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc21_can"></a>crc21_can</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[20:0] crc21_can(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-21-CAN value.&nbsp; The CRC polynomial is:</p><img src="../images/crc21_can.png" width="294" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-21-CAN value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc21_can"></a>crc21_can</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[20:0] crc21_can(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-21-CAN value.&nbsp; The CRC polynomial is:</p><img src="../images/crc21_can.png" width="294" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-21-CAN value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc21_can( bs ) == 21'h1A3C3F );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc24"></a>crc24</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[23:0] crc24(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-24 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc24.png" width="547" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-24 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc24"></a>crc24</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[23:0] crc24(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-24 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc24.png" width="547" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-24 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc24( bs ) == 24'h4FAC88 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc24_radix_64"></a>crc24_radix_64</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[23:0] crc24_radix_64(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-24-Radix-64 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc24_radix_64.png" width="530" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-24-Radix-64 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc24_radix_64"></a>crc24_radix_64</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[23:0] crc24_radix_64(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-24-Radix-64 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc24_radix_64.png" width="530" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-24-Radix-64 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc24_radix_64( bs ) == 24'h5EFC5F );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc30"></a>crc30</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[29:0] crc30(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-30 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc30.png" width="536" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-30 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc30"></a>crc30</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[29:0] crc30(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-30 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc30.png" width="536" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-30 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc30( bs ) == 30'h3FA4F577 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32"></a>crc32</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32.png" width="547" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32 value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32"></a>crc32</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32 value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32.png" width="547" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32 value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc32( bs ) == 32'h257491D0 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32c"></a>crc32c</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32c(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32C (Castagnoli) value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32c.png" width="572" height="35"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32C (Castagnoli) value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32c"></a>crc32c</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32c(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32C (Castagnoli) value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32c.png" width="572" height="36"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32C (Castagnoli) value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc32c( bs ) == 32'hC68BEAB1 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32k"></a>crc32k</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32k(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32K (Koopman) value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32k.png" width="572" height="35"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32K (Koopman) value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32k"></a>crc32k</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32k(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32K (Koopman) value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32k.png" width="572" height="36"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32K (Koopman) value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc32k( bs ) == 32'hE9D7E7E8 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32q"></a>crc32q</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32q(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32Q value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32q.png" width="449" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32Q value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc32q"></a>crc32q</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[31:0] crc32q(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-32Q value.&nbsp; The CRC polynomial is:</p><img src="../images/crc32q.png" width="449" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-32Q value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc32q( bs ) == 32'hC604B994 );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc40_gsm"></a>crc40_gsm</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[39:0] crc40_gsm(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-40-GSM value.&nbsp; The CRC polynomial is:</p><img src="../images/crc40_gsm.png" width="220" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-40-GSM value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc40_gsm"></a>crc40_gsm</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[39:0] crc40_gsm(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-40-GSM value.&nbsp; The CRC polynomial is:</p><img src="../images/crc40_gsm.png" width="220" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-40-GSM value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc40_gsm( bs ) == 40'hAF3E6E680C );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc64_ecma"></a>crc64_ecma</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[63:0] crc64_ecma(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-64-ECMA value.&nbsp; The CRC polynomial is:</p><img src="../images/crc64_ecma.png" width="572" height="54"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-64-ECMA value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc64_ecma"></a>crc64_ecma</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[63:0] crc64_ecma(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-64-ECMA value.&nbsp; The CRC polynomial is:</p><img src="../images/crc64_ecma.png" width="572" height="55"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-64-ECMA value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc64_ecma( bs ) == 64'h1AD51F768A8B4D1D );</pre></blockquote></div></div></div>
 
-<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc64_iso"></a>crc64_iso</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[63:0] crc64_iso(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-64-ISO value.&nbsp; The CRC polynomial is:</p><img src="../images/crc64_iso.png" width="155" height="15"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-64-ISO value.</p></div></div></div>
+<div class="CFunction"><div class=CTopic><h3 class=CTitle><a name="crc.crc64_iso"></a>crc64_iso</h3><div class=CBody><blockquote><table border=0 cellspacing=0 cellpadding=0 class="Prototype"><tr><td><table border=0 cellspacing=0 cellpadding=0><tr><td class="PBeforeParameters  prettyprint "nowrap>static function T[63:0] crc64_iso(</td><td class="PType  prettyprint " nowrap>bs_type&nbsp;</td><td class="PParameter  prettyprint " nowrap>bs</td><td class="PAfterParameters  prettyprint "nowrap>)</td></tr></table></td></tr></table></blockquote><p><span class="static">static</span> Returns a CRC-64-ISO value.&nbsp; The CRC polynomial is:</p><img src="../images/crc64_iso.png" width="155" height="16"><h4 class=CHeading>Argument</h4><table border=0 cellspacing=0 cellpadding=0 class=CDescriptionList><tr><td class=CDLEntry>bs</td><td class=CDLDescription>An input bit stream.</td></tr></table><h4 class=CHeading>Returns</h4><p>A CRC-64-ISO value.</p><h4 class=CHeading>Example</h4><blockquote><pre>bit bs[];     // input order ---------------------------------&gt;
+bs = new[80]( '{ 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b0, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0,
+                 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b1, 1'b0, 1'b0 } );
+assert( crc#(bit)::crc64_iso( bs ) == 64'h41982B4D80015DEB );</pre></blockquote></div></div></div>
 
 </div><!--Content-->
 

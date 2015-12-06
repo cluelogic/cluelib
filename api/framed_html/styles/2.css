@@ -176,4 +176,11 @@ span.under-construction {
   height: 16px;
   display: inline-block;
 }
+span.new {
+  background-image: url("http://ajax.cluelogic.com/libs/images/fugue-icons/icons/new-text.png");
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
 
