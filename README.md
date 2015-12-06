@@ -37,12 +37,12 @@ The library has been tested on the following simulators:
 - *VCS* (Version G-2012.09-SP1) of Synopsys, Inc.
 
 ###How to use
-Compile `src/cl_pkg.sv` and `src/cl_dpi.cc` with your files.
+Compile `src/cl_pkg.sv` (and optional `src/cl_dpi.cc`) with your files.
 - The `src/cl_pkg.sv` includes all library files.  Make sure your `+incdir`
   option points to the **src** directory when you compile.
-- If you don't want to use the DPI-C, undefine the **CL_USE_DPI_C** macro in
-  `src/cl_define.svh` and compile the `src/cl_pkg.sv` only (the `src/cl_dpi.cc`
-  is not necessary).
+- By default, DPI-C is disabled. If you want to use the DPI-C, uncomment the
+  **CL_USE_DPI_C** macro in `src/cl_define.svh` and compile the `src/cl_dpi.cc`
+  with the `src/cl_pkg.sv`.
 - Sample makefiles are available under the **run** directory.
 
 ###Pull requests policy

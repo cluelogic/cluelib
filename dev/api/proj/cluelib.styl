@@ -1,0 +1,207 @@
+// -*-jade-*-
+//
+// cluelib.styl
+//
+
+// fonts
+
+ss-fonts = "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif
+
+mono-fonts = Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace
+
+// colors
+
+dark-reddish   = rgb(140, 65, 48)
+dark-bluish    = rgb(48, 65, 140)
+lite-bluish    = rgb(53, 109, 228)
+thin-bluish    = rgb(216, 216, 248)
+dark-grayish   = rgb(51, 51, 51)
+grayish        = rgb(127, 127, 127)
+lite-grayish   = rgb(186, 186, 186)
+lite-greenish  = rgb(70, 202, 59)
+dark-yellowish = rgb(140, 140, 65)
+dark-purplish  = rgb(140, 65, 140)
+dark-turqo     = rgb(65, 140, 140)
+
+brand-primary = #428bca
+brand-success = #5cb85c
+brand-info    = #5bc0de
+brand-warning = #f0ad4e
+brand-danger  = #d9534f
+
+content-width = 970px
+
+heading-color = dark-grayish
+desc-color    = dark-grayish
+title-color   = dark-bluish
+code-color    = lite-bluish
+stripe-color  = thin-bluish
+proto-color   = thin-bluish
+
+optional-color      = grayish
+static-color        = brand-success
+parameterized-color = dark-reddish
+virtual-color       = brand-primary
+pure-color          = brand-danger
+protected-color     = brand-warning
+singleton-color     = brand-info
+under-construction-color = brand-danger
+rand-color = dark-reddish
+
+span-bean(bg)
+  background-color bg
+  background-clip border-box
+  padding-top 1px
+  padding-left 4px
+  padding-right 4px
+  padding-bottom 1px
+  border-radius 3px
+  color white
+  font-size xx-small
+
+span-img(name)
+  background-image url('http://ajax.cluelogic.com/libs/images/fugue-icons/icons/' + name + '.png')
+  background-repeat no-repeat
+  width 16px
+  height 16px
+  display inline-block
+
+#Content
+  width content-width
+
+//.MGroup #MSelected
+//  border-radius 3px
+//  border-top-width 0px
+//  border-left-width 0px
+//  border-right-width 0px
+//  border-bottom-width 0px
+//  background-color brand-info
+//  //padding-top 1px
+//  //padding-left 4px
+//  //padding-right 4px
+//  padding-bottom 2px
+
+// main
+
+#MainTopic .CTitle
+  background-color title-color
+  border-width 0 0 0 0
+
+// class (if multiple classes in a file)
+
+.CTopic h2.CTitle
+  background-color title-color
+  border-width 0 0 0 0
+
+// summary
+
+.SEntry a // function names
+  font-family ss-fonts
+  //color code-color
+
+.SDescription
+  font-family ss-fonts
+  color desc-color
+
+.SBorder
+  border-radius 3px
+
+//tr.SMarked
+//  background-color code-color
+
+// class
+
+.CClass .Prototype
+  border-width 1px 1px 1px 1px
+
+.CGroup .CTitle
+  border-color title-color
+
+.CTitle
+  font-family ss-fonts
+  color title-color
+
+.CHeading
+  font-family ss-fonts
+  color heading-color
+
+.CDLEntry // function arguments
+  font-family mono-fonts
+  color code-color
+
+.CDLDescription
+  font-family ss-fonts
+  color desc-color
+
+.CBody pre // examples
+  font-family mono-fonts
+  background #303030
+  color #fff
+  border-style none
+  border-radius 3px
+
+//.CFunction .Prototype
+//  background-color proto-color
+
+table.Prototype
+  font-family mono-fonts
+  border-radius 3px
+
+a:link
+  color lite-bluish
+
+a:visited
+  color dark-bluish
+
+p
+  font-family ss-fonts
+  color desc-color
+  text-indent 0
+  margin-bottom 1em
+
+b // code
+  font-weight normal
+  font-family mono-fonts
+  color code-color
+
+li
+  list-style-type none
+
+li.level1
+  padding-left 20px
+
+li.level2
+  padding-left 70px
+
+li.level3
+  padding-left 120px
+
+span.optional
+  span-bean(optional-color)
+
+span.static
+  span-bean(static-color)
+
+span.parameterized
+  span-bean(parameterized-color)
+
+span.virtual
+  span-bean(virtual-color)
+
+span.pure
+  span-bean(pure-color)
+
+span.protected
+  span-bean(protected-color)
+
+span.singleton
+  span-bean(singleton-color)
+
+span.rand
+  span-bean(rand-color)
+
+span.under-construction
+  span-img(construction)
+
+span.new
+  span-img(new-text)

@@ -1,10 +1,10 @@
 //==============================================================================
 //
-// cl_deque_iterator.svh (v0.2.0)
+// cl_deque_iterator.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -113,6 +113,6 @@ endclass: deque_iterator
 `endif //  `ifndef CL_DEQUE_ITERATOR_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

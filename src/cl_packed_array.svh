@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_packed_array.svh (v0.2.0)
+// cl_packed_array.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -84,7 +84,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   A packed array converted from *ua*.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | assert( packed_array#(bit,8)::from_unpacked_array( ua                ) == 8'hD8 ); // bit[7:0]
    // | assert( packed_array#(bit,8)::from_unpacked_array( ua, .reverse( 1 ) ) == 8'h1B );
@@ -114,7 +114,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   An unpacked array converted from *pa*.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] pa = 8'hD8;
    // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -150,7 +150,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   A packed array converted from *da*.
    //
-   // Examples:
+   // Example:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
    // | assert( packed_array#(bit,8)::from_dynamic_array( da                ) == 8'hD8 ); // bit[7:0]
    // | assert( packed_array#(bit,8)::from_dynamic_array( da, .reverse( 1 ) ) == 8'h1B );
@@ -180,7 +180,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   A dynamic array converted from *pa*.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] pa = 8'hD8;
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -216,7 +216,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   A packed array converted from *q*.
    //
-   // Examples:
+   // Example:
    // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | assert( packed_array#(bit,8)::from_queue( q                ) == 8'hD8 ); // bit[7:0]
    // | assert( packed_array#(bit,8)::from_queue( q, .reverse( 1 ) ) == 8'h1B );
@@ -244,7 +244,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   A queue converted from *pa*.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] pa = 8'hD8;
    // | bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -278,7 +278,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | bit[7:0] pa;
    // |
@@ -315,7 +315,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] pa = 8'hD8;
    // | bit ua[8];
    // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -357,7 +357,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
    // | bit[7:0] pa;
    // |
@@ -396,7 +396,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] pa = 8'hD8;
    // | bit da [] = new[8]; // set the size of da[]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
@@ -437,7 +437,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit[7:0] pa;
    // |
@@ -473,7 +473,7 @@ virtual class packed_array #( type T = bit, int WIDTH = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] pa = 8'hD8;
    // | bit q [$];
    // | bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -667,6 +667,6 @@ endclass: packed_array
 `endif //  `ifndef CL_PACKED_ARRAY_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

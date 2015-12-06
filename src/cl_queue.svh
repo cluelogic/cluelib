@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_queue.svh (v0.2.0)
+// cl_queue.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -95,7 +95,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A queue converted from *ua*.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
    // | bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -128,7 +128,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   An unpacked array converted from *q*.
    //
-   // Examples:
+   // Example:
    // | bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -160,7 +160,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A queue converted from *da*.
    //
-   // Examples:
+   // Example:
    // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -193,7 +193,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A dynamic array converted from *q*.
    //
-   // Examples:
+   // Example:
    // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -228,7 +228,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -270,7 +270,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -308,7 +308,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
    // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -347,7 +347,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -429,7 +429,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //         is initialized with the default value of type *T*.  If 0, no
    //         padding element is added. The default is 0.
    //
-   // Examples:
+   // Example:
    // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1 }; // q[0] to q[6]
    // | bit q0[$], q1[$], expected_q0[$], expected_q1[$];
    // |
@@ -482,7 +482,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A new merged queue.
    //
-   // Examples:
+   // Example:
    // | int q0[$] = { 0, 0, 0, 0 };
    // | int q1[$] = { 1, 2, 3, 4, 5, 6 };
    // | int expected[$];
@@ -575,7 +575,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A new queue extracted from *q*.
    //
-   // Examples:
+   // Example:
    // | int q[$]        = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
    // | int expected[$] = {          3, 4, 5, 6, 7       };
    // |
@@ -639,7 +639,7 @@ virtual class queue #( type T = bit, int SIZE = 1 );
    //   queues contain the same data in the specified range, 1 is
    //   returned. Otherwise, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | bit q1[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q2[$] = { 1, 1, 0, 1, 1, 0, 0, 0 };
    // | //                  |<------>|
@@ -721,6 +721,6 @@ endclass: queue
 `endif //  `ifndef CL_QUEUE_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

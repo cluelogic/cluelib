@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_pkg.sv (v0.2.0)
+// cl_pkg.sv (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -69,6 +69,7 @@ package cl;
 
    `include "cl_crc.svh"
    `include "cl_scrambler.svh"
+   `include "cl_network.svh"
 
    `include "cl_comparator.svh"
    `include "cl_default_comparator.svh"
@@ -110,6 +111,6 @@ endpackage: cl
 `endif //  `ifndef CL_PKG_SV
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

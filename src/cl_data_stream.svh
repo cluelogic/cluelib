@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_data_stream.svh (v0.2.0)
+// cl_data_stream.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -110,7 +110,7 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    // Returns:
    //   A _new_ bit stream serialized from *ds*.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] ds[] = new[2]( '{ 8'h0F, 8'hAA } );
    // | bit bs0[] = new[16]( '{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0 } );
    // | bit bs1[] = new[16]( '{ 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1 } );
@@ -201,7 +201,7 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    //   A _new_ data stream with the elements whose values are initialized with
    //   sequential values.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] ds0[] = new[8]( '{ 8'hFE, 8'hFF, 8'h00, 8'h01, 8'h02, 8'h03, 8'h04, 8'h05 } );
    // | bit[7:0] ds1[] = new[8]( '{ 8'hFE, 8'h00, 8'h02, 8'h04, 8'h06, 8'h08, 8'h0A, 8'h0C } );
    // | bit[7:0] ds2[] = new[8]( '{ 8'hFE, 8'hFD, 8'hFC, 8'hFB, 8'hFA, 8'hF9, 8'hF8, 8'hF7 } );
@@ -364,19 +364,27 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    // Returns:
    //   A string representing *ds*.
    //
-   // Examples:
+   // Example:
    // 
    // | bit[15:0] ds16[] = new[7]( '{ 16'h0123, 16'h4567, 16'h89ab, 16'hcdef, 16'h0000, 16'h0001, 16'h1000 } );
-   // | assert( data_stream#(bit,16)::
-   // |         to_string( ds16 ) == "0123456789abcdef000000011000" );
-   // | assert( data_stream#(bit,16)::
-   // |         to_string( ds16, .group( 1 ) ) == "0123 4567 89ab cdef 0000 0001 1000" );
-   // | assert( data_stream#(bit,16)::
-   // |         to_string( ds16, .group( 1 ), .num_head( 2 ), .num_tail( 0 ) ) == "0123 4567 ... " );
-   // | assert( data_stream#(bit,16)::
-   // |         to_string( ds16, .group( 1 ), .num_head( 0 ), .num_tail( 2 ) ) == "... 0001 1000" );
-   // | assert( data_stream#(bit,16)::
-   // |         to_string( ds16, .group( 1 ), .num_head( 2 ), .num_tail( 2 ) ) == "0123 4567 ... 0001 1000" );
+   // | assert( data_stream#(bit,16)::to_string( ds16 ) 
+   // |   == "0123456789abcdef000000011000" );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .left_to_right( 0 ) ) 
+   // |   == "100000010000cdef89ab45670123" );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .group( 1 ) ) 
+   // |   == "0123 4567 89ab cdef 0000 0001 1000" );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .group( 2 ) ) 
+   // |   == "01234567 89abcdef 00000001 1000" );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .group( 1 ), .left_to_right( 0 ) ) 
+   // |   == "1000 0001 0000 cdef 89ab 4567 0123" );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .group( 2 ), .left_to_right( 0 ) ) 
+   // |   == "10000001 0000cdef 89ab4567 0123" );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .group( 1 ), .num_head( 2 ), .num_tail( 0 ) ) 
+   // |   == "0123 4567 ... " );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .group( 1 ), .num_head( 0 ), .num_tail( 2 ) ) 
+   // |   == "... 0001 1000" );
+   // | assert( data_stream#(bit,16)::to_string( ds16, .group( 1 ), .num_head( 2 ), .num_tail( 2 ) ) 
+   // |   == "0123 4567 ... 0001 1000" );
    //---------------------------------------------------------------------------
 
    static function string to_string( ds_type ds,
@@ -390,7 +398,7 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
       int len = ds.size();
 
       enables = new[ len ];
-      for ( int i = 0; i < len; i++ ) enables[i] = 1'b1;
+      for ( int i = 0; i < len; i++ ) enables[i] = 1'b1; // enables all
       return to_string_with_en( ds, enables, "-", left_to_right,
 				group, group_separator, num_head, 
 				num_tail, abbrev );
@@ -437,21 +445,23 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
    // Returns:
    //   A string representing *ds* qualified with *enables*.
    //
-   // Examples:
+   // Example:
    // | bit[7:0] ds8[] = new[10]( '{ 8'h10, 8'h11, 8'h12, 8'h13, 8'h14, 8'h15, 8'h16, 8'h17, 8'h18, 8'h19 } );
    // | bit      en[]  = new[10]( '{ 1'b1,  1'b0,  1'b1,  1'b0,  1'b1,  1'b0,  1'b1,  1'b0,  1'b1,  1'b0  } );
-   // | assert( data_stream#(bit,8)::
-   // |   to_string_with_en( ds8, en ) == "10--12--14--16--18--" );
-   // | assert( data_stream#(bit,8)::
-   // |   to_string_with_en( ds8, en, .group(1) ) == "10 -- 12 -- 14 -- 16 -- 18 --" );
-   // | assert( data_stream#(bit,8)::
-   // |   to_string_with_en( ds8, en, .group(2) ) == "10-- 12-- 14-- 16-- 18--" );
-   // | assert( data_stream#(bit,8)::
-   // |   to_string_with_en( ds8, en, .group(1), .group_separator("|") ) == "10|--|12|--|14|--|16|--|18|--" );
-   // | assert( data_stream#(bit,8)::
-   // |   to_string_with_en( ds8, en, .group(1), .num_head(2), .num_tail(2) ) == "10 -- ...18 --" );
-   // | assert( data_stream#(bit,8)::
-   // |   to_string_with_en( ds8, en, .group(1), .disabled_char("*") ) == "10 ** 12 ** 14 ** 16 ** 18 **" );
+   // | assert( data_stream#(bit,8)::to_string_with_en( ds8, en ) 
+   // |   == "10--12--14--16--18--" );
+   // | assert( data_stream#(bit,8)::to_string_with_en( ds8, en, .group(1) ) 
+   // |   == "10 -- 12 -- 14 -- 16 -- 18 --" );
+   // | assert( data_stream#(bit,8)::to_string_with_en( ds8, en, .group(2) ) 
+   // |   == "10-- 12-- 14-- 16-- 18--" );
+   // | assert( data_stream#(bit,8)::to_string_with_en( ds8, en, .group(8) ) 
+   // |   == "10--12--14--16-- 18--" );
+   // | assert( data_stream#(bit,8)::to_string_with_en( ds8, en, .group(1), .group_separator("|") ) 
+   // |   == "10|--|12|--|14|--|16|--|18|--" );
+   // | assert( data_stream#(bit,8)::to_string_with_en( ds8, en, .group(1), .num_head(2), .num_tail(2) ) 
+   // |   == "10 -- ...18 --" );
+   // | assert( data_stream#(bit,8)::to_string_with_en( ds8, en, .group(1), .disabled_char("*") ) 
+   // |   == "10 ** 12 ** 14 ** 16 ** 18 **" );
    //---------------------------------------------------------------------------
 
    static function string to_string_with_en( ds_type ds,
@@ -472,8 +482,8 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
       if ( num_head == -1 || 
 	   num_tail == -1 || 
 	   num_head + num_tail >= num_data ) begin
-	 num_head = num_data;
-	 num_tail = 0;
+	 num_head  = num_data;
+	 num_tail  = 0;
 	 is_abbrev = 0;
       end else begin
 	 is_abbrev = 1;
@@ -483,7 +493,7 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
       
       en = new[ num_data ]( enables ); 
 
-      if ( left_to_right ) begin // ds[0] at the left
+      if ( left_to_right ) begin // position ds[0] at the left
 	 for ( int i = 0; i < num_head; i++ ) begin
 	    s = { s, format_data( ds[i], en[i], disabled_char ) };
 	    if ( separated(  group, i, max_index, left_to_right ) )
@@ -495,7 +505,7 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
 	    if ( separated( group, i, max_index, left_to_right ) )
 	      s = { s, group_separator };
 	 end
-      end else begin // ds[0] at the right
+      end else begin // position ds[0] at the right
 	 for ( int i = max_index; i >= num_data - num_tail; i-- ) begin
 	    s = { s, format_data( ds[i], en[i], disabled_char ) };
 	    if ( separated( group, i, max_index, left_to_right ) )
@@ -537,13 +547,13 @@ virtual class data_stream #( type T = bit, int WIDTH = 1, int DEGREE = 2 )
 					    int index,
 					    int last_index,
 					    bit left_to_right );
-      int loc_from_right;
+      int loc_from_left;
 
-      if ( left_to_right ) loc_from_right = last_index - index;
-      else                 loc_from_right = index;
+      if ( left_to_right ) loc_from_left = index;
+      else                 loc_from_left = last_index - index;
 
-      return ( group != 0 && index != last_index && 
-	       loc_from_right % group == 0 );
+      return ( group != 0 && loc_from_left != last_index && 
+	       loc_from_left % group == ( group - 1 ) );
    endfunction: separated
 
 endclass: data_stream
@@ -551,6 +561,6 @@ endclass: data_stream
 `endif //  `ifndef CL_DATA_STREAM_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

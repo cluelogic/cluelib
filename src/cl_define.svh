@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_define.svh (v0.2.0)
+// cl_define.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,29 +33,34 @@
 //------------------------------------------------------------------------------
 // Define: CL_USE_DPI_C
 //   If defined, some functions are delegated to C functions via DPI-C. If not
-//   defined, only SystemVerilog is used.
+//   defined, only SystemVerilog is used. This macro is *not defined* by
+//   default.
 //------------------------------------------------------------------------------
 
-`define CL_USE_DPI_C
+//`define CL_USE_DPI_C
+
+//---->OBSOLETE---->OBSOLETE---->OBSOLETE---->OBSOLETE---->OBSOLETE---->OBSOLETE
 
 //------------------------------------------------------------------------------
-// Define: CL_NAME_OF_LOG
+// Define CL_NAME_OF_LOG
 //   Defines the name of a log file used by the <journal> class.
 //------------------------------------------------------------------------------
 
-`define CL_NAME_OF_LOG "journal.log"
+//`define CL_NAME_OF_LOG "journal.log"
 
 //------------------------------------------------------------------------------
-// Define: CL_NAME_OF_CSV
+// Define CL_NAME_OF_CSV
 //   Defines the name of a CSV (comma separated value) file used by the
 //   <journal> class.
 //------------------------------------------------------------------------------
 
-`define CL_NAME_OF_CSV "journal.csv"
+//`define CL_NAME_OF_CSV "journal.csv"
+
+//<----OBSOLETE<----OBSOLETE<----OBSOLETE<----OBSOLETE<----OBSOLETE<----OBSOLETE
 
 //------------------------------------------------------------------------------
 // Defines: Simulator Selection
-//   These macros enable the set of <Supported Features> based on the selected
+//   These macros enable a set of <Supported Features> based on the selected
 //   simulator. Only one simulator should be enabled at one time.
 //
 //   CL_USE_INCISIVE - Use Incisive Enterpirse Simulator from Cadence Design Systems.
@@ -114,6 +119,6 @@
 `endif //  `ifndef CL_DEFINE_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

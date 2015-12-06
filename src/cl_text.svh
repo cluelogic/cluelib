@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_text.svh (v0.2.0)
+// cl_text.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -48,7 +48,7 @@ virtual class text;
    //   end_pos - Specifies the end position in a string using the same rule as
    //             the *start_pos*. The default is -1 (the last character).
    //
-   // Examples:
+   // Example:
    // (begin example)
    //       ____ position 0 or -26
    //      /    ____ position 5 or -21
@@ -117,7 +117,7 @@ virtual class text;
    // Returns:
    //   A string with *s* placed at the center and padded with *fill_char*.
    //
-   // Examples:
+   // Example:
    // | assert( text::center( "center me", 15 )                 == "   center me   " );
    // | assert( text::center( "center me", 15, "-" )            == "---center me---" );
    // | assert( text::center( "center me", 7 )                  ==    "center me"    ); // widened to fit
@@ -169,7 +169,7 @@ virtual class text;
    //   *sub*. If the specified range is invalid, *s* is returned without a
    //   change. If *s* is an empty string (""), no change is made.
    //
-   // Examples:
+   // Example:
    // | assert( text::change( "a primary library", "function", .start_pos( 10 ) ) == "a primary function" );
    // | //                               |---->|
    // | //                              10
@@ -202,7 +202,7 @@ virtual class text;
    //   present). Returns *s* as is if the given string does not end in a
    //   newline character.
    //
-   // Examples:
+   // Example:
    // | assert( text::chomp( "abc"     ) == "abc" );
    // | assert( text::chomp( "abc\n"   ) == "abc" );
    // | assert( text::chomp( "abc\n\n" ) == "abc\n" );
@@ -228,7 +228,7 @@ virtual class text;
    // Returns:
    //   Returns the last character of *s*. If *s* is empty, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::chop( "abc" ) == "c" );
    // | assert( text::chop( "abc\n" ) == "\n" );
    //
@@ -259,7 +259,7 @@ virtual class text;
    // Returns:
    //   A copy of *s* with ANSI escape codes.
    //
-   // Examples:
+   // Example:
    // | $display( text::colorize( "display me in red", FG_RED ) );
    //---------------------------------------------------------------------------
 
@@ -297,7 +297,7 @@ virtual class text;
    // Returns:
    //   If *s* contains *sub*, 1 is returned. Otherwise, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::contains( "a primary library", "primary" )                  == 1 );
    // | assert( text::contains( "a primary library", "primary", .start_pos( 3 ) ) == 0 );
    // | //                          |----------->|
@@ -339,7 +339,7 @@ virtual class text;
    //   If *s* contains *sub*, *sub* is returned. Otherwise, an empty string
    //   ("") is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::contains_str( "a primary library", "primary" )                  == "primary" );
    // | assert( text::contains_str( "a primary library", "primary", .start_pos( 3 ) ) == "" );
    // | //                              |----------->|
@@ -381,7 +381,7 @@ virtual class text;
    // Returns:
    //   The number of non-overlapping occurrences of *sub* in *s*.
    //
-   // Examples:
+   // Example:
    // | assert( text::count( "a primary library", "ary" )                  == 2 );
    // | assert( text::count( "a primary library", "ary", .start_pos( 3 ) ) == 2 );
    // | //                       |----------->|
@@ -429,7 +429,7 @@ virtual class text;
    // Returns:
    //   A copy of *s* with the first *count* occurrences of *sub* removed.
    //
-   // Examples:
+   // Example:
    // | assert( text::delete( "abcabc", "abc"    ) == "" );
    // | assert( text::delete( "abcabc", "abc", 1 ) == "abc" );
    //
@@ -461,7 +461,7 @@ virtual class text;
    //   If *s* ends with one of the specified *suffixes*, 1 is returned. 
    //   Otherwise, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::ends_with( "a primary library", { "primary", "library" } )                  == 1 );
    // | assert( text::ends_with( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 1 );
    // | //                           |----------->|
@@ -517,7 +517,7 @@ virtual class text;
    //   The lowest index in *s* where each substring in *subs* is found. If no
    //   substring is found, -1 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::find_any( "a primary library", { "primary", "library" } ) ==  2 );
    // | assert( text::find_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 );
    // | //                          |----------->|
@@ -595,7 +595,7 @@ virtual class text;
    //   The index of the first occurrence of *sub* in *s*. If *sub* is not
    //   found, -1 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::index( "a primary library", "ary" )                  ==  6 );
    // | assert( text::index( "a primary library", "ary", .start_pos( 3 ) ) ==  6 );
    // | //                       |----------->|
@@ -652,7 +652,7 @@ virtual class text;
    // Returns:
    //   A copy of *s* with *sub* inserted at *start_pos*.
    //
-   // Examples:
+   // Example:
    // | assert( text::insert( "abc", "XYZ"     ) == "XYZabc" ); // insert "XYZ" before the first character ("a")
    // | assert( text::insert( "abc", "XYZ",  1 ) == "aXYZbc" ); // insert "XYZ" before the character index 1 ("b")
    // | assert( text::insert( "abc", "XYZ", -1 ) == "abXYZc" ); // insert "XYZ" before the last character ("c")
@@ -684,7 +684,7 @@ virtual class text;
    //   If all characters in *s* are alphabetic, 1 is returned. Otherwise, 0 is
    //   returned. If *s* is an empty string, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::is_alpha( "abc"  ) == 1 );
    // | assert( text::is_alpha( "abc_" ) == 0 );
    //
@@ -714,7 +714,7 @@ virtual class text;
    //   If all characters in *s* are digits, 1 is returned. Otherwise, 0 is
    //   returned.  If *s* is an empty string, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::is_digit( "123"  ) == 1 );
    // | assert( text::is_digit( "123X" ) == 0 );
    //
@@ -743,7 +743,7 @@ virtual class text;
    //   If all cased characters in *s* are lowercase, 1 is returned. Otherwise,
    //   0 is returned. If *s* is an empty string, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::is_lower( "abc"   ) == 1 );
    // | assert( text::is_lower( "abcX"  ) == 0 );
    // | assert( text::is_lower( "abc!?" ) == 1 ); // all cased characters are lowercase
@@ -773,7 +773,7 @@ virtual class text;
    //   If all characters in *s* are printable, 1 is returned. Otherwise, 0 is
    //   returned.  If *s* is an empty string, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::is_printable( "!@#$" ) == 1 );
    // | assert( text::is_printable( "\200" ) == 0 ); // ASCII 'h80 is not printable
    //
@@ -801,7 +801,7 @@ virtual class text;
    //   If *s* is *bit*, *logic*, or *reg*, 1 is returned. Othewise, 0 is
    //   returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::is_single_bit_type( "bit" ) == 1 );
    // | assert( text::is_single_bit_type( "int" ) == 0 );
    //---------------------------------------------------------------------------
@@ -823,7 +823,7 @@ virtual class text;
    //   returned. Otherwise, 0 is returned. If *s* is an empty string, 0 is
    //   returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::is_space( " \t\n" ) == 1 );
    // | assert( text::is_space( "X\t\n" ) == 0 );
    //
@@ -852,7 +852,7 @@ virtual class text;
    //   If all cased characters in *s* are uppercase, 1 is returned. Otherwise,
    //   0 is returned.  If *s* is an empty string, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::is_upper( "ABC"   ) == 1 );
    // | assert( text::is_upper( "ABCx"  ) == 0 );
    // | assert( text::is_upper( "ABC!?" ) == 1 ); // all cased characters are uppercase
@@ -885,7 +885,7 @@ virtual class text;
    //   A string by concatenating the strings in *strings*, separated by 
    //   *separator*.
    //
-   // Examples:
+   // Example:
    // | assert( text::join_str( { "abc", "XYZ" }        ) == "abcXYZ"    );
    // | assert( text::join_str( { "abc", "XYZ" }, "---" ) == "abc---XYZ" );
    //---------------------------------------------------------------------------
@@ -948,7 +948,7 @@ virtual class text;
    // Returns:
    //   A string with *s* left-justified and padded with *fill_char*.
    //
-   // Examples:
+   // Example:
    // | assert( text::ljust( "ljust me", 15 )                  == "ljust me       " );
    // | assert( text::ljust( "ljust me", 15, "-" )             == "ljust me-------" );
    // | assert( text::ljust( "ljust me", 7 )                   == "ljust me"        ); // widened to fit
@@ -990,7 +990,7 @@ virtual class text;
    // Returns:
    //   A copy of *s* with leading characters removed.
    //
-   // Examples:
+   // Example:
    // | assert( text::lstrip( "      abc" ) == "abc" );
    // | assert( text::lstrip( "  \t\nabc" ) == "abc" );
    // | assert( text::lstrip( "aabbcc", "a"  ) == "bbcc" );
@@ -1026,7 +1026,7 @@ virtual class text;
    //   If *s* consists of only the characters in *chars*, 1 is returned.
    //   Othewise, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::only( "abc", "abcXYZ" ) == 1 );
    // | assert( text::only( "abcXYZ", "abc" ) == 0 );
    //
@@ -1067,7 +1067,7 @@ virtual class text;
    //   An array that consists of the part before *sep*, the *sep*, and the part
    //   after *sep*. If *sep* is not found, returns *s* and two empty strings.
    //
-   // Examples:
+   // Example:
    // | three_strings s, t1, t2, t3, t4;
    // |
    // | s = '{ "abc", "-", "XYZ" };
@@ -1116,7 +1116,7 @@ virtual class text;
    //   A copy of *s* with the first *count* occurrences of *old_str* replaced
    //   with *new_str*.
    //
-   // Examples:
+   // Example:
    // | assert( text::replace( "abcabc", "abc", "XYZ"    ) == "XYZXYZ" );
    // | assert( text::replace( "abcabc", "abc", "XYZ", 1 ) == "XYZabc" );
    //
@@ -1151,7 +1151,7 @@ virtual class text;
    // Returns:
    //   A copy of *s* with the characters in reverse order.
    //
-   // Examples:
+   // Example:
    // | assert( text::reverse( "reverse me!" ) == "!em esrever" );
    // | assert( text::reverse( "wonton? not now" ) == "won ton ?notnow" );
    //---------------------------------------------------------------------------
@@ -1183,7 +1183,7 @@ virtual class text;
    //   The highest index in *s* where each substring in *subs* is found. If no
    //   substring is found, -1 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::rfind_any( "a primary library", { "primary", "library" } )                  == 10 );
    // | assert( text::rfind_any( "a primary library", { "primary", "library" }, .start_pos( 3 ) ) == 10 );
    // | //                           |----------->|
@@ -1239,7 +1239,7 @@ virtual class text;
    //   The index of the last occurrence of *sub* in *s*. If *sub* is not found,
    //   -1 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::rindex( "a primary library", "ary" )                  == 14 );
    // | assert( text::rindex( "a primary library", "ary", .start_pos( 3 ) ) == 14 );
    // | //                        |----------->|
@@ -1293,7 +1293,7 @@ virtual class text;
    // Returns:
    //   A string with *s* right justified and padded with *fill_char*.
    //
-   // Examples:
+   // Example:
    // | assert( text::rjust( "rjust me", 15 )                 == "       rjust me" );
    // | assert( text::rjust( "rjust me", 15, "-" )            == "-------rjust me" );
    // | assert( text::rjust( "rjust me", 7 )                  ==        "rjust me" ); // widened to fit
@@ -1336,7 +1336,7 @@ virtual class text;
    //   An array that consists of the part before *sep*, the *sep*, and the part
    //   after *sep*. If *sep* is not found, returns *s* and two empty strings.
    //
-   // Examples:
+   // Example:
    // | three_strings s, t1, t2, t3, t4;
    // |
    // | s = '{ "abc", "-", "XYZ" };
@@ -1390,7 +1390,7 @@ virtual class text;
    // Returns:
    //   A queue of substrings (<string_q>).
    //
-   // Examples:
+   // Example:
    // | string_q s1, s2, s3, s4, t1, t2, t3, t4, t5;
    // |
    // | s1 = '{ "abc", "pqr", "xyz" };
@@ -1468,7 +1468,7 @@ virtual class text;
    // Returns:
    //   A copy of *s* with trailing characters removed.
    //
-   // Examples:
+   // Example:
    // | assert( text::rstrip( "abc      " ) == "abc" );
    // | assert( text::rstrip( "abc  \t\n" ) == "abc" );
    // | assert( text::rstrip( "aabbcc", "c"  ) == "aabb" );
@@ -1506,7 +1506,7 @@ virtual class text;
    // Returns:
    //   Returns a substring in the specified range.
    //
-   // Examples:
+   // Example:
    // | assert( text::slice( "slice me",  2,  6 ) == "ice m" );
    // | assert( text::slice( "slice me", -6, -2 ) == "ice m" );
    //
@@ -1536,7 +1536,7 @@ virtual class text;
    // Returns:
    //   Returns a substring in the specified range.
    //
-   // Examples:
+   // Example:
    // | assert( text::slice_len( "slice me",  2, 5 ) == "ice m" );
    // | assert( text::slice_len( "slice me", -6, 5 ) == "ice m" );
    //
@@ -1576,7 +1576,7 @@ virtual class text;
    // Returns:
    //   A queue of substrings (<string_q>).
    //
-   // Examples:
+   // Example:
    // | string_q s1, s2, s3, s4, t1, t2, t3, t4, t5;
    // |
    // | s1 = '{ "abc", "pqr", "xyz" };
@@ -1725,7 +1725,7 @@ virtual class text;
    //   If *s* starts with one of the specified *prefixes*, 1 is returned. 
    //   Otherwise, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | assert( text::starts_with( "a primary library", { "a primary", "library" } )                   == 1 );
    // | assert( text::starts_with( "a primary library", { "a primary", "library" }, .start_pos( 10 ) ) == 1 );
    // | //                                    |---->|
@@ -1778,7 +1778,7 @@ virtual class text;
    // Returns:
    //   A copy of *s* with leading and trailing characters removed.
    //
-   // Examples:
+   // Example:
    // | assert( text::strip( "   abc    " ) == "abc" );
    // | assert( text::strip( " \t\nabc\n" ) == "abc" );
    // | assert( text::strip( "aabbcc", "a"  ) == "bbcc" );
@@ -1880,7 +1880,7 @@ virtual class text;
    //   A copy of *s* with leading *left* characters and trailing *right* 
    //   characters removed.
    //
-   // Examples:
+   // Example:
    // | assert( text::trim( "trim me!"       ) == "trim me!" );
    // | assert( text::trim( "trim me!", 1, 2 ) ==  "rim m"   );
    // | assert( text::trim( "trim me!", 3, 4 ) ==    "m"     );
@@ -1937,7 +1937,7 @@ virtual class text;
    //   A copy of *s* where all tab characters are replaced by one or more 
    //   spaces, depending on the tab positions.
    //   
-   // Examples:
+   // Example:
    // | assert( text::untabify( "AB\tCDE\tFGHI\tJKLMN" ) == "AB      CDE     FGHI    JKLMN" );
    // |                                    // tab positions: ^       ^       ^       ^
    // | assert( text::untabify( "AB\tCDE\tFGHI\tJKLMN", 4 ) == "AB  CDE FGHI    JKLMN" );
@@ -1976,6 +1976,6 @@ endclass: text
 `endif //  `ifndef CL_TEXT_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

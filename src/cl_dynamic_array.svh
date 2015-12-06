@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_dynamic_array.svh (v0.2.0)
+// cl_dynamic_array.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -95,7 +95,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A dynamic array converted from *ua*.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // same as ua[0:7]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -129,7 +129,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   An unpacked array converted from *da*.
    //
-   // Examples:
+   // Example:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit ua0[8] =       '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua1[8] =       '{ 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -162,7 +162,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A dynamic array converted from *q*.
    //
-   // Examples:
+   // Example:
    // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -194,7 +194,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A queue converted from *da*.
    //
-   // Examples:
+   // Example:
    // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -230,7 +230,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -272,7 +272,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit da[]   = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
    // | bit ua0[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua1[8] =         '{ 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -310,7 +310,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit q[$]  =          { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -350,7 +350,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit da[]  = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
    // | bit q0[$] =          { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] =          { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -434,7 +434,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //         element is initialized with the default value of type *T*.  If 0,
    //         no padding element is added. The default is 0.
    //
-   // Examples:
+   // Example:
    // | bit da[] = new[7]( '{ 0, 0, 0, 1, 1, 0, 1 } ); // da[0] to da[6]
    // | bit da0[], da1[], expected_da0[], expected_da1[];
    // |
@@ -493,7 +493,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A new merged dynamic array.
    //
-   // Examples:
+   // Example:
    // | int da0[] = new[4]( '{ 0, 0, 0, 0 } );
    // | int da1[] = new[6]( '{ 1, 2, 3, 4, 5, 6 } );
    // | int expected[];
@@ -605,7 +605,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A new dynamic array extracted from *da*.
    //
-   // Examples:
+   // Example:
    // | int da[]       = new[10]( '{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
    // | int expected[] = new[5] ( '{          3, 4, 5, 6, 7       } );
    // |
@@ -674,7 +674,7 @@ virtual class dynamic_array #( type T = bit, int SIZE = 1 );
    //   dynamic arrays contain the same data in the specified range, 1 is
    //   returned. Otherwise, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | bit da1[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da2[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
    // | //                           |<------>|
@@ -756,6 +756,6 @@ endclass: dynamic_array
 `endif //  `ifndef CL_DYNAMIC_ARRAY_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

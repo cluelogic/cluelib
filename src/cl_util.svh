@@ -1,10 +1,10 @@
 //==============================================================================
 //
-// cl_util.svh (v0.2.0)
+// cl_util.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -50,7 +50,7 @@ virtual class util;
    // Returns:
    //   The number of octal digits required to represent *num_bin_digits*.
    //
-   // Examples:
+   // Example:
    // | assert( util::num_oct_digits( 3 ) == 1 ); //  3'b111 -> 1'o7
    // | assert( util::num_oct_digits( 4 ) == 2 ); // 4'b1111 -> 2'o17
    //---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ virtual class util;
    // Returns:
    //   The number of decimal digits required to represent *num_bin_digits*.
    //
-   // Examples:
+   // Example:
    // | assert( util::num_dec_digits( 3 ) == 1 ); //  3'b111 -> 1'd7
    // | assert( util::num_dec_digits( 4 ) == 2 ); // 4'b1111 -> 2'd15
    //---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ virtual class util;
    // Returns:
    //   The number of hexadecimal digits required to represent *num_bin_digits*.
    //
-   // Examples:
+   // Example:
    // | assert( util::num_hex_digits( 3 ) == 1 ); //  3'b111 -> 1'h7
    // | assert( util::num_hex_digits( 4 ) == 1 ); // 4'b1111 -> 1'hF
    //---------------------------------------------------------------------------
@@ -128,6 +128,6 @@ endclass: util
 `endif //  `ifndef CL_UTIL_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

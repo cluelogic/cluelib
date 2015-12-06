@@ -1,0 +1,120 @@
+Format: 1.51
+
+
+Title: ClueLib
+SubTitle: Sharing generic libraries in SystemVerilog makes coding fun again.
+
+Footer: Copyright (C) 2013, 2014, 2015 ClueLogic, LLC
+Timestamp: Last updated on mon day, year
+#   m     - One or two digit month.  January is "1"
+#   mm    - Always two digit month.  January is "01"
+#   mon   - Short month word.  January is "Jan"
+#   month - Long month word.  January is "January"
+#   d     - One or two digit day.  1 is "1"
+#   dd    - Always two digit day.  1 is "01"
+#   day   - Day with letter extension.  1 is "1st"
+#   yy    - Two digit year.  2006 is "06"
+#   yyyy  - Four digit year.  2006 is "2006"
+#   year  - Four digit year.  2006 is "2006"
+
+
+# --------------------------------------------------------------------------
+# 
+# Cut and paste the lines below to change the order in which your files
+# appear on the menu.  Don't worry about adding or removing files, Natural
+# Docs will take care of that.
+# 
+# You can further organize the menu by grouping the entries.  Add a
+# "Group: [name] {" line to start a group, and add a "}" to end it.
+# 
+# You can add text and web links to the menu by adding "Text: [text]" and
+# "Link: [name] ([URL])" lines, respectively.
+# 
+# The formatting and comments are auto-generated, so don't worry about
+# neatness when editing the file.  Natural Docs will clean it up the next
+# time it is run.  When working with groups, just deal with the braces and
+# forget about the indentation and comments.
+# 
+# --------------------------------------------------------------------------
+
+
+File: Overview  (overview.txt)
+File: Package  (cl_pkg.sv)
+
+Group: Text Processing  {
+
+   File: text  (cl_text.svh)
+   }  # Group: Text Processing
+
+Group: Container  {
+
+   File: bit_stream  (cl_bit_stream.svh)
+   File: collection  (cl_collection.svh)
+   File: data_stream  (cl_data_stream.svh)
+   File: deque  (cl_deque.svh)
+   File: deque_descending_iterator  (cl_deque_descending_iterator.svh)
+   File: deque_iterator  (cl_deque_iterator.svh)
+   File: dynamic_array  (cl_dynamic_array.svh)
+   File: packed_array  (cl_packed_array.svh)
+   File: pair  (cl_pair.svh)
+   File: queue  (cl_queue.svh)
+   File: set  (cl_set.svh)
+   File: set_base  (cl_set_base.svh)
+   File: set_iterator  (cl_set_iterator.svh)
+   File: tuple  (cl_tuple.svh)
+   File: unpacked_array  (cl_unpacked_array.svh)
+   File: iterator  (cl_iterator.svh)
+   }  # Group: Container
+
+Group: Strategy  {
+
+   File: comma_formatter  (cl_comma_formatter.svh)
+   File: comparator  (cl_comparator.svh)
+   File: decimal_formatter  (cl_decimal_formatter.svh)
+   File: default_comparator  (cl_default_comparator.svh)
+   File: formatter  (cl_formatter.svh)
+   File: hex_formatter  (cl_hex_formatter.svh)
+   File: pair_comparator  (cl_pair_comparator.svh)
+   File: string_formatter  (cl_string_formatter.svh)
+   File: tuple_comparator  (cl_tuple_comparator.svh)
+   }  # Group: Strategy
+
+Group: Verification-specific  {
+
+   File: Random Number Generators  (cl_random_num.svh)
+   File: kitchen_timer  (cl_kitchen_timer.svh)
+   File: journal  (cl_journal.svh)
+   }  # Group: Verification-specific
+
+Group: Domain-specific  {
+
+   File: crc  (cl_crc.svh)
+   File: Scramblers  (cl_scrambler.svh)
+   File: network  (cl_network.svh)
+   }  # Group: Domain-specific
+
+Group: Miscellaneous  {
+
+   File: Macro Definitions  (cl_define.svh)
+   File: Type Definitions  (cl_types.svh)
+   File: choice  (cl_choice.svh)
+   File: putil  (cl_putil.svh)
+   File: util  (cl_util.svh)
+   }  # Group: Miscellaneous
+
+Group: Common  {
+
+   File: common_array  (cl_common_array.svh)
+   }  # Group: Common
+
+Group: Index  {
+
+   Index: Everything
+   Class Index: Classes
+   Event Index: Events
+   Function Index: Functions
+   Macro Index: Macros
+   Property Index: Properties
+   Type Index: Types
+   }  # Group: Index
+

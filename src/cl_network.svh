@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_iterator.svh (v0.3.0)
+// cl_network.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
@@ -26,41 +26,67 @@
 // SOFTWARE.
 //==============================================================================
 
-`ifndef CL_ITERATOR_SVH
-`define CL_ITERATOR_SVH
+`ifndef CL_NETWORK_SVH
+`define CL_NETWORK_SVH
 
 //------------------------------------------------------------------------------
-// Class: iterator
-//   (VIRTUAL) Defines a uniform way of accessing collection elements
-//   sequentially.
+// Class: network
+//   (VIRTUAL) Provides a logging function to store network transactions in the
+//   Wireshark hex format.
 //------------------------------------------------------------------------------
 
-virtual class iterator #( type T = int );
+virtual class network;
 
    //---------------------------------------------------------------------------
-   // Function: has_next
-   //   (PURE) (VIRTUAL) Returns 1 if the iteration has more elements.
+   // Property: fds
+   //   The dynamic array of file descriptors. It is user's responsibility to
+   //   open the file(s).
+   //
+   // Example:
+   // | network::fds    = new[2];
+   // | network::fds[0] = $fopen( "file0.hex", "w" );
+   // | network::fds[1] = $fopen( "file1.hex", "w" );
    //---------------------------------------------------------------------------
 
-   pure virtual function bit has_next();
+   static integer fds[];
 
    //---------------------------------------------------------------------------
-   // Function: next
-   //   (PURE) (VIRTUAL) Returns the next element in the iteration.
+   // Function: dump
+   //
+   //   (STATIC) Stores a network transaction to the file specified by the *idx*
+   //   using the Wireshark hex format. It is user's responsibility to open the
+   //   file before calling this function.
+   //
+   // Arguments:
+   //   desc - The description of a transaction.
+   //   idx - (OPTIONAL) The index of the file descriptor array. The default
+   //   index is 0.
+   //
+   // Example:
+   // | network::fds    = new[2];
+   // | network::fds[0] = $fopen( "file0.hex", "w" );
+   // | network::fds[1] = $fopen( "file1.hex", "w" );
+   // | network::dump( "000000 01 02 03 04" ); // dump to fds[0] (file0.hex)
+   // | #100;
+   // | network::dump( "000000 11 12 13 14", .idx( 1 ) ); // dump to fds[1] (file1.hex)
+   // |
+   // | /* file0.hex */
+   // | // 0.
+   // | // 000000 01 02 03 04
+   // |
+   // | /* file1.hex */
+   // | // 100.
+   // | // 000000 11 12 13 14
    //---------------------------------------------------------------------------
 
-   pure virtual function T next();
+   static function void dump( string desc, int idx = 0 );
+      time t = $time;
+      $fwrite( fds[idx], "%0d.\n%s\n", t, desc );
+   endfunction: dump
 
-   //---------------------------------------------------------------------------
-   // Function: remove
-   //   (PURE) (VIRTUAL) Removes the last element returned by the iterator.
-   //---------------------------------------------------------------------------
+endclass: network
 
-   pure virtual function void remove();
-
-endclass: iterator
-
-`endif //  `ifndef CL_ITERATOR_SVH
+`endif //  `ifndef CL_NETWORK_SVH
 
 //==============================================================================
 // Copyright (c) 2013, 2014, 2015 ClueLogic, LLC

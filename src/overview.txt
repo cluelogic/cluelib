@@ -43,6 +43,7 @@ Title: Overview
 - Domain-specific
 - ... \___ <crc>
 - ... \___ <Scramblers>
+- ... \___ <network> (NEW)
 - Miscellaneous
 - ... \___ <Macro Definitions>
 - ... \___ <Type Definitions>
@@ -53,7 +54,7 @@ Title: Overview
 License:
 The MIT License (MIT)
 
-Copyright (c) 2013, 2014 ClueLogic, LLC
+Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 
 http://cluelogic.com/
 

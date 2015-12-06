@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_unpacked_array.svh (v0.2.0)
+// cl_unpacked_array.svh (v0.3.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -96,7 +96,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   An unpacked array converted from *da*.
    //
-   // Examples:
+   // Example:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
    // | bit ua0[8] =       '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua1[8] =       '{ 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -129,7 +129,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A dynamic array converted from *ua*.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] =         '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
    // | bit da1[] = new[8]( '{ 1, 1, 0, 1, 1, 0, 0, 0 } );
@@ -165,7 +165,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   An unpacked array converted from *q*.
    //
-   // Examples:
+   // Example:
    // | bit q[$]   =  { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua1[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -196,7 +196,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   A queue converted from *ua*.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | bit q0[$] =  { 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit q1[$] =  { 1, 1, 0, 1, 1, 0, 0, 0 };
@@ -233,7 +233,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit da[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } ); // da[0] to da[7]
    // | bit ua[8];
    // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -274,7 +274,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | bit da [] = new[8]; // set the size of da[]
    // | bit da0[] = new[8]( '{ 0, 0, 0, 1, 1, 0, 1, 1 } );
@@ -315,7 +315,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit q[$] = { 0, 0, 0, 1, 1, 0, 1, 1 }; // q[0] to q[7]
    // | bit ua [8];
    // | bit ua0[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -353,7 +353,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    // Returns:
    //   None.
    //
-   // Examples:
+   // Example:
    // | bit ua[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 }; // assigned to ua[0:7]
    // | bit q [$];
    // | bit q0[$] = { 0, 0, 0, 1, 1, 0, 1, 1 };
@@ -447,7 +447,7 @@ virtual class unpacked_array #( type T = bit, int SIZE = 1 );
    //   unpacked arrays contain the same data in the specified range, 1 is
    //   returned. Otherwise, 0 is returned.
    //
-   // Examples:
+   // Example:
    // | bit ua1[8] = '{ 0, 0, 0, 1, 1, 0, 1, 1 };
    // | bit ua2[8] = '{ 1, 1, 0, 1, 1, 0, 0, 0 };
    // | //                    |<------>|
@@ -508,6 +508,6 @@ endclass: unpacked_array
 `endif //  `ifndef CL_UNPACKED_ARRAY_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================
