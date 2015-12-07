@@ -2,6 +2,9 @@
 ClueLib is a free, open-source generic library written in SystemVerilog. ClueLib is
 provided under MIT license and is available on GitHub for forking.
 
+###Revision
+The latest revision is **v0.3.1**.
+
 ###Documents
 - [Online Documentation](http://cluelogic.com/tools/cluelib/api/framed_html/index.html)
 - Offline Documentation (same contents as the Online Documentation) is available at

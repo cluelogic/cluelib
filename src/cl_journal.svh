@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_journal.svh (v0.3.0)
+// cl_journal.svh (v0.3.1)
 //
 // The MIT License (MIT)
 //
@@ -31,8 +31,8 @@
 
 //------------------------------------------------------------------------------
 // Class: journal
-//   (VIRTUAL) Provides logging functions to store transactions to a log or CSV
-//   file.
+//   (VIRTUAL) Provides logging functions to store transactions to a log or a
+//   CSV file.
 //------------------------------------------------------------------------------
 
 virtual class journal;
@@ -40,15 +40,22 @@ virtual class journal;
    //---------------------------------------------------------------------------
    // Property: log_fd
    //   The file descriptor for the log. It is user's responsibility to open the
-   //   file before calling `log`.
+   //   file before calling *log*.
    //---------------------------------------------------------------------------
 
    static integer log_fd;
+
+   //---------------------------------------------------------------------------
+   // Property: csv_fd
+   //   The file descriptor for the CSV file. It is user's responsibility to
+   //   open the file before calling *csv*.
+   //---------------------------------------------------------------------------
+
    static integer csv_fd;
 
    //---------------------------------------------------------------------------
    // Function: log
-   //   (STATIC) Stores a transaction to the file specified by the `log_fd`
+   //   (STATIC) Stores a transaction to the file specified by the *log_fd*
    //   using the format shown in the Example below. It is user's responsibility
    //   to open the log file before calling this function.
    //
@@ -79,7 +86,7 @@ virtual class journal;
 
    //---------------------------------------------------------------------------
    // Function: csv
-   //   (STATIC) Stores a transaction to the file specified by the `csv_fd`
+   //   (STATIC) Stores a transaction to the file specified by the *csv_fd*
    //   using the CSV (comma separated value) format shown in the Example
    //   below. It is user's responsibility to open the CSV file before calling
    //   this function.
