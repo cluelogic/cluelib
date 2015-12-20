@@ -785,20 +785,24 @@ module test_from_examples;
     begin
       deque#(int) int_dq = new();
       iterator#(int) it;
+      string s;
       
       void'( int_dq.add( 123 ) );
       void'( int_dq.add( 456 ) );
       it = int_dq.get_iterator();
-      while ( it.has_next() ) $display( it.next() ); // 123 456
+      while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+      assert( s == "123 456 " );
     end
     begin
       deque#(int) int_dq = new();
       iterator#(int) it;
+      string s;
       
       void'( int_dq.add( 123 ) );
       void'( int_dq.add( 456 ) );
       it = int_dq.get_descending_iterator();
-      while ( it.has_next() ) $display( it.next() ); // 456 123
+      while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+      assert( s == "456 123 " );
     end
     begin
       deque#(int) int_dq = new();
@@ -1596,11 +1600,13 @@ module test_from_examples;
     begin
       set#(int) int_set = new();
       iterator#(int) it;
+      string s;
       
       void'( int_set.add( 123 ) );
       void'( int_set.add( 456 ) );
       it = int_set.get_iterator();
-      while ( it.has_next() ) $display( it.next() ); // 123 456
+      while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+      assert( s == "123 456 " );
     end
     begin
       set#(int) int_set = new();
@@ -1967,6 +1973,212 @@ module test_from_examples;
       // tab positions:    ^   ^   ^   ^   ^   ^
       assert( text::untabify( "AB\nCDE\tFGHI\tJKLMN", 4 ) == "AB\nCDE FGHI    JKLMN" );
       // tab positions:    ^   ^   ^   ^   ^   ^
+    end
+    // test ../src/cl_tree.svh
+    begin
+      tree#(int) int_tree = new();
+    end
+    begin
+      tree#(int) int_tree = new();
+      
+      assert( int_tree.add( 123 ) );
+      // (123)
+      //   \__ root node
+      
+      assert( int_tree.add( 234 ) );
+      // (123) ---- (234)
+      
+      assert( int_tree.add( 345 ) );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+    end
+    begin
+      tree#(int)      int_tree = new();
+      tree_node#(int) tn_123;
+      tree_node#(int) tn_234;
+      tree_node#(int) tn_345;
+      
+      tn_123 = int_tree.add_node( 123 );
+      // (123)
+      //   \__ root node
+      
+      tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
+      // (123) ---- (234)
+      
+      tn_345 = int_tree.add_node( 345, .parent( tn_234 ) );
+      // (123) ---- (234) ---- (345)
+    end
+    begin
+      tree#(int) int_tree = new();
+      
+      assert( int_tree.add( 123 ) );
+      assert( int_tree.add( 234 ) );
+      assert( int_tree.size() == 2 );
+      int_tree.clear();
+      assert( int_tree.size() == 0 );
+    end
+    begin
+      tree#(int) int_tree = new();
+      collection#(int) cloned;
+      
+      assert( int_tree.add( 123 ) );
+      assert( int_tree.add( 234 ) );
+      cloned = int_tree.clone();
+      assert( cloned.size() == 2 );
+    end
+    begin
+      tree#(int) int_tree = new();
+      
+      assert( int_tree.add( 123 ) );
+      assert( int_tree.add( 234 ) );
+      assert( int_tree.is_empty() == 0 );
+    end
+    begin
+      tree#(int)      int_tree = new();
+      tree_node#(int) tn_123;
+      tree_node#(int) tn_234;
+      tree_node#(int) tn_345;
+      tree_node#(int) tn_456;
+      iterator#(int)  it;
+      string s;
+      
+      tn_123 = int_tree.add_node( 123 );
+      tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
+      tn_345 = int_tree.add_node( 345, .parent( tn_123 ) );
+      tn_456 = int_tree.add_node( 456, .parent( tn_234 ) );
+      // (123) -+-- (234) ---- (456)
+      //        |
+      //        +-- (345)
+      
+      it = int_tree.get_iterator();
+      while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+      assert( s == "123 234 345 456 " );
+    end
+    begin
+      tree#(int)      int_tree = new();
+      tree_node#(int) tn_123;
+      tree_node#(int) tn_234;
+      tree_node#(int) tn_345;
+      tree_node#(int) tn_456;
+      iterator#(int)  it;
+      string s;
+      
+      tn_123 = int_tree.add_node( 123 );
+      tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
+      tn_345 = int_tree.add_node( 345, .parent( tn_123 ) );
+      tn_456 = int_tree.add_node( 456, .parent( tn_234 ) );
+      // (123) -+-- (234) ---- (456)
+      //        |
+      //        +-- (345)
+      
+      it = int_tree.get_breadth_first_iterator();
+      while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+      assert( s == "123 234 345 456 " );
+    end
+    begin
+      tree#(int) int_tree = new();
+      assert( int_tree.add( 123 ) );
+      assert( int_tree.add( 234 ) );
+      
+      assert( int_tree.get_last_node().elem == 234 );
+    end
+    begin
+      tree#(int)      t = new();
+      tree_node#(int) tn_234;
+      tree_node#(int) tn_345;
+      tree_node#(int) tn_456;
+      tree_node#(int) tn_567;
+      tree_node#(int) root;
+      
+      root = t.add_node( 123 );
+      tn_234 = t.add_node( 234 );
+      tn_345 = t.add_node( 345 );
+      tn_456 = t.add_node( 456 );
+      tn_567 = t.add_node( 567, .parent( tn_456 ) );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+      //        |
+      //        +-- (456) ---- (567)
+      
+      assert( t.get_location_name( tn_567 ) == "[0,2,0]" );
+    end
+    // test ../src/cl_tree_node.svh
+    begin
+      int i = 123;
+      tree_node#(int) tn = new( i );
+    end
+    begin
+      tree_node#(int) tn;
+      tree_node#(int) tn_123 = new( 123 );
+      
+      tn = tn_123.add( 234 );
+      // (123) ---- (234) <~~ tn
+      
+      tn = tn_123.add( 345 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345) <~~ tn
+      
+      tn = tn_123.add( 456 ).add( 567 ); // chain
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+      //        |
+      //        +-- (456) ---- (567) <~~ tn
+    end
+    begin
+      tree_node#(int) tn_123;
+      tree_node#(int) st_123; // sub-tree
+      tree_node#(int) tn_345;
+      tree_node#(int) st_345; // sub-tree
+      tree_node#(int) tn;
+      
+      tn_123 = new( 123 );
+      st_123 = tn_123.add( 234 );
+      // (123) ---- (234)
+      
+      tn_345 = new( 345 );
+      st_345 = tn_345.add( 456 );
+      // (345) ---- (456)
+      
+      tn = st_123.graft( st_345 );
+      // (123) ---- (234) --- (345) ---- (456)
+      //                        \__ tn
+    end
+    begin
+      tree_node#(int) tn;
+      tree_node#(int) tn_123 = new( 123 );
+      
+      tn = tn_123.add( 234 );
+      tn = tn_123.add( 456 ).add( 567 );
+      tn = tn_123.add( 345 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (456) ---- (567)
+      //        |
+      //        +-- (345)
+      
+      tn = tn_123.prune( .index( 1 ) );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+    end
+    begin
+      tree_node#(int) tn;
+      tree_node#(int) tn_123 = new( 123 );
+      
+      tn = tn_123.add( 234 );
+      tn = tn_123.add( 345 );
+      tn = tn_123.add( 456 ).add( 567 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+      //        |
+      //        +-- (456) ---- (567)
+      
+      assert( tn_123.get_num_children == 3 ); // not 4
     end
     // test ../src/cl_tuple.svh
     begin

@@ -1,5 +1,5 @@
 //==============================================================================
-// cl_pkg.sv (v0.3.1)
+// cl_pkg.sv (v0.4.0)
 //
 // The MIT License (MIT)
 //
@@ -63,7 +63,9 @@ package cl;
    `include "cl_formatter.svh"
    `include "cl_string_formatter.svh"
    `include "cl_decimal_formatter.svh"
+   `include "cl_decimal_min_formatter.svh"
    `include "cl_hex_formatter.svh"
+   `include "cl_hex_min_formatter.svh"
    `include "cl_comma_formatter.svh"
    `include "cl_global.svh"
 
@@ -101,6 +103,9 @@ package cl;
 //   `include "cl_list_iterator.svh"
 //   `include "cl_list_bidir_iterator.svh"
 //   `include "cl_list.svh"
+   `include "cl_tree_breadth_first_iterator.svh"
+   `include "cl_tree_node.svh"
+   `include "cl_tree.svh"
 
    `include "cl_random_num.svh"
    `include "cl_kitchen_timer.svh"

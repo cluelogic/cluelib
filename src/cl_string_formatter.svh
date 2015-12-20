@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_string_formatter.svh (v0.3.1)
+// cl_string_formatter.svh (v0.4.0)
 //
 // The MIT License (MIT)
 //

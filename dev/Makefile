@@ -61,6 +61,8 @@ cl_files_to_run := \
 	$(src_dir)/cl_set.svh\
 	$(src_dir)/cl_set_base.svh\
 	$(src_dir)/cl_text.svh\
+	$(src_dir)/cl_tree.svh\
+	$(src_dir)/cl_tree_node.svh\
 	$(src_dir)/cl_tuple.svh\
 	$(src_dir)/cl_unpacked_array.svh\
 	$(src_dir)/cl_util.svh\

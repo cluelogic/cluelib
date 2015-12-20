@@ -55,15 +55,18 @@ Group: Container  {
    File: deque_descending_iterator  (cl_deque_descending_iterator.svh)
    File: deque_iterator  (cl_deque_iterator.svh)
    File: dynamic_array  (cl_dynamic_array.svh)
+   File: iterator  (cl_iterator.svh)
    File: packed_array  (cl_packed_array.svh)
    File: pair  (cl_pair.svh)
    File: queue  (cl_queue.svh)
    File: set  (cl_set.svh)
    File: set_base  (cl_set_base.svh)
    File: set_iterator  (cl_set_iterator.svh)
+   File: tree  (cl_tree.svh)
+   File: tree_breadth_first_iterator  (cl_tree_breadth_first_iterator.svh)
+   File: tree_node  (cl_tree_node.svh)
    File: tuple  (cl_tuple.svh)
    File: unpacked_array  (cl_unpacked_array.svh)
-   File: iterator  (cl_iterator.svh)
    }  # Group: Container
 
 Group: Strategy  {
@@ -71,9 +74,11 @@ Group: Strategy  {
    File: comma_formatter  (cl_comma_formatter.svh)
    File: comparator  (cl_comparator.svh)
    File: decimal_formatter  (cl_decimal_formatter.svh)
+   File: decimal_min_formatter  (cl_decimal_min_formatter.svh)
    File: default_comparator  (cl_default_comparator.svh)
    File: formatter  (cl_formatter.svh)
    File: hex_formatter  (cl_hex_formatter.svh)
+   File: hex_min_formatter  (cl_hex_min_formatter.svh)
    File: pair_comparator  (cl_pair_comparator.svh)
    File: string_formatter  (cl_string_formatter.svh)
    File: tuple_comparator  (cl_tuple_comparator.svh)
@@ -82,14 +87,14 @@ Group: Strategy  {
 Group: Verification-specific  {
 
    File: Random Number Generators  (cl_random_num.svh)
-   File: kitchen_timer  (cl_kitchen_timer.svh)
    File: journal  (cl_journal.svh)
+   File: kitchen_timer  (cl_kitchen_timer.svh)
    }  # Group: Verification-specific
 
 Group: Domain-specific  {
 
-   File: crc  (cl_crc.svh)
    File: Scramblers  (cl_scrambler.svh)
+   File: crc  (cl_crc.svh)
    File: network  (cl_network.svh)
    }  # Group: Domain-specific
 

@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_deque.svh (v0.3.1)
+// cl_deque.svh (v0.4.0)
 //
 // The MIT License (MIT)
 //
@@ -347,11 +347,13 @@ class deque #( type T = int ) extends collection#( T );
    // Example:
    // | deque#(int) int_dq = new();
    // | iterator#(int) it;
+   // | string s;
    // |
    // | void'( int_dq.add( 123 ) );
    // | void'( int_dq.add( 456 ) );
    // | it = int_dq.get_iterator();
-   // | while ( it.has_next() ) $display( it.next() ); // 123 456
+   // | while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+   // | assert( s == "123 456 " );
    //---------------------------------------------------------------------------
 
    virtual function iterator#( T ) get_iterator();
@@ -376,11 +378,13 @@ class deque #( type T = int ) extends collection#( T );
    // Example:
    // | deque#(int) int_dq = new();
    // | iterator#(int) it;
+   // | string s;
    // |
    // | void'( int_dq.add( 123 ) );
    // | void'( int_dq.add( 456 ) );
    // | it = int_dq.get_descending_iterator();
-   // | while ( it.has_next() ) $display( it.next() ); // 456 123
+   // | while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+   // | assert( s == "456 123 " );
    //---------------------------------------------------------------------------
 
    virtual function iterator#( T ) get_descending_iterator();

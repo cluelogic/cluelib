@@ -6,6 +6,7 @@ Title: Overview
 - Container
 - ... \___ <pair>
 - ... \___ <tuple>
+- ... \___ <tree_node> (NEW)
 - ... \___ Aggregate
 - ........... \___ <packed_array>
 - ........... \___ <unpacked_array>
@@ -17,6 +18,7 @@ Title: Overview
 - ........... \___ <set_base>
 - ................... \___ <set>
 - ........... \___ <deque>
+- ........... \___ <tree> (NEW)
 - ........... \___ linked_list (UNDER CONSTRUCTION)
 - ........... \___ priority_queue (UNDER CONSTRUCTION)
 - ........... \___ map (UNDER CONSTRUCTION)
@@ -25,6 +27,7 @@ Title: Overview
 - ................... \___ <set_iterator>
 - ................... \___ <deque_iterator>
 - ................... \___ <deque_descending_iterator>
+- ................... \___ <tree_breadth_first_iterator> (NEW)
 - Strategy
 - ... \___ <comparator>
 - ........... \___ <default_comparator>
@@ -32,7 +35,9 @@ Title: Overview
 - ........... \___ <tuple_comparator>
 - ... \___ <formatter>
 - ........... \___ <decimal_formatter>
+- ........... \___ <decimal_min_formatter>
 - ........... \___ <hex_formatter>
+- ........... \___ <hex_min_formatter>
 - ........... \___ <comma_formatter>
 - ........... \___ <string_formatter>
 - Verification-specific
@@ -43,7 +48,7 @@ Title: Overview
 - Domain-specific
 - ... \___ <crc>
 - ... \___ <Scramblers>
-- ... \___ <network> (NEW)
+- ... \___ <network>
 - Miscellaneous
 - ... \___ <Macro Definitions>
 - ... \___ <Type Definitions>
@@ -52,7 +57,7 @@ Title: Overview
 - ... \___ <util>
 
 Revision:
-v0.3.1
+v0.4.0
 
 License:
 The MIT License (MIT)

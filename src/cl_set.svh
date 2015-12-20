@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_set.svh (v0.3.1)
+// cl_set.svh (v0.4.0)
 //
 // The MIT License (MIT)
 //
@@ -219,11 +219,13 @@ class set #( type T = int ) extends set_base#( T );
    // Example:
    // | set#(int) int_set = new();
    // | iterator#(int) it;
+   // | string s;
    // |
    // | void'( int_set.add( 123 ) );
    // | void'( int_set.add( 456 ) );
    // | it = int_set.get_iterator();
-   // | while ( it.has_next() ) $display( it.next() ); // 123 456
+   // | while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+   // | assert( s == "123 456 " );
    //--------------------------------------------------------------------------
 
    virtual function iterator#( T ) get_iterator();

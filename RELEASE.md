@@ -1,5 +1,10 @@
 ##Release Notes
 
+###v0.4.0
+- Added `tree`, `tree_node`, and `tree_breadth_first_iterator` classes.
+- Fixed a bug in `collection::contains`.
+- Changed `collection::size` from `pure virtual` to `virtual` and added default implementation using an iterator.
+
 ###v0.3.0
 - Added `network` class.
 - The `journal` class no longer opens the log files (`journal.log` and

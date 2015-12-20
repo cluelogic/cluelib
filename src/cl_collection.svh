@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_collection.svh (v0.3.1)
+// cl_collection.svh (v0.4.0)
 //
 // The MIT License (MIT)
 //
@@ -140,7 +140,8 @@ virtual class collection#( type T = int );
       iterator#( T ) it = this.get_iterator();
       while ( it.has_next() ) begin
 	 T item = it.next();
-	 return cmp.eq( e, item );
+
+	 if ( cmp.eq( e, item ) ) return 1;
       end
       return 0;
    endfunction: contains
@@ -268,13 +269,22 @@ virtual class collection#( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: size
-   //   (PURE) (VIRTUAL) Returns the number of elements in this collection.
+   //   (VIRTUAL) Returns the number of elements in this collection.
    //
    // Returns:
    //   The number of elements in this collection.
    //---------------------------------------------------------------------------
 
-   pure virtual function int size();
+   virtual function int size();
+      iterator #( T ) it = this.get_iterator();
+      int cnt = 0;
+      
+      while ( it.has_next() ) begin
+	 void'( it.next() );
+	 cnt++;
+      end	 
+      return cnt;
+   endfunction: size
 
    //---------------------------------------------------------------------------
    // Function: to_dynamic_array
