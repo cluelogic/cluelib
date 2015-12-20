@@ -35,9 +35,9 @@ Title: Overview
 - ........... \___ <tuple_comparator>
 - ... \___ <formatter>
 - ........... \___ <decimal_formatter>
-- ........... \___ <decimal_min_formatter>
+- ........... \___ <decimal_min_formatter> (NEW)
 - ........... \___ <hex_formatter>
-- ........... \___ <hex_min_formatter>
+- ........... \___ <hex_min_formatter> (NEW)
 - ........... \___ <comma_formatter>
 - ........... \___ <string_formatter>
 - Verification-specific

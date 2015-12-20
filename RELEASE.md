@@ -1,7 +1,7 @@
 ##Release Notes
 
 ###v0.4.0
-- Added `tree`, `tree_node`, and `tree_breadth_first_iterator` classes.
+- Added `tree`, `tree_node`, `tree_breadth_first_iterator`, `decimal_min_formatter`, and `hex_min_formatter` classes.
 - Fixed a bug in `collection::contains`.
 - Changed `collection::size` from `pure virtual` to `virtual` and added default implementation using an iterator.
 
