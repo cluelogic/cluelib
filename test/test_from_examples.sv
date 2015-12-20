@@ -1999,15 +1999,37 @@ module test_from_examples;
       tree_node#(int) tn_234;
       tree_node#(int) tn_345;
       
-      tn_123 = int_tree.add_node( 123 );
+      tn_123 = int_tree.add_to_node( 123 );
       // (123)
       //   \__ root node
       
-      tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
+      tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
       // (123) ---- (234)
       
-      tn_345 = int_tree.add_node( 345, .parent( tn_234 ) );
+      tn_345 = int_tree.add_to_node( 345, .parent( tn_234 ) );
       // (123) ---- (234) ---- (345)
+    end
+    begin
+      tree#(int)      int_tree = new();
+      tree_node#(int) tn;
+      tree_node#(int) tn_123;
+      tree_node#(int) tn_234;
+      tree_node#(int) tn_345;
+      tree_node#(int) tn_456;
+      
+      tn_123 = int_tree.add_to_node( 123 );
+      tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
+      // (123) ---- (234)
+      //              \__ tn_234
+      
+      tn_345 = new( 345 );
+      tn_456 = tn_345.add( 456 );
+      // (345) ---- (456)
+      //   \__ tn_345
+      
+      tn = int_tree.graft( tn_345, .parent( tn_234 ) );
+      // (123) ---- (234) ---- (345) --- (456)
+      //                         \__ tn
     end
     begin
       tree#(int) int_tree = new();
@@ -2043,10 +2065,10 @@ module test_from_examples;
       iterator#(int)  it;
       string s;
       
-      tn_123 = int_tree.add_node( 123 );
-      tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
-      tn_345 = int_tree.add_node( 345, .parent( tn_123 ) );
-      tn_456 = int_tree.add_node( 456, .parent( tn_234 ) );
+      tn_123 = int_tree.add_to_node( 123 );
+      tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
+      tn_345 = int_tree.add_to_node( 345, .parent( tn_123 ) );
+      tn_456 = int_tree.add_to_node( 456, .parent( tn_234 ) );
       // (123) -+-- (234) ---- (456)
       //        |
       //        +-- (345)
@@ -2064,10 +2086,10 @@ module test_from_examples;
       iterator#(int)  it;
       string s;
       
-      tn_123 = int_tree.add_node( 123 );
-      tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
-      tn_345 = int_tree.add_node( 345, .parent( tn_123 ) );
-      tn_456 = int_tree.add_node( 456, .parent( tn_234 ) );
+      tn_123 = int_tree.add_to_node( 123 );
+      tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
+      tn_345 = int_tree.add_to_node( 345, .parent( tn_123 ) );
+      tn_456 = int_tree.add_to_node( 456, .parent( tn_234 ) );
       // (123) -+-- (234) ---- (456)
       //        |
       //        +-- (345)
@@ -2091,17 +2113,18 @@ module test_from_examples;
       tree_node#(int) tn_567;
       tree_node#(int) root;
       
-      root = t.add_node( 123 );
-      tn_234 = t.add_node( 234 );
-      tn_345 = t.add_node( 345 );
-      tn_456 = t.add_node( 456 );
-      tn_567 = t.add_node( 567, .parent( tn_456 ) );
+      root = t.add_to_node( 123 );
+      tn_234 = t.add_to_node( 234 );
+      tn_345 = t.add_to_node( 345 );
+      tn_456 = t.add_to_node( 456 );
+      tn_567 = t.add_to_node( 567, .parent( tn_456 ) );
       // (123) -+-- (234)
       //        |
       //        +-- (345)
       //        |
       //        +-- (456) ---- (567)
       
+      t.update_locations();
       assert( t.get_location_name( tn_567 ) == "[0,2,0]" );
     end
     // test ../src/cl_tree_node.svh
@@ -2130,20 +2153,22 @@ module test_from_examples;
     end
     begin
       tree_node#(int) tn_123;
-      tree_node#(int) st_123; // sub-tree
+      tree_node#(int) tn_234;
       tree_node#(int) tn_345;
-      tree_node#(int) st_345; // sub-tree
+      tree_node#(int) tn_456;
       tree_node#(int) tn;
       
       tn_123 = new( 123 );
-      st_123 = tn_123.add( 234 );
-      // (123) ---- (234)
+      tn_234 = tn_123.add( 234 );
+      // (123) --- (234)
+      //             \__ tn_234
       
       tn_345 = new( 345 );
-      st_345 = tn_345.add( 456 );
+      tn_456 = tn_345.add( 456 );
       // (345) ---- (456)
+      //   \__ tn_345
       
-      tn = st_123.graft( st_345 );
+      tn = tn_234.graft( tn_345 );
       // (123) ---- (234) --- (345) ---- (456)
       //                        \__ tn
     end

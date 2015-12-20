@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_tree.svh (v0.4.0)
+// cl_tree.svh (v0.5.0)
 //
 // The MIT License (MIT)
 //
@@ -122,11 +122,11 @@ class tree #( type T = int ) extends collection#( T );
    //---------------------------------------------------------------------------
 
    virtual function bit add( T e );
-      return add_node( e ) != null;
+      return add_to_node( e ) != null;
    endfunction: add
 
    //---------------------------------------------------------------------------
-   // Function: add_node
+   // Function: add_to_node
    //   (VIRTUAL) Creates a new <tree_node> of the given element and adds it to
    //   the tree as the child of the specified parent.
    //
@@ -145,29 +145,79 @@ class tree #( type T = int ) extends collection#( T );
    // | tree_node#(int) tn_234;
    // | tree_node#(int) tn_345;
    // |
-   // | tn_123 = int_tree.add_node( 123 );
+   // | tn_123 = int_tree.add_to_node( 123 );
    // | // (123)
    // | //   \__ root node
    // |
-   // | tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
+   // | tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
    // | // (123) ---- (234)
    // |
-   // | tn_345 = int_tree.add_node( 345, .parent( tn_234 ) );
+   // | tn_345 = int_tree.add_to_node( 345, .parent( tn_234 ) );
    // | // (123) ---- (234) ---- (345)
    //---------------------------------------------------------------------------
 
-   virtual function tree_node_type add_node( T e, tree_node_type parent = null );
+   virtual function tree_node_type add_to_node( T e, tree_node_type parent = null );
       if ( parent ) begin
 	 return parent.add( e );
+      end else if ( root ) begin
+	 return root.add( e );
       end else begin
-	 if ( root ) begin
-	    return root.add( e );
-	 end else begin
-	    root = new( e );
-	    return root;
-	 end
+	 root = new( e );
+	 return root;
       end
-   endfunction: add_node
+   endfunction: add_to_node
+
+   //---------------------------------------------------------------------------
+   // Function: graft
+   //   (VIRTUAL) Grafts the given <tree_node> (and its children) to the tree as
+   //   the child of the specified parent.
+   //
+   // Argument:
+   //   tn - A tree node to be grafted.
+   //   parent - (OPTIONAL) The parent <tree_node>. If the *parent* is *null*,
+   //            add the node to the <root>. If the <root> is empty, make the
+   //            *tn* as the root. Default is *null*.
+   //
+   // Returns:
+   //   A tree node to be grafted (*tn*).
+   //
+   // Example:
+   // | tree#(int)      int_tree = new();
+   // | tree_node#(int) tn;
+   // | tree_node#(int) tn_123;
+   // | tree_node#(int) tn_234;
+   // | tree_node#(int) tn_345;
+   // | tree_node#(int) tn_456;
+   // |
+   // | tn_123 = int_tree.add_to_node( 123 );
+   // | tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
+   // | // (123) ---- (234)
+   // | //              \__ tn_234
+   // |
+   // | tn_345 = new( 345 );
+   // | tn_456 = tn_345.add( 456 );
+   // | // (345) ---- (456)
+   // | //   \__ tn_345
+   // |
+   // | tn = int_tree.graft( tn_345, .parent( tn_234 ) );
+   // | // (123) ---- (234) ---- (345) --- (456)
+   // | //                         \__ tn
+   //---------------------------------------------------------------------------
+
+   virtual function tree_node_type graft( tree_node_type tn, 
+					  tree_node_type parent = null );
+      if ( parent ) begin
+	 void'( parent.graft( tn ) );
+	 tn.parent = parent;
+      end else if ( root ) begin
+	 void'( root.graft( tn ) );
+	 tn.parent = root;
+      end else begin
+	 root = tn;
+	 tn.parent = null;
+      end
+      return tn;
+   endfunction: graft
 
    //---------------------------------------------------------------------------
    // Function: clear
@@ -250,10 +300,10 @@ class tree #( type T = int ) extends collection#( T );
    // | iterator#(int)  it;
    // | string s;
    // |
-   // | tn_123 = int_tree.add_node( 123 );
-   // | tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
-   // | tn_345 = int_tree.add_node( 345, .parent( tn_123 ) );
-   // | tn_456 = int_tree.add_node( 456, .parent( tn_234 ) );
+   // | tn_123 = int_tree.add_to_node( 123 );
+   // | tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
+   // | tn_345 = int_tree.add_to_node( 345, .parent( tn_123 ) );
+   // | tn_456 = int_tree.add_to_node( 456, .parent( tn_234 ) );
    // | // (123) -+-- (234) ---- (456)
    // | //        |
    // | //        +-- (345)
@@ -284,10 +334,10 @@ class tree #( type T = int ) extends collection#( T );
    // | iterator#(int)  it;
    // | string s;
    // |
-   // | tn_123 = int_tree.add_node( 123 );
-   // | tn_234 = int_tree.add_node( 234, .parent( tn_123 ) );
-   // | tn_345 = int_tree.add_node( 345, .parent( tn_123 ) );
-   // | tn_456 = int_tree.add_node( 456, .parent( tn_234 ) );
+   // | tn_123 = int_tree.add_to_node( 123 );
+   // | tn_234 = int_tree.add_to_node( 234, .parent( tn_123 ) );
+   // | tn_345 = int_tree.add_to_node( 345, .parent( tn_123 ) );
+   // | tn_456 = int_tree.add_to_node( 456, .parent( tn_234 ) );
    // | // (123) -+-- (234) ---- (456)
    // | //        |
    // | //        +-- (345)
@@ -332,23 +382,25 @@ class tree #( type T = int ) extends collection#( T );
    endfunction: get_last_node
 
    //--------------------------------------------------------------------------
-   // Function: rebase
+   // Function: update_locations
    //   (VIRTUAL) Updates the <tree_node::location> of the entire tree.
    //
    // Returns:
    //   None.
    //--------------------------------------------------------------------------
 
-   virtual function void rebase();
+   virtual function void update_locations();
       iterator#(T) it = get_iterator();
 
       while ( it.has_next() ) void'( it.next() ); // iterating updates the locations
-   endfunction: rebase
+   endfunction: update_locations
 
    //---------------------------------------------------------------------------
    // Function: get_location_name
    //   (VIRTUAL) Returns the human-readable location string of this node from
-   //   the root. This function calls <rebase> internally. See
+   //   the root. The user must call <update_locations> prior to this function
+   //   if the tree structure has changed since the last call of this function
+   //   (this function does not call <update_locations> by itself). See
    //   <tree_node::location> for more detail.
    //
    // Argument:
@@ -365,17 +417,18 @@ class tree #( type T = int ) extends collection#( T );
    // | tree_node#(int) tn_567;
    // | tree_node#(int) root;
    // |
-   // | root = t.add_node( 123 );
-   // | tn_234 = t.add_node( 234 );
-   // | tn_345 = t.add_node( 345 );
-   // | tn_456 = t.add_node( 456 );
-   // | tn_567 = t.add_node( 567, .parent( tn_456 ) );
+   // | root = t.add_to_node( 123 );
+   // | tn_234 = t.add_to_node( 234 );
+   // | tn_345 = t.add_to_node( 345 );
+   // | tn_456 = t.add_to_node( 456 );
+   // | tn_567 = t.add_to_node( 567, .parent( tn_456 ) );
    // | // (123) -+-- (234)
    // | //        |
    // | //        +-- (345)
    // | //        |
    // | //        +-- (456) ---- (567)
    // |
+   // | t.update_locations();
    // | assert( t.get_location_name( tn_567 ) == "[0,2,0]" );
    //
    // See Also:
@@ -385,7 +438,7 @@ class tree #( type T = int ) extends collection#( T );
    virtual function string get_location_name( tree_node_type tn );
       decimal_min_formatter#(int) fmtr = decimal_min_formatter#(int)::get_instance();
 
-      rebase();
+      // update_locations(); // expensive
       return { "[", queue#(int)::to_string( tn.location, .separator( "," ), .fmtr( fmtr ) ), "]" };
    endfunction: get_location_name
 

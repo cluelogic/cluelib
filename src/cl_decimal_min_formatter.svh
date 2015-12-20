@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_decimal_min_formatter.svh (v0.4.0)
+// cl_decimal_min_formatter.svh (v0.5.0)
 //
 // The MIT License (MIT)
 //

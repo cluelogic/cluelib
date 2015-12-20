@@ -1,5 +1,10 @@
 ##Release Notes
 
+###v0.5.0
+- Renamed `tree::add_node` funtion to `tree::add_to_node`.
+- Renamed `tree::rebase` function to `tree::update_locations`.
+- Added `tree::graft` function.
+
 ###v0.4.0
 - Added `tree`, `tree_node`, `tree_breadth_first_iterator`, `decimal_min_formatter`, and `hex_min_formatter` classes.
 - Fixed a bug in `collection::contains`.
