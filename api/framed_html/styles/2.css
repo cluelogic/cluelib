@@ -48,19 +48,18 @@
   border-style: none;
   border-radius: 3px;
 }
-.tree,
+ul.tree,
 .tree ul {
   margin: 0 0 0 1em;
   padding: 0;
   list-style: none;
-  color: #369;
   position: relative;
 }
 .tree ul {
   margin-left: 0.5em;
 }
-.tree:before,
-.tree ul:before {
+.tree::before,
+.tree ul::before {
   content: "";
   display: block;
   width: 0;
@@ -73,11 +72,11 @@
 .tree li {
   margin: 0;
   padding: 0 1.5em;
-  line-height: 2em;
+  line-height: 1.4em;
   font-weight: bold;
   position: relative;
 }
-.tree li:before {
+.tree li::before {
   content: "";
   display: block;
   width: 10px;
@@ -85,13 +84,13 @@
   border-top: 1px solid;
   margin-top: -1px;
   position: absolute;
-  top: 1em;
+  top: 0.7em;
   left: 0;
 }
-.tree li:last-child:before {
+.tree li:last-child::before {
   background: #fff;
   height: auto;
-  top: 1em;
+  top: 0.7em;
   bottom: 0;
 }
 table.Prototype {
@@ -114,18 +113,6 @@ b {
   font-weight: normal;
   font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   color: #356de4;
-}
-li {
-  list-style-type: none;
-}
-li.level1 {
-  padding-left: 20px;
-}
-li.level2 {
-  padding-left: 70px;
-}
-li.level3 {
-  padding-left: 120px;
 }
 span.optional {
   background-color: #7f7f7f;

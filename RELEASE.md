@@ -1,5 +1,8 @@
 ##Release Notes
 
+###v0.5.1
+- Updated the Overview.
+
 ###v0.5.0
 - Renamed `tree::add_node` funtion to `tree::add_to_node`.
 - Renamed `tree::rebase` function to `tree::update_locations`.

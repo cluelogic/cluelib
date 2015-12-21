@@ -2,62 +2,86 @@ Title: Overview
 
 <Package> Contents:
 - Text Processing
-- ... \___ <text>
+  - (INDENT)
+  - <text>
+  - (UNINDENT)
 - Container
-- ... \___ <pair>
-- ... \___ <tuple>
-- ... \___ <tree_node> (NEW)
-- ... \___ Aggregate
-- ........... \___ <packed_array>
-- ........... \___ <unpacked_array>
-- ........... \___ <dynamic_array>
-- ........... \___ <queue>
-- ........... \___ <data_stream>
-- ........... \___ <bit_stream>
-- ... \___ <collection>
-- ........... \___ <set_base>
-- ................... \___ <set>
-- ........... \___ <deque>
-- ........... \___ <tree> (NEW)
-- ........... \___ linked_list (UNDER CONSTRUCTION)
-- ........... \___ priority_queue (UNDER CONSTRUCTION)
-- ........... \___ map (UNDER CONSTRUCTION)
-- ........... \___ stack (UNDER CONSTRUCTION)
-- ........... \___ <iterator>
-- ................... \___ <set_iterator>
-- ................... \___ <deque_iterator>
-- ................... \___ <deque_descending_iterator>
-- ................... \___ <tree_breadth_first_iterator> (NEW)
+  - (INDENT)
+  - <pair>
+  - <tuple>
+  - <tree_node> (NEW)
+  - Aggregate
+    - (INDENT)
+    - <packed_array>
+    - <unpacked_array>
+    - <dynamic_array>
+    - <queue>
+    - <data_stream>
+    - <bit_stream>
+    - (UNINDENT)
+  - <collection>
+    - (INDENT)
+    - <set_base>
+      - (INDENT)
+      - <set>
+      - (UNINDENT)
+    - <deque>
+    - <tree> (NEW)
+    - linked_list (UNDER CONSTRUCTION)
+    - priority_queue (UNDER CONSTRUCTION)
+    - map (UNDER CONSTRUCTION)
+    - stack (UNDER CONSTRUCTION)
+    - <iterator>
+      - (INDENT)
+      - <set_iterator>
+      - <deque_iterator>
+      - <deque_descending_iterator>
+      - <tree_breadth_first_iterator> (NEW)
+      - (UNINDENT)
+    - (UNINDENT)
+  - (UNINDENT)
 - Strategy
-- ... \___ <comparator>
-- ........... \___ <default_comparator>
-- ........... \___ <pair_comparator>
-- ........... \___ <tuple_comparator>
-- ... \___ <formatter>
-- ........... \___ <decimal_formatter>
-- ........... \___ <decimal_min_formatter> (NEW)
-- ........... \___ <hex_formatter>
-- ........... \___ <hex_min_formatter> (NEW)
-- ........... \___ <comma_formatter>
-- ........... \___ <string_formatter>
+  - (INDENT)
+  - <comparator>
+    - (INDENT)
+    - <default_comparator>
+    - <pair_comparator>
+    - <tuple_comparator>
+    - (UNINDENT)
+  - <formatter>
+    - (INDENT)
+    - <decimal_formatter>
+    - <decimal_min_formatter> (NEW)
+    - <hex_formatter>
+    - <hex_min_formatter> (NEW)
+    - <comma_formatter>
+    - <string_formatter>
+    - (UNINDENT)
+  - (UNINDENT)
 - Verification-specific
-- ... \___ <Random Number Generators>
-- ... \___ <kitchen_timer>
-- ... \___ stopwatch (UNDER CONSTRUCTION)
-- ... \___ <journal>
+  - (INDENT)
+  - <Random Number Generators>
+  - <kitchen_timer>
+  - stopwatch (UNDER CONSTRUCTION)
+  - <journal>
+  - (UNINDENT)
 - Domain-specific
-- ... \___ <crc>
-- ... \___ <Scramblers>
-- ... \___ <network>
+  - (INDENT)
+  - <crc>
+  - <Scramblers>
+  - <network>
+  - (UNINDENT)
 - Miscellaneous
-- ... \___ <Macro Definitions>
-- ... \___ <Type Definitions>
-- ... \___ <choice>
-- ... \___ <putil>
-- ... \___ <util>
+  - (INDENT)
+  - <Macro Definitions>
+  - <Type Definitions>
+  - <choice>
+  - <putil>
+  - <util>
+  - (UNINDENT)
 
 Revision:
-v0.5.0
+v0.5.1
 
 License:
 The MIT License (MIT)
