@@ -81,7 +81,7 @@ Title: Overview
   - (UNINDENT)
 
 Revision:
-v0.5.2
+v0.5.3
 
 License:
 The MIT License (MIT)

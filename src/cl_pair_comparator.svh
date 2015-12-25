@@ -1,5 +1,5 @@
 //==============================================================================
-// cl_pair_comparator.svh (v0.5.2)
+// cl_pair_comparator.svh (v0.5.3)
 //
 // The MIT License (MIT)
 //

@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_comma_formatter.svh (v0.5.2)
+// cl_comma_formatter.svh (v0.5.3)
 //
 // The MIT License (MIT)
 //

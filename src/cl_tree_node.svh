@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_tree_node.svh (v0.5.2)
+// cl_tree_node.svh (v0.5.3)
 //
 // The MIT License (MIT)
 //
@@ -92,8 +92,8 @@ class tree_node #( type T = int );
    //   The queue indicating the location of this tree node in a <tree>. Every
    //   child appends its index to the queue. _The <new>, <add>, <graft>, and
    //   <prune> functions do not update the location automatically. You must
-   //   call <tree::rebase> to update the entire tree-node locations._ To get a
-   //   human-readable location string, use <tree::get_location_name>.
+   //   call <tree::update_locations> to update the entire tree-node locations._
+   //   To get a human-readable location string, use <tree::get_location_name>.
    //
    //   Example:
    //   (start example)

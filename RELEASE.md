@@ -1,5 +1,8 @@
 ##Release Notes
 
+###v0.5.3
+- Updated the API document.
+
 ###v0.5.2
 - Added `tree_node::relatives` property.
 
