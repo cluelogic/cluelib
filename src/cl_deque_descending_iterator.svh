@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_deque_descending_iterator.svh (v0.5.1)
+// cl_deque_descending_iterator.svh (v0.5.2)
 //
 // The MIT License (MIT)
 //

@@ -1,5 +1,5 @@
 //==============================================================================
-// cl_default_comparator.svh (v0.5.1)
+// cl_default_comparator.svh (v0.5.2)
 //
 // The MIT License (MIT)
 //

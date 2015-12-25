@@ -16,10 +16,14 @@ make tex
 
 ### Common:
 - Update `dev/bin/revisionize.sed` to the new revision number
-- Update the revision in `README.md`
 
 ```bash
 cd ..
+```
+
+- Update the revision in `README.md`
+
+```bash
 git diff | cat
 ```
 
