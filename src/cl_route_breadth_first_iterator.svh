@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_set_iterator.svh (v0.6.0)
+// cl_route_breadth_first_iterator.svh (v0.6.0)
 //
 // The MIT License (MIT)
 //
@@ -26,54 +26,56 @@
 // SOFTWARE.
 //==============================================================================
 
-`ifndef CL_SET_ITERATOR_SVH
-`define CL_SET_ITERATOR_SVH
+`ifndef CL_ROUTE_BREADTH_FIRST_ITERATOR_SVH
+`define CL_ROUTE_BREADTH_FIRST_ITERATOR_SVH
 `ifndef CL_SUPPORT_PARAMETERIZED_NESTED_CLASS
 
-typedef class set;
+typedef class route;
+typedef class route_node;
 
 //-----------------------------------------------------------------------------
-// Class: set_iterator
-//   Provides an iterator to a <set>.
+// Class: route_breadth_first_iterator
+//   Provides a breadth-first iterator to a <route>.
 //
 // Parameter:
-//   T - (OPTIONAL) The type of data collected in a <set>. The default is *int*.
+//   T - (OPTIONAL) The type of data collected in a <route>. The default is
+//       *int*.
 //-----------------------------------------------------------------------------
 
-class set_iterator #( type T = int ) extends iterator#( T );
+class route_breadth_first_iterator #( type T = int ) extends iterator#( T );
 
-   local T cur_key;
-   local int cnt;
-   local int aa_size;
+   // Group: Types
 
-   //--------------------------------------------------------------------------
-   // Typedef: aa_type
-   //   The shorthand of the associative array type of type *T*.
-   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Typedef: route_node_type
+   //   The shorthand of the <route_node> type specialized with type *T*.
+   //---------------------------------------------------------------------------
 
-   typedef bit aa_type[T];
+   typedef route_node#(T) route_node_type;
 
    //--------------------------------------------------------------------------
-   // Typedef: set_type
-   //   The shorthand of the <set> type of type *T*.
+   // Typedef: route_type
+   //   The shorthand of the <route> type specialized with type *T*.
    //--------------------------------------------------------------------------
 
-   typedef set#( T ) set_type;
+   typedef route#( T ) route_type;
 
-   local set_type s; // needs to place after the typedef above
+   local route_node_type q[$];
+   local int cur_index;
+   local bit visited[ route_node_type ];
 
    //--------------------------------------------------------------------------
    // Function: new
-   //   Creates a set iterator.
+   //   Creates a route iterator.
    //
    // Argument:
-   //   s - A set to be iterated.
+   //   r - A route to be iterated.
    //--------------------------------------------------------------------------
 
-   function new( set_type s );
-      this.s = s;
-      aa_size = s.aa.size();
-      cnt = 0;
+   function new( route_type r );
+      if ( r.start ) q.push_back( r.start );
+      cur_index = 0;
+      visited.delete();
    endfunction: new
 
    //--------------------------------------------------------------------------
@@ -85,7 +87,7 @@ class set_iterator #( type T = int ) extends iterator#( T );
    //--------------------------------------------------------------------------
 
    virtual function bit has_next();
-      return cnt < aa_size;
+      return cur_index < q.size();
    endfunction: has_next
 
    //--------------------------------------------------------------------------
@@ -97,29 +99,50 @@ class set_iterator #( type T = int ) extends iterator#( T );
    //--------------------------------------------------------------------------
 
    virtual function T next();
-      if ( cnt == 0 ) begin
-	 assert( s.aa.first( cur_key ) == 1 ); // first() returns 0, 1, or -1
-      end else begin
-	 assert( s.aa.next( cur_key ) == 1 ); // next() returns 0, 1, or -1
-      end
-      cnt++;
-      return cur_key;
+      route_node_type rn = next_node();
+
+      return rn.elem;
    endfunction: next
+
+   //--------------------------------------------------------------------------
+   // Function: next_node
+   //   (VIRTUAL) Returns the next <route_node>.
+   //
+   // Returns:
+   //   The next route node in the route.
+   //--------------------------------------------------------------------------
+
+   virtual function route_node_type next_node();
+      route_node_type rn = q[cur_index];
+
+      foreach ( rn.to_nodes[i] ) begin
+	 if ( ! visited.exists( rn.to_nodes[i] ) ) begin
+	    q.push_back( rn.to_nodes[i] );
+	    visited[ rn.to_nodes[i] ] = 1;
+	 end
+      end
+      cur_index++;
+
+      return rn;
+   endfunction: next_node
 
    //--------------------------------------------------------------------------
    // Function: remove
    //   (VIRTUAL) Removes the last element returned by the iterator. This
-   //   function can be called once per call to <next>.
+   //   function can be called once per call to <next> or <next_node>.
+   //
+   // Returns:
+   //   None.
    //--------------------------------------------------------------------------
 
    virtual function void remove();
-      void'( s.aa.delete( cur_key ) );
+      q.delete( --cur_index ); // delete at the previous index
    endfunction: remove
 
-endclass: set_iterator
+endclass: route_breadth_first_iterator
 
 `endif //  `ifndef CL_SUPPORT_PARAMETERIZED_NESTED_CLASS
-`endif //  `ifndef CL_SET_ITERATOR_SVH
+`endif //  `ifndef CL_ROUTE_BREADTH_FIRST_ITERATOR_SVH
 
 //==============================================================================
 // Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC

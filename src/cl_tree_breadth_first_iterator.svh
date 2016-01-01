@@ -1,10 +1,10 @@
 //==============================================================================
 //
-// cl_tree_breadth_first_iterator.svh (v0.5.3)
+// cl_tree_breadth_first_iterator.svh (v0.6.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +35,7 @@ typedef class tree_node;
 
 //-----------------------------------------------------------------------------
 // Class: tree_breadth_first_iterator
-//   Provides an breadth-first iterator to a <tree>.
+//   Provides a breadth-first iterator to a <tree>.
 //
 // Parameter:
 //   T - (OPTIONAL) The type of data collected in a <tree>. The default is
@@ -145,6 +145,6 @@ endclass: tree_breadth_first_iterator
 `endif //  `ifndef CL_TREE_BREADTH_FIRST_ITERATOR_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

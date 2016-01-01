@@ -4,7 +4,7 @@ Format: 1.52
 Title: ClueLib
 SubTitle: Sharing generic libraries in SystemVerilog makes coding fun again.
 
-Footer: Copyright (C) 2013, 2014, 2015 ClueLogic, LLC
+Footer: Copyright (C) 2013, 2014, 2015, 2016 ClueLogic, LLC
 Timestamp: Last updated on mon day, year
 #   m     - One or two digit month.  January is "1"
 #   mm    - Always two digit month.  January is "01"
@@ -59,6 +59,9 @@ Group: Container  {
    File: packed_array  (cl_packed_array.svh)
    File: pair  (cl_pair.svh)
    File: queue  (cl_queue.svh)
+   File: route  (cl_route.svh)
+   File: route_breadth_first_iterator  (cl_route_breadth_first_iterator.svh)
+   File: route_node  (cl_route_node.svh)
    File: set  (cl_set.svh)
    File: set_base  (cl_set_base.svh)
    File: set_iterator  (cl_set_iterator.svh)

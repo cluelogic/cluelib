@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_pkg.sv (v0.5.3)
+// cl_pkg.sv (v0.6.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -91,21 +91,29 @@ package cl;
 
    `include "cl_iterator.svh"
    `include "cl_collection.svh"
+
    `include "cl_set_base.svh"
    `include "cl_set_iterator.svh"
    `include "cl_set.svh"
+
    `include "cl_deque_iterator.svh"
    `include "cl_deque_descending_iterator.svh"
    `include "cl_deque.svh"
+
 //   `include "cl_bidir_iterator.svh"
 //   `include "cl_list_base.svh"
 //   `include "cl_sub_list_base.svh"
 //   `include "cl_list_iterator.svh"
 //   `include "cl_list_bidir_iterator.svh"
 //   `include "cl_list.svh"
+
    `include "cl_tree_breadth_first_iterator.svh"
    `include "cl_tree_node.svh"
    `include "cl_tree.svh"
+
+   `include "cl_route_breadth_first_iterator.svh"
+   `include "cl_route_node.svh"
+   `include "cl_route.svh"
 
    `include "cl_random_num.svh"
    `include "cl_kitchen_timer.svh"
@@ -116,6 +124,6 @@ endpackage: cl
 `endif //  `ifndef CL_PKG_SV
 
 //==============================================================================
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

@@ -1,10 +1,10 @@
 //==============================================================================
 //
-// cl_tree.svh (v0.5.3)
+// cl_tree.svh (v0.6.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -99,7 +99,7 @@ class tree #( type T = int ) extends collection#( T );
    //   as the root.
    //
    // Argument:
-   //   e - An element to be added to the root.
+   //   e - An element to be added to the <root>.
    //
    // Returns:
    //   If this tree changed as a result of the call, 1 is returned.
@@ -208,10 +208,8 @@ class tree #( type T = int ) extends collection#( T );
 					  tree_node_type parent = null );
       if ( parent ) begin
 	 void'( parent.graft( tn ) );
-	 tn.parent = parent;
       end else if ( root ) begin
 	 void'( root.graft( tn ) );
-	 tn.parent = root;
       end else begin
 	 root = tn;
 	 tn.parent = null;
@@ -363,7 +361,7 @@ class tree #( type T = int ) extends collection#( T );
    //   (VIRTUAL) Returns the last tree node in the breadth-first order.
    //
    // Returns:
-   //   The last node. If the last tree node does not exist, return *null*.
+   //   The last node. If the last tree node does not exist, returns *null*.
    //
    // Example:
    // | tree#(int) int_tree = new();
@@ -447,6 +445,6 @@ endclass: tree
 `endif //  `ifndef CL_TREE_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

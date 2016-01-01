@@ -1,9 +1,9 @@
 //==============================================================================
-// cl_comparator.svh (v0.5.3)
+// cl_comparator.svh (v0.6.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -182,6 +182,6 @@ endclass: comparator
 `endif //  `ifndef CL_COMPARATOR_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

@@ -7,7 +7,10 @@ cd dev
 make lib
 ```
 ### If a new class has been added:
-- Update `cl_files_to_run` in the `dev/Makefile`, `src/overview.txt`, and `dev/api/proj/Menu.txt`
+- Update `cl_files_to_run` in the `dev/Makefile`, `src/overview.txt`, `src/cl_pkg.sv` ~~and `dev/api/proj/Menu.txt`~~
+```bash
+git add NEW_CLASS_FILE
+```
 
 ### If `crc/scrambler` TeX files have been updated:
 ```bash

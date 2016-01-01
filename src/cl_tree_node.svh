@@ -1,10 +1,10 @@
 //==============================================================================
 //
-// cl_tree_node.svh (v0.5.3)
+// cl_tree_node.svh (v0.6.0)
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -121,7 +121,7 @@ class tree_node #( type T = int );
 
    //---------------------------------------------------------------------------
    // Function: new
-   //   Creates a new tree_node.
+   //   Creates a new tree node.
    //
    // Argument:
    //   elem - Data element stored at the tree node.
@@ -269,12 +269,40 @@ class tree_node #( type T = int );
    // | //        |
    // | //        +-- (456) ---- (567)
    // |
-   // | assert( tn_123.get_num_children == 3 ); // not 4
+   // | assert( tn_123.get_num_children() == 3 ); // not 4
    //---------------------------------------------------------------------------
 
    virtual function int get_num_children();
       return children.size();
    endfunction: get_num_children
+
+   //---------------------------------------------------------------------------
+   // Function: has_child
+   //   (VIRTUAL) Returns if this tree node has at least one child.
+   //
+   // Returns:
+   //   If this tree node has a child (or children), returns 1. Otherwise,
+   //   returns 0.
+   //
+   // Example:
+   // | tree_node#(int) tn;
+   // | tree_node#(int) tn_123 = new( 123 );
+   // |
+   // | tn = tn_123.add( 234 );
+   // | tn = tn_123.add( 345 );
+   // | tn = tn_123.add( 456 ).add( 567 );
+   // | // (123) -+-- (234)
+   // | //        |
+   // | //        +-- (345)
+   // | //        |
+   // | //        +-- (456) ---- (567)
+   // |
+   // | assert( tn_123.has_child() == 1 );
+   //---------------------------------------------------------------------------
+
+   virtual function bit has_child();
+      return get_num_children() > 0;
+   endfunction: has_child
 
    // TBD...
    // is_leaf()
@@ -285,6 +313,6 @@ endclass: tree_node
 `endif //  `ifndef CL_TREE_NODE_SVH
 
 //==============================================================================
-// Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+// Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 // http://cluelogic.com/
 //==============================================================================

@@ -58,6 +58,8 @@ cl_files_to_run := \
 	$(src_dir)/cl_pair.svh\
 	$(src_dir)/cl_putil.svh\
 	$(src_dir)/cl_queue.svh\
+	$(src_dir)/cl_route.svh\
+	$(src_dir)/cl_route_node.svh\
 	$(src_dir)/cl_set.svh\
 	$(src_dir)/cl_set_base.svh\
 	$(src_dir)/cl_text.svh\

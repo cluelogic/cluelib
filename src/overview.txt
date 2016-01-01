@@ -10,6 +10,7 @@ Title: Overview
   - <pair>
   - <tuple>
   - <tree_node> (NEW)
+  - <route_node> (NEW)
   - Aggregate
     - (INDENT)
     - <packed_array>
@@ -27,6 +28,7 @@ Title: Overview
       - (UNINDENT)
     - <deque>
     - <tree> (NEW)
+    - <route> (NEW)
     - linked_list (UNDER CONSTRUCTION)
     - priority_queue (UNDER CONSTRUCTION)
     - map (UNDER CONSTRUCTION)
@@ -37,6 +39,7 @@ Title: Overview
       - <deque_iterator>
       - <deque_descending_iterator>
       - <tree_breadth_first_iterator> (NEW)
+      - <route_breadth_first_iterator> (NEW)
       - (UNINDENT)
     - (UNINDENT)
   - (UNINDENT)
@@ -81,12 +84,12 @@ Title: Overview
   - (UNINDENT)
 
 Revision:
-v0.5.3
+v0.6.0
 
 License:
 The MIT License (MIT)
 
-Copyright (c) 2013, 2014, 2015 ClueLogic, LLC
+Copyright (c) 2013, 2014, 2015, 2016 ClueLogic, LLC
 
 http://cluelogic.com/
 

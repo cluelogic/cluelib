@@ -1562,6 +1562,258 @@ module test_from_examples;
       assert( queue#(bit,8)::to_string( q, .separator( "-" ) ) == "0-0-0-1-1-0-1-1" );
       assert( queue#(bit,8)::to_string( q, .from_index( 4 )  ) ==         "1 0 1 1" );
     end
+    // test ../src/cl_route.svh
+    begin
+      route#(int) int_route = new();
+    end
+    begin
+      route#(int) int_route = new();
+      
+      assert( int_route.add( 123 ) );
+      // (123)
+      //   \__ starting node
+      
+      assert( int_route.add( 234 ) );
+      // (123) ---- (234)
+      
+      assert( int_route.add( 345 ) );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+    end
+    begin
+      route#(int)      int_route = new();
+      route_node#(int) rn_123;
+      route_node#(int) rn_234;
+      route_node#(int) rn_345;
+      
+      rn_123 = int_route.add_to_node( 123 );
+      // (123)
+      //   \__ starting node
+      
+      rn_234 = int_route.add_to_node( 234, .node( rn_123 ) );
+      // (123) ---- (234)
+      
+      rn_345 = int_route.add_to_node( 345, .node( rn_234 ) );
+      // (123) ---- (234) ---- (345)
+    end
+    begin
+      route#(int)      int_route = new();
+      route_node#(int) rn;
+      route_node#(int) rn_123;
+      route_node#(int) rn_234;
+      route_node#(int) rn_345;
+      route_node#(int) rn_456;
+      
+      rn_123 = int_route.add_to_node( 123 );
+      rn_234 = int_route.add_to_node( 234, .node( rn_123 ) );
+      // (123) ---- (234)
+      //              \__ rn_234
+      
+      rn_345 = new( 345 );
+      rn_456 = rn_345.add( 456 );
+      // (345) ---- (456)
+      //   \__ rn_345
+      
+      rn = int_route.connect( .from_node( rn_234 ), .to_node( rn_345 ) );
+      // (123) ---- (234) ---- (345) --- (456)
+      //                         \__ rn
+    end
+    begin
+      route#(int) int_route = new();
+      
+      assert( int_route.add( 123 ) );
+      assert( int_route.add( 234 ) );
+      assert( int_route.size() == 2 );
+      int_route.clear();
+      assert( int_route.size() == 0 );
+    end
+    begin
+      route#(int) int_route = new();
+      collection#(int) cloned;
+      
+      assert( int_route.add( 123 ) );
+      assert( int_route.add( 234 ) );
+      cloned = int_route.clone();
+      assert( cloned.size() == 2 );
+    end
+    begin
+      route#(int) int_route = new();
+      
+      assert( int_route.add( 123 ) );
+      assert( int_route.add( 234 ) );
+      assert( int_route.is_empty() == 0 );
+    end
+    begin
+      route#(int)      int_route = new();
+      route_node#(int) rn_123;
+      route_node#(int) rn_234;
+      route_node#(int) rn_345;
+      route_node#(int) rn_456;
+      iterator#(int)  it;
+      string s;
+      
+      rn_123 = int_route.add_to_node( 123 );
+      rn_234 = int_route.add_to_node( 234, .node( rn_123 ) );
+      rn_345 = int_route.add_to_node( 345, .node( rn_123 ) );
+      rn_456 = int_route.add_to_node( 456, .node( rn_234 ) );
+      // (123) -+-- (234) ---- (456)
+      //        |
+      //        +-- (345)
+      
+      it = int_route.get_iterator();
+      while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+      assert( s == "123 234 345 456 " );
+    end
+    begin
+      route#(int)      int_route = new();
+      route_node#(int) rn_123;
+      route_node#(int) rn_234;
+      route_node#(int) rn_345;
+      route_node#(int) rn_456;
+      iterator#(int)  it;
+      string s;
+      
+      rn_123 = int_route.add_to_node( 123 );
+      rn_234 = int_route.add_to_node( 234, .node( rn_123 ) );
+      rn_345 = int_route.add_to_node( 345, .node( rn_123 ) );
+      rn_456 = int_route.add_to_node( 456, .node( rn_234 ) );
+      // (123) -+-- (234) ---- (456)
+      //        |
+      //        +-- (345)
+      
+      it = int_route.get_breadth_first_iterator();
+      while ( it.has_next() ) s = { s, $sformatf( "%0d ", it.next() ) };
+      assert( s == "123 234 345 456 " );
+    end
+    begin
+      route#(int) int_route = new();
+      assert( int_route.add( 123 ) );
+      assert( int_route.add( 234 ) );
+      
+      assert( int_route.get_last_node().elem == 234 );
+    end
+    // test ../src/cl_route_node.svh
+    begin
+      int i = 123;
+      route_node#(int) rn = new( i );
+    end
+    begin
+      route_node#(int) rn;
+      route_node#(int) rn_123 = new( 123 );
+      
+      rn = rn_123.add( 234 );
+      // (123) ---- (234) <~~ rn
+      
+      rn = rn_123.add( 345 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345) <~~ rn
+      
+      rn = rn_123.add( 456 ).add( 567 ); // chain
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+      //        |
+      //        +-- (456) ---- (567) <~~ rn
+    end
+    begin
+      route_node#(int) rn_123;
+      route_node#(int) rn_234;
+      route_node#(int) rn_345;
+      route_node#(int) rn_456;
+      route_node#(int) rn;
+      
+      rn_123 = new( 123 );
+      rn_234 = rn_123.add( 234 );
+      // (123) --- (234)
+      //             \__ rn_234
+      
+      rn_345 = new( 345 );
+      rn_456 = rn_345.add( 456 );
+      // (345) ---- (456)
+      //   \__ rn_345
+      
+      rn = rn_234.connect( rn_345 );
+      // (123) ---- (234) --- (345) ---- (456)
+      //                        \__ rn
+    end
+    begin
+      route_node#(int) rn;
+      route_node#(int) rn_123 = new( 123 );
+      
+      rn = rn_123.add( 234 );
+      rn = rn_123.add( 456 ).add( 567 );
+      rn = rn_123.add( 345 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (456) ---- (567)
+      //        |
+      //        +-- (345)
+      
+      rn = rn_123.disconnect( .index( 1 ) );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+    end
+    begin
+      route_node#(int) rn;
+      route_node#(int) rn_123 = new( 123 );
+      
+      rn = rn_123.add( 234 );
+      rn = rn_123.add( 345 );
+      rn = rn_123.add( 456 ).add( 567 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+      //        |
+      //        +-- (456) ---- (567)
+      
+      assert( rn_123.get_num_of_to_nodes() == 3 ); // not 4
+    end
+    begin
+      route_node#(int) rn;
+      route_node#(int) rn_123 = new( 123 );
+      
+      rn = rn_123.add( 234 );
+      rn = rn_123.add( 345 );
+      rn = rn_123.add( 456 ).add( 567 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+      //        |
+      //        +-- (456) ---- (567)
+      
+      assert( rn_123.has_to_nodes() == 1 );
+    end
+    begin
+      route_node#(int) from_node0 = new( 0 );
+      route_node#(int) from_node1 = new( 1 );
+      route_node#(int) to_node0   = new( 2 );
+      route_node#(int) to_node1   = new( 3 );
+      route_node#(int) this_node  = new( 4 );
+      route_node#(int) rn;
+      
+      rn = from_node0.connect( this_node );
+      rn = from_node1.connect( to_node0  );
+      rn = from_node1.connect( to_node1  );
+      rn = from_node1.connect( this_node );
+      
+      //  +---------------+                       +------+
+      //  | from_nodes[0] |------to_nodes[0]----->|      |
+      //  +---------------+                       |      |
+      //  +---------------+    +-------------+    |      |
+      //  | from_nodes[1] |--->| to_nodes[0] |    | this |
+      //  |               |    +-------------+    |      |
+      //  |               |    +-------------+    | node |
+      //  |               |--->| to_nodes[1] |    |      |
+      //  |               |    +-------------+    |      |
+      //  |               |------to_nodes[2]----->|      | 
+      //  +---------------+                       +------+
+      
+      assert( this_node.get_index( .from_node_index( 0 ) ) == 0 );
+      assert( this_node.get_index( .from_node_index( 1 ) ) == 2 );
+    end
     // test ../src/cl_set.svh
     begin
       set#(int) int_set = new();
@@ -2203,7 +2455,22 @@ module test_from_examples;
       //        |
       //        +-- (456) ---- (567)
       
-      assert( tn_123.get_num_children == 3 ); // not 4
+      assert( tn_123.get_num_children() == 3 ); // not 4
+    end
+    begin
+      tree_node#(int) tn;
+      tree_node#(int) tn_123 = new( 123 );
+      
+      tn = tn_123.add( 234 );
+      tn = tn_123.add( 345 );
+      tn = tn_123.add( 456 ).add( 567 );
+      // (123) -+-- (234)
+      //        |
+      //        +-- (345)
+      //        |
+      //        +-- (456) ---- (567)
+      
+      assert( tn_123.has_child() == 1 );
     end
     // test ../src/cl_tuple.svh
     begin
