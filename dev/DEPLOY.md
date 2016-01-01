@@ -53,6 +53,9 @@ make
 cp -r ./api/framed_html ../api
 cd ..
 git status
+
+# Make sure there is no new file under ./api/framed_html
+
 git commit -a
 git push
 ```

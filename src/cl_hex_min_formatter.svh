@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_hex_min_formatter.svh (v0.6.0)
+// cl_hex_min_formatter.svh (v0.6.1)
 //
 // The MIT License (MIT)
 //

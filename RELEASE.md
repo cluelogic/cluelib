@@ -1,5 +1,8 @@
 ##Release Notes
 
+###v0.6.1
+- Added `route_node::id` property.
+
 ###v0.6.0
 - Added `route`, `route_node`, and `route_breadth_first_iterator` classes.
 - Added `tree::has_child` function.

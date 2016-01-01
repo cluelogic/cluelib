@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_route_node.svh (v0.6.0)
+// cl_route_node.svh (v0.6.1)
 //
 // The MIT License (MIT)
 //
@@ -52,11 +52,13 @@ class route_node #( type T = int );
    // Group: Properties
 
    //---------------------------------------------------------------------------
-   // PropertyX: id
-   //   The unique ID of a node within a route.
+   // Property: id
+   //   The globally unique ID of this node.
    //---------------------------------------------------------------------------
 
    int id;
+
+   local static int serial_num = 0;
 
    //---------------------------------------------------------------------------
    // Property: elem
@@ -127,7 +129,7 @@ class route_node #( type T = int );
 
    function new( T elem );
       this.elem = elem;
-//    location.push_back( 0 );
+      id = serial_num++;
    endfunction: new
 
    //---------------------------------------------------------------------------

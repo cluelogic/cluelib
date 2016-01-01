@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// cl_tree_breadth_first_iterator.svh (v0.6.0)
+// cl_tree_breadth_first_iterator.svh (v0.6.1)
 //
 // The MIT License (MIT)
 //
