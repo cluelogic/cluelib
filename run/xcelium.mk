@@ -1,5 +1,5 @@
 #===============================================================================
-# Makefile (v0.2.0)
+# xcelium.mk
 #
 # The MIT License (MIT)
 #
@@ -25,24 +25,26 @@
 # SOFTWARE.
 #===============================================================================
 
-help:
-	@echo "Usage: make [TARGET]"
-	@echo "  Runs a sanity check."
-	@echo "  TARGET can be 'modelsim', 'questa', 'xlm', 'incisive', or 'vcs'."
+# user definable variables
+
+# NONE
 
 # constants
 
-src_dir  := ../src
-test_dir := ../test
-compile_files := $(src_dir)/cl_pkg.sv $(src_dir)/cl_dpi.cc $(test_dir)/test_from_examples.sv
-compile_opts  := +incdir+$(src_dir)+$(test_dir)
-top_module    := test_from_examples
+xcelium_compile_opts := $(compile_opts) +define+CL_USE_INCISIVE
+xcelium_run_opts     :=
 
-include xcelium.mk
-include incisive.mk
-include modelsim.mk
-include questa.mk
-include vcs.mk
+# targets
+.PHONY: xcelium xlm run_xcelium clean_xcelium
+
+xcelium: run_xcelium
+xlm: xcelium
+
+run_xcelium:
+	xrun $(xcelium_compile_opts) $(xcelium_run_opts) $(compile_files)
+
+clean_xcelium:
+	rm -rf xcelium.d/ .simvision/ waves.shm/ xrun.log xmsc.log xrun.history
 
 #===============================================================================
 # Copyright (c) 2013, 2014 ClueLogic, LLC
