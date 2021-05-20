@@ -1,3 +1,8 @@
 dev/api/images/*.png
 dev/api/proj/cluelib.css
 *~
+
+# Ignore everything in run/ except for the Makefiles
+run/*
+!run/Makefile
+!run/*.mk
